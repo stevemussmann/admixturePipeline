@@ -13,7 +13,20 @@ class VCF():
 		temp = os.path.splitext(infile)
 		self.prefix = temp[0]
 
-	def convert():
-		command_string = "vcftools --vcf " + self.infile + " --plink --out " + self.prefix
-		print(command_string)
-		#return_code = subprocess.call()
+	def check_status(self,code, program):
+		if code !=0:
+			print(code)
+			print("Exiting due to non-zero exit status in", program)
+			raise SystemExit
+
+	def run_program(self,string,program):
+		print(string)
+		return_code = subprocess.call(string, shell=True)
+		self.check_status(return_code, program)
+
+	def convert(self):
+		vcf_command = "vcftools --vcf " + self.vcf_file + " --plink --out " + self.prefix
+		plink_command = "plink --file " + self.prefix + " --noweb --recode12 --out " + self.prefix
+
+		self.run_program(vcf_command, "VCFtools")
+		self.run_program(plink_command, "plink")

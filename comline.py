@@ -35,7 +35,7 @@ class ComLine():
 
 	def exists(self, filename):
 		if( os.path.isfile(filename) != True ):
-			print( filename, "does not exist" )
-			print( "Exiting program..." )
-			print( "" );
+			print(filename, "does not exist")
+			print("Exiting program...")
+			print("")
 			raise SystemExit

@@ -24,11 +24,52 @@ class ComLine():
 							default="output.txt",
 							help="Specify an output file name."
 		)
+		parser.add_argument("-w", "--window",
+							dest='window',
+							default=50,
+							help="Window size for filtering in plink."
+		)
+		parser.add_argument("-a", "--advance",
+							dest='advance',
+							default=10,
+							help="Value by which window is advanced when filtering in plink."
+		)
+		parser.add_argument("-r", "--rsquare",
+							dest='rsquare',
+							default=0.1,
+							help="R^2 value for filtering in plink."
+		)
+		parser.add_argument("-f", "--filter",
+							dest='filter',
+							default=False,
+							action='store_true',
+							help="Turn on filtering in plink."
+		)
+		parser.add_argument("-k", "--minK",
+							dest='minK',
+							default=1,
+							help="minimum K value."
+		)
+		parser.add_argument("-K", "--maxK",
+							dest='maxK',
+							default=20,
+							help="maximum K value."
+		)
+		parser.add_argument("-n", "--np",
+							dest='np',
+							default=1,
+							help="Number of processors."
+		)
+		parser.add_argument("-R", "--rep",
+							dest='rep',
+							default=20,
+							help="Number of replicates per K."
+		)
 		
 		self.args = parser.parse_args()
 
 		#check if files exist
-		self.exists( self.args.popmap )
+		#self.exists( self.args.popmap )
 		self.exists( self.args.vcf )
 
 

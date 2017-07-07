@@ -24,9 +24,35 @@ class VCF():
 		return_code = subprocess.call(string, shell=True)
 		self.check_status(return_code, program)
 
+	def fix_map(self):
+		name = self.prefix + ".map"
+		f = open(name)
+		data = f.readlines()
+		f.close()
+
+		f = open(name,'w')
+		for line in data:
+			newline = "l" + line.rstrip()
+			f.write(newline)
+			f.write('\n')
+		f.close()
+
+
 	def convert(self):
 		vcf_command = "vcftools --vcf " + self.vcf_file + " --plink --out " + self.prefix
-		plink_command = "plink --file " + self.prefix + " --noweb --recode12 --out " + self.prefix
 
 		self.run_program(vcf_command, "VCFtools")
+
+		self.fix_map()
+
+	def plink(self,pfilter,window,advance,rsquare):
+		plink_command = "plink --file " + self.prefix + " --noweb --allow-extra-chr 0 --recode12 --out " + self.prefix
+
 		self.run_program(plink_command, "plink")
+		
+		#plink_filter = ""
+		#if pfilter == True:
+		#	plink_filter = "plink --file " + self.prefix + " --noweb --chr-set --autosome-num 8255 --indep-pairwise " + str(window) + " " + str(advance) + " " + str(rsquare)
+		#	print(plink_filter)
+
+		#self.run_program(plink_filter, "plink")

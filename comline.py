@@ -26,16 +26,19 @@ class ComLine():
 		)
 		parser.add_argument("-w", "--window",
 							dest='window',
+							type=int,
 							default=50,
 							help="Window size for filtering in plink."
 		)
 		parser.add_argument("-a", "--advance",
 							dest='advance',
+							type=int,
 							default=10,
 							help="Value by which window is advanced when filtering in plink."
 		)
 		parser.add_argument("-r", "--rsquare",
 							dest='rsquare',
+							type=float,
 							default=0.1,
 							help="R^2 value for filtering in plink."
 		)
@@ -47,21 +50,25 @@ class ComLine():
 		)
 		parser.add_argument("-k", "--minK",
 							dest='minK',
+							type=int,
 							default=1,
 							help="minimum K value."
 		)
 		parser.add_argument("-K", "--maxK",
 							dest='maxK',
+							type=int,
 							default=20,
 							help="maximum K value."
 		)
 		parser.add_argument("-n", "--np",
 							dest='np',
+							type=int,
 							default=1,
 							help="Number of processors."
 		)
 		parser.add_argument("-R", "--rep",
 							dest='rep',
+							type=int,
 							default=20,
 							help="Number of replicates per K."
 		)

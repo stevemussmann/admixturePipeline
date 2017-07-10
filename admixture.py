@@ -5,6 +5,7 @@ import os
 import os.path
 import subprocess
 import numpy as np
+import zipfile
 
 class Admixture():
 	'Class for operating on VCF file using VCFtools and Plink'
@@ -43,3 +44,16 @@ class Admixture():
 						oldname, extension = os.path.splitext(filename)
 						newname = oldname + "_" + str(j) + extension
 						os.rename(filename, newname)
+
+	def zipdir(self,path,ziph):
+		files = [f for f in os.listdir('.') if os.path.isfile(f)]
+		for root,dirs,files in os.walk(path):
+			for f in files:
+				if f.endswith('.Q'):
+					ziph.write(os.path.join(root,f))
+
+	def create_zip(self):
+		zipf = zipfile.ZipFile('results.zip', 'w', zipfile.ZIP_DEFLATED)
+		self.zipdir('./', zipf)
+		zipf.close()
+

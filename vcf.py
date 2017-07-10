@@ -45,14 +45,11 @@ class VCF():
 
 		self.fix_map()
 
-	def plink(self,pfilter,window,advance,rsquare):
+	def plink(self):
 		plink_command = "plink --file " + self.prefix + " --noweb --allow-extra-chr 0 --recode12 --out " + self.prefix
 
 		self.run_program(plink_command, "plink")
 		
-		#plink_filter = ""
-		#if pfilter == True:
-		#	plink_filter = "plink --file " + self.prefix + " --noweb --chr-set --autosome-num 8255 --indep-pairwise " + str(window) + " " + str(advance) + " " + str(rsquare)
-		#	print(plink_filter)
-
-		#self.run_program(plink_filter, "plink")
+	def plink_filter(self,window,advance,rsquare):
+		plink_filter = "plink --file " + self.prefix + " --noweb --indep-pairwise " + str(window) + " " + str(advance) + " " + str(rsquare)
+		self.run_program(plink_filter, "plink")

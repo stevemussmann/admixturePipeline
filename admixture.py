@@ -20,13 +20,7 @@ class Admixture():
 		self.maxK = maxK
 		self.rep = rep
 
-	def check_status(self,code, program):
-		if code !=0:
-			print(code)
-			print("Exiting due to non-zero exit status in", program)
-			raise SystemExit
-
-	def run_program(self,string,program,i,j):
+	def run_program(self,string,i,j):
 		print(string)
 		try:
 			fn = self.prefix + "." + str(i) + "_" + str(j) + ".stdout" #make name for stdout log file
@@ -38,8 +32,7 @@ class Admixture():
 		except:
 			print("Unexpected error:")
 			print(sys.exc_info())
-		#return_code = subprocess.check_output(string, shell=True)
-		#self.check_status(return_code, program)
+			raise SystemExit
 
 	def admix(self):
 		ks = range(self.minK, self.maxK+1)
@@ -49,7 +42,7 @@ class Admixture():
 			for j in xrange(self.rep):
 				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " " + self.prefix + ".ped " + str(i)
 				#print(command_string)
-				self.run_program(command_string,"admixture",i,j)
+				self.run_program(command_string,i,j)
 				for filename in os.listdir("."):
 					fn = self.prefix + "." + str(i) + "."
 					if filename.startswith(fn):
@@ -86,6 +79,7 @@ class Admixture():
 						fh.write("\t")
 						fh.write(mylist[-1])
 						fh.write("\n")
+				temp.close()
 		fh.close()
 		
 		try:
@@ -95,3 +89,4 @@ class Admixture():
 		except:
 			print("Unexpected error:")
 			print(sys.exc_info())
+			raise SystemExit

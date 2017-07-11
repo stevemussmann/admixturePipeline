@@ -1,34 +1,35 @@
 from __future__ import print_function
 
+from popmap import Popmap
+
 import argparse
 import os.path
 import subprocess
+import sys
 
 class VCF():
 	'Class for operating on VCF file using VCFtools and Plink'
 	
-
-	def __init__(self, infile):
+	def __init__(self, infile, thin):
 		self.vcf_file = infile
+		self.thin = thin
+
 		temp = os.path.splitext(infile)
 		self.prefix = temp[0]
 
-	def check_status(self,code, program):
-		if code !=0:
-			print(code)
-			print("Exiting due to non-zero exit status in", program)
-			raise SystemExit
-
-	def run_program(self,string,program):
+	def run_program(self,string):
 		print(string)
-		return_code = subprocess.call(string, shell=True)
-		self.check_status(return_code, program)
+		try:
+			process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+			output, err = process.communicate()
+		except:
+			print("Unexpected error:")
+			print(sys.exec_info())
+			raise SystemExit
 
 	def fix_map(self):
 		name = self.prefix + ".map"
-		f = open(name)
-		data = f.readlines()
-		f.close()
+		data = self.readfile(name)
 
 		f = open(name,'w')
 		for line in data:
@@ -37,19 +38,40 @@ class VCF():
 			f.write('\n')
 		f.close()
 
-
 	def convert(self):
 		vcf_command = "vcftools --vcf " + self.vcf_file + " --plink --out " + self.prefix
+		self.run_program(vcf_command)
 
-		self.run_program(vcf_command, "VCFtools")
+		self.fix_map()
+
+	def convert_filter(self):
+		vcf_command = "vcftools --vcf " + self.vcf_file + " --plink --thin " + str(self.thin) + " --out " + self.prefix
+		self.run_program(vcf_command)
 
 		self.fix_map()
 
 	def plink(self):
 		plink_command = "plink --file " + self.prefix + " --noweb --allow-extra-chr 0 --recode12 --out " + self.prefix
+		self.run_program(plink_command)
 
-		self.run_program(plink_command, "plink")
-		
-	def plink_filter(self,window,advance,rsquare):
-		plink_filter = "plink --file " + self.prefix + " --noweb --indep-pairwise " + str(window) + " " + str(advance) + " " + str(rsquare)
-		self.run_program(plink_filter, "plink")
+	def print_populations(self,popmap):
+		data = self.readfile(self.vcf_file)
+		popfile = self.prefix + "_pops.txt"
+		f = open(popfile,'w')
+		for line in data:
+			if line.startswith("#CHROM"):
+				mylist = line.split()
+				del mylist[0:9]
+				print(mylist)
+				for ind in mylist:
+					ind.strip('\t\n\r')
+					print(popmap.get_pop(ind))
+					f.write(popmap.get_pop(ind))
+					f.write("\n")
+		f.close()
+
+	def readfile(self,infile):
+		f=open(infile)
+		data = f.readlines()
+		f.close()
+		return data

@@ -65,7 +65,7 @@ class VCF():
 				print(mylist)
 				for ind in mylist:
 					ind.strip('\t\n\r')
-					print(popmap.get_pop(ind))
+					#print(popmap.get_pop(ind))
 					f.write(popmap.get_pop(ind))
 					f.write("\n")
 		f.close()

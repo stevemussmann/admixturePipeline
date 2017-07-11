@@ -17,10 +17,11 @@ def main():
 	populations = Popmap(input.args.popmap)
 	vcf_file.plink()
 	vcf_file.print_populations(populations)
-	admix_run = Admixture(vcf_file.prefix, input.args.np, input.args.minK, input.args.maxK, input.args.rep)
+	admix_run = Admixture(vcf_file.prefix, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv)
 	admix_run.admix()
 	admix_run.create_zip()
 	admix_run.loglik()
+	admix_run.print_cv()
 
 main()
 

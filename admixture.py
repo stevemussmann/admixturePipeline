@@ -13,12 +13,13 @@ class Admixture():
 	'Class for operating on VCF file using VCFtools and Plink'
 	
 
-	def __init__(self, prefix, NP, minK, maxK, rep):
+	def __init__(self, prefix, NP, minK, maxK, rep, cv):
 		self.prefix = prefix
 		self.NP = NP
 		self.minK = minK
 		self.maxK = maxK
 		self.rep = rep
+		self.cv = cv
 
 	def run_program(self,string,i,j):
 		print(string)
@@ -40,7 +41,7 @@ class Admixture():
 		#for each k value
 		for i in ks:
 			for j in xrange(self.rep):
-				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " " + self.prefix + ".ped " + str(i)
+				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " --cv=" + str(self.cv) + " " + self.prefix + ".ped " + str(i)
 				#print(command_string)
 				self.run_program(command_string,i,j)
 				for filename in os.listdir("."):
@@ -62,6 +63,16 @@ class Admixture():
 		self.zipdir('./', zipf)
 		zipf.close()
 
+	def print_cv(self):
+		try:
+			command="grep -h CV " + self.prefix + "*.stdout > " + self.prefix + "_cv_summary.txt"
+			process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+			output,err = process.communicate()
+		except:
+			print("Unexpected error:")
+			print(sys.exc_info())
+			raise SystemExit
+
 	def loglik(self):
 		fh = open("loglik.txt", 'w')
 		for fn in os.listdir("."):
@@ -74,7 +85,7 @@ class Admixture():
 				for line in temp.readlines():
 					if line.startswith("Loglikelihood:"):
 						mylist = line.split()
-						print(mylist)
+						#print(mylist)
 						fh.write(kval)
 						fh.write("\t")
 						fh.write(mylist[-1])

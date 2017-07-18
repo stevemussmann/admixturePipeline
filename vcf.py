@@ -22,6 +22,11 @@ class VCF():
 		try:
 			process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 			output, err = process.communicate()
+			print(err)
+			if process.returncode != 0:
+				print("Non-zero exit status:")
+				print(process.returncode)
+				raise SystemExit
 		except:
 			print("Unexpected error:")
 			print(sys.exec_info())

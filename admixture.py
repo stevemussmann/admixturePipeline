@@ -30,6 +30,11 @@ class Admixture():
 			f = open(fn, 'w')
 			f.write(output)
 			f.close()
+			print(err)
+			if process.returncode !=0:
+				print("Non-zero exit status:")
+				print(process.returncode)
+				raise SystemExit
 		except:
 			print("Unexpected error:")
 			print(sys.exc_info())
@@ -68,6 +73,11 @@ class Admixture():
 			command="grep -h CV " + self.prefix + "*.stdout > " + self.prefix + "_cv_summary.txt"
 			process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 			output,err = process.communicate()
+			print(err)
+			if process.returncode != 0:
+				print("Non-zero exit status:")
+				print(process.returncode)
+				raise SystemExit
 		except:
 			print("Unexpected error:")
 			print(sys.exc_info())
@@ -97,6 +107,11 @@ class Admixture():
 			command="sort -n -k1 -o loglik.txt loglik.txt"
 			process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 			output, err = process.communicate()
+			print(err)
+			if process.returncode != 0:
+				print("Non-zero exit status:")
+				print(process.returncode)
+				raise SystemExit
 		except:
 			print("Unexpected error:")
 			print(sys.exc_info())

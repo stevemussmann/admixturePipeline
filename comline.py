@@ -23,7 +23,7 @@ class ComLine():
 		required.add_argument("-v", "--vcf",
 							dest='vcf',
 							required=True,
-							help="Specify a phylip file for input."
+							help="Specify a vcf file for input."
 		)
 		opt_admix.add_argument("-k", "--minK",
 							dest='minK',
@@ -53,7 +53,7 @@ class ComLine():
 							dest='thin',
 							type=int,
 							default=0,
-							help="Use VCFtools to thin out loci falling within the specified proximity to one another. -f must also be used to turn on filtering"
+							help="Use VCFtools to thin out loci falling within the specified proximity to one another."
 		)
 		opt_admix.add_argument("-c", "--cv",
 							dest='cv',

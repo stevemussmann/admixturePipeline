@@ -12,9 +12,12 @@ class ComLine():
 		parser._action_groups.pop()
 		required = parser.add_argument_group('required arguments')
 		optional = parser.add_argument_group('optional arguments')
-		optional.add_argument("-m", "--popmap",
+		opt_admix = parser.add_argument_group('Admixture optional arguments')
+		opt_plink = parser.add_argument_group('plink optional arguments')
+		opt_vcf = parser.add_argument_group('VCFtools optional arguments')
+		required.add_argument("-m", "--popmap",
 							dest='popmap',
-							default="map.txt",
+							required=True,
 							help="Specify a tab-delimited population map (sample -> population)"
 		)
 		required.add_argument("-v", "--vcf",
@@ -22,19 +25,19 @@ class ComLine():
 							required=True,
 							help="Specify a phylip file for input."
 		)
-		optional.add_argument("-o", "--out",
+		opt_admix.add_argument("-k", "--minK",
 							dest='minK',
 							type=int,
 							default=1,
 							help="minimum K value."
 		)
-		optional.add_argument("-K", "--maxK",
+		opt_admix.add_argument("-K", "--maxK",
 							dest='maxK',
 							type=int,
 							default=20,
 							help="maximum K value."
 		)
-		optional.add_argument("-a", "--maf",
+		opt_plink.add_argument("-a", "--maf",
 							dest='maf',
 							type=int,
 							default=0,
@@ -46,19 +49,19 @@ class ComLine():
 							default=1,
 							help="Number of processors."
 		)
-		optional.add_argument("-t", "--thin",
+		opt_vcf.add_argument("-t", "--thin",
 							dest='thin',
 							type=int,
 							default=0,
 							help="Use VCFtools to thin out loci falling within the specified proximity to one another. -f must also be used to turn on filtering"
 		)
-		optional.add_argument("-c", "--cv",
+		opt_admix.add_argument("-c", "--cv",
 							dest='cv',
 							type=int,
 							default=20,
 							help="Specify the cross-validation number for admixture program"
 		)
-		optional.add_argument("-R", "--rep",
+		opt_admix.add_argument("-R", "--rep",
 							dest='rep',
 							type=int,
 							default=20,

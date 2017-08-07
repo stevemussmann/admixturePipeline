@@ -42,3 +42,21 @@ Plink optional arguments:
 
 VCFtools optional arguments:
 * **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
+
+## Example:
+
+The following command will run the program from K values 1 through 10, conducting 10 repetitions at each K value.  Admixture will use all 16 processors available on the hypothetical machine, VCFtools will filter SNPs at an interval of 100bp, and the minor allele frequency filter in PLINK will drop any loci with a minor allele frequency less than 0.05:
+
+```
+admixturePipeline.py -m popmap.txt -v input.vcf -k 1 -K 10 -n 16 -t 100 -a 5
+```
+
+## Outputs:
+
+For the example line of code above, the following outputs will be produced:
+* input.ped, input.map: output of plink
+* results.zip: a compressed file that can be input into a pipeline such as CLUMPAK
+* loglik.txt: a file containing the log likelihood values of each iteration of each K value.
+* input.{k}\_{r}.P and input.{k}\_{r}.Q: Admixture output files for each iteration{r} of each K{k} value
+* input\_pops.txt: a list of population data that can be input into a pipeline such as CLUMPAK
+* input\_cv\_summary.txt: a list of all CV values produced for each iteration of each K value.  This can be summarized and plotted using another of my repositories: (https://github.com/smussmann82/admixture_cv_sum)

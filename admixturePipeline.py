@@ -10,10 +10,10 @@ import sys
 def main():
 	input = ComLine(sys.argv[1:])
 	vcf_file = VCF(input.args.vcf, input.args.thin)
-	if input.args.filter == True:
-		vcf_file.convert_filter()
-	else:
-		vcf_file.convert()
+	#if input.args.filter == True:
+	#	vcf_file.convert_filter()
+	#else:
+	vcf_file.convert()
 	populations = Popmap(input.args.popmap)
 	vcf_file.plink()
 	vcf_file.print_populations(populations)

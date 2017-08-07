@@ -16,7 +16,7 @@ class ComLine():
 		)
 		parser.add_argument("-v", "--vcf",
 							dest='vcf',
-							default="input.vcf",
+							required=True,
 							help="Specify a phylip file for input."
 		)
 		parser.add_argument("-o", "--out",
@@ -24,12 +24,12 @@ class ComLine():
 							default="output.txt",
 							help="Specify an output file name."
 		)
-		parser.add_argument("-f", "--filter",
-							dest='filter',
-							default=False,
-							action='store_true',
-							help="Turn on filtering in plink."
-		)
+		#parser.add_argument("-f", "--filter",
+		#					dest='filter',
+		#					default=False,
+		#					action='store_true',
+		#					help="Turn on filtering in plink."
+		#)
 		parser.add_argument("-k", "--minK",
 							dest='minK',
 							type=int,
@@ -51,7 +51,7 @@ class ComLine():
 		parser.add_argument("-t", "--thin",
 							dest='thin',
 							type=int,
-							default=100,
+							default=0,
 							help="Use VCFtools to thin out loci falling within the specified proximity to one another. -f must also be used to turn on filtering"
 		)
 		parser.add_argument("-c", "--cv",

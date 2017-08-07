@@ -1,7 +1,7 @@
 # admixturePipeline
 A pipeline that accepts a VCF file to run through Admixture
 
-## Installation:
+## Installation & Setup:
 
 This pipeline was written to be run on Unix based operating systems, such as the various Linux distributions and Mac OS X.  To get started, clone this project to the desired location on your computer.  
 
@@ -15,6 +15,17 @@ The VCFtools package can be easily installed on Ubuntu.  The following command s
 sudo apt-get install vcftools
 ```
 The PLINK version in the standard Ubuntu repository is unsupported.  Please install it and Admixture manually.  The executable for each program should be the lowercase version of its name (i.e., plink, vcftools, admixture), and should be placed in your path.  
+
+You may have to modify the first line of the admixturePipeline.py file, which by default reads:
+```
+#!/usr/bin/env Python
+```
+
+To find the location of your Python installation, you can type the following at the bash command prompt:
+```
+which python
+```
+Then modify the first line of admixturePipeline.py to reflect the location of your Python installation.
 
 ## Running the pipeline:
 

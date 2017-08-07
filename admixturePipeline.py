@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 from comline import ComLine
 from vcf import VCF
@@ -9,7 +9,7 @@ import sys
 
 def main():
 	input = ComLine(sys.argv[1:])
-	vcf_file = VCF(input.args.vcf, input.args.thin)
+	vcf_file = VCF(input.args.vcf, input.args.thin, input.args.maf)
 	#if input.args.filter == True:
 	#	vcf_file.convert_filter()
 	#else:

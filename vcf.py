@@ -10,9 +10,10 @@ import sys
 class VCF():
 	'Class for operating on VCF file using VCFtools and Plink'
 	
-	def __init__(self, infile, thin):
+	def __init__(self, infile, thin, maf):
 		self.vcf_file = infile
 		self.thin = thin
+		self.maf = maf
 
 		temp = os.path.splitext(infile)
 		self.prefix = temp[0]
@@ -51,18 +52,12 @@ class VCF():
 
 		self.fix_map()
 
-	#def convert_filter(self):
-	#	vcf_command = "vcftools --vcf " + self.vcf_file + " --plink --thin " + str(self.thin) + " --out " + self.prefix
-	#	self.run_program(vcf_command)
-	#
-	#	self.fix_map()
-
 	def plink(self):
 		plink_command = "plink --file " + self.prefix + " --noweb --allow-extra-chr 0 --recode12 --out " + self.prefix
+		if(self.maf > 0):
+			maf_float = self.maf/100.0
+			plink_command = plink_command + " --maf " + str(maf_float)
 		self.run_program(plink_command)
-
-	def plink_filter(self):
-		plink_command = "plink --file " + self.prefix + " --noweb --allow-extra-chr 0 --recode12 --out " + self.prefix
 
 	def print_populations(self,popmap):
 		data = self.readfile(self.vcf_file)

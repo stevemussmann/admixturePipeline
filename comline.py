@@ -9,58 +9,56 @@ class ComLine():
 
 	def __init__(self, args):
 		parser = argparse.ArgumentParser()
-		parser.add_argument("-m", "--popmap",
+		parser._action_groups.pop()
+		required = parser.add_argument_group('required arguments')
+		optional = parser.add_argument_group('optional arguments')
+		optional.add_argument("-m", "--popmap",
 							dest='popmap',
 							default="map.txt",
 							help="Specify a tab-delimited population map (sample -> population)"
 		)
-		parser.add_argument("-v", "--vcf",
+		required.add_argument("-v", "--vcf",
 							dest='vcf',
 							required=True,
 							help="Specify a phylip file for input."
 		)
-		parser.add_argument("-o", "--out",
-							dest='out',
-							default="output.txt",
-							help="Specify an output file name."
-		)
-		#parser.add_argument("-f", "--filter",
-		#					dest='filter',
-		#					default=False,
-		#					action='store_true',
-		#					help="Turn on filtering in plink."
-		#)
-		parser.add_argument("-k", "--minK",
+		optional.add_argument("-o", "--out",
 							dest='minK',
 							type=int,
 							default=1,
 							help="minimum K value."
 		)
-		parser.add_argument("-K", "--maxK",
+		optional.add_argument("-K", "--maxK",
 							dest='maxK',
 							type=int,
 							default=20,
 							help="maximum K value."
 		)
-		parser.add_argument("-n", "--np",
+		optional.add_argument("-a", "--maf",
+							dest='maf',
+							type=int,
+							default=0,
+							help="Enter the minimum frequency for the minor allele frequency filter as an integer.  For example, 1 = 0.01"
+		)
+		optional.add_argument("-n", "--np",
 							dest='np',
 							type=int,
 							default=1,
 							help="Number of processors."
 		)
-		parser.add_argument("-t", "--thin",
+		optional.add_argument("-t", "--thin",
 							dest='thin',
 							type=int,
 							default=0,
 							help="Use VCFtools to thin out loci falling within the specified proximity to one another. -f must also be used to turn on filtering"
 		)
-		parser.add_argument("-c", "--cv",
+		optional.add_argument("-c", "--cv",
 							dest='cv',
 							type=int,
 							default=20,
 							help="Specify the cross-validation number for admixture program"
 		)
-		parser.add_argument("-R", "--rep",
+		optional.add_argument("-R", "--rep",
 							dest='rep',
 							type=int,
 							default=20,

@@ -15,7 +15,7 @@ class VCF():
 		self.thin = thin
 		self.maf = maf
 
-		temp = os.path.splitext(infile)
+		temp = os.path.splitext(os.path.basename(infile))
 		self.prefix = temp[0]
 
 	def run_program(self,string):

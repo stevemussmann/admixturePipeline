@@ -11,7 +11,7 @@ import zipfile
 
 class Admixture():
 	'Class for operating on VCF file using VCFtools and Plink'
-	
+
 
 	def __init__(self, prefix, NP, minK, maxK, rep, cv):
 		self.prefix = prefix
@@ -49,9 +49,17 @@ class Admixture():
 				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " --cv=" + str(self.cv) + " " + self.prefix + ".ped " + str(i)
 				#print(command_string)
 				self.run_program(command_string,i,j)
+
+				#Manually re-name output files to include _j rep number
+				# oldP = self.prefix + "." + str(i) + ".P"
+				# newP = self.prefix + "." + str(i) + "_" + str(j) + ".P"
+				# os.rename(oldP, newP)
+				# oldQ = self.prefix + "." + str(i) + ".Q"
+				# newQ = self.prefix + "." + str(i) + "_" + str(j) + ".Q"
+				# os.rename(oldQ, newQ)
 				for filename in os.listdir("."):
 					fn = self.prefix + "." + str(i) + "."
-					if filename.startswith(fn):
+					if fn in filename:
 						oldname, extension = os.path.splitext(filename)
 						newname = oldname + "_" + str(j) + extension
 						os.rename(filename, newname)
@@ -102,7 +110,7 @@ class Admixture():
 						fh.write("\n")
 				temp.close()
 		fh.close()
-		
+
 		try:
 			command="sort -n -k1 -o loglik.txt loglik.txt"
 			process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)

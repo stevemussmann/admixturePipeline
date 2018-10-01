@@ -9,11 +9,14 @@ import sys
 
 def main():
 	input = ComLine(sys.argv[1:])
-	vcf_file = VCF(input.args.vcf, input.args.thin, input.args.maf)
+	vcf_file = VCF(input.args.vcf, input.args.thin, input.args.maf, input.args.indcov, input.args.snpcov)
 	#if input.args.filter == True:
 	#	vcf_file.convert_filter()
 	#else:
+
+	#convert to Plink
 	vcf_file.convert()
+
 	populations = Popmap(input.args.popmap)
 	vcf_file.plink()
 	vcf_file.print_populations(populations)

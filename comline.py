@@ -5,7 +5,7 @@ import os.path
 
 class ComLine():
 	'Class for implementing command line options'
-	
+
 
 	def __init__(self, args):
 		parser = argparse.ArgumentParser()
@@ -55,6 +55,18 @@ class ComLine():
 							default=0,
 							help="Use VCFtools to thin out loci falling within the specified proximity to one another."
 		)
+		opt_admix.add_argument("-C", "--indcov",
+							dest='indcov',
+							type=float,
+							default=0.9,
+							help="Specify the maximum allowable missing data per individual"
+		)
+		opt_admix.add_argument("-S", "--snpcov",
+							dest='snpcov',
+							type=float,
+							default=0.9,
+							help="Specify the maximum allowable missing data per SNP"
+		)
 		opt_admix.add_argument("-c", "--cv",
 							dest='cv',
 							type=int,
@@ -67,7 +79,7 @@ class ComLine():
 							default=20,
 							help="Number of replicates per K."
 		)
-		
+
 		self.args = parser.parse_args()
 
 		#check if files exist

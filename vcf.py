@@ -9,11 +9,13 @@ import sys
 
 class VCF():
 	'Class for operating on VCF file using VCFtools and Plink'
-	
-	def __init__(self, infile, thin, maf):
+
+	def __init__(self, infile, thin, maf, ind, snp):
 		self.vcf_file = infile
 		self.thin = thin
 		self.maf = maf
+		self.ind = ind #maximum allowable missing data per snp
+		self.snp = snp #maximum allowable missing data per individual
 
 		temp = os.path.splitext(os.path.basename(infile))
 		self.prefix = temp[0]
@@ -28,6 +30,8 @@ class VCF():
 				print("Non-zero exit status:")
 				print(process.returncode)
 				raise SystemExit
+		except (KeyboardInterrupt, SystemExit):
+			raise
 		except:
 			print("Unexpected error:")
 			print(sys.exec_info())
@@ -45,12 +49,53 @@ class VCF():
 		f.close()
 
 	def convert(self):
+
+		if (self.ind < 1.0 and self.ind > 0.0):
+			remove = self.get_ind_coverage()
+			#print(remove)
+
 		vcf_command = "vcftools --vcf " + self.vcf_file + " --plink --out " + self.prefix
 		if(self.thin > 0):
 			vcf_command = vcf_command + " --thin " + str(self.thin)
+		if (self.snp < 1.0 and self.snp > 0.0):
+			vcf_command = vcf_command + " --max-missing " + str(self.snp)
+		if (len(remove) > 0):
+			vcf_command = vcf_command + remove
 		self.run_program(vcf_command)
 
 		self.fix_map()
+
+	def get_ind_coverage(self):
+		vcf_command = "vcftools --vcf " + self.vcf_file + " --missing-indv --out " + self.prefix
+		self.run_program(vcf_command)
+
+		fname = self.prefix + ".imiss"
+		ret = ""
+		with open(fname, 'r') as fh:
+			try:
+				lnum = 0
+				for line in fh:
+					line = line.strip()
+					if not line:
+						continue
+					lnum+=1
+					if lnum <2: #skip header line
+						continue
+					else:
+						stuff = line.split()
+						#print(stuff)
+						if float(stuff[4]) > self.ind:
+							print("Removing individual %s: %s missing data"%(stuff[0],stuff[4]))
+							ret = ret + " --remove-indv " + str(stuff[0])
+				return(ret)
+			except IOError as e:
+				print("Could not read file %s: %s"%(fname,e))
+				sys.exit(1)
+			except Exception as e:
+				print("Unexpected error reading file %s: %s"%(fname,e))
+				sys.exit(1)
+			finally:
+				fh.close()
 
 	def plink(self):
 		plink_command = "plink --file " + self.prefix + " --noweb --allow-extra-chr 0 --recode12 --out " + self.prefix

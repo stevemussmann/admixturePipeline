@@ -35,6 +35,8 @@ class Admixture():
 				print("Non-zero exit status:")
 				print(process.returncode)
 				raise SystemExit
+		except (KeyboardInterrupt, SystemExit):
+			raise
 		except:
 			print("Unexpected error:")
 			print(sys.exc_info())

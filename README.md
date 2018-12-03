@@ -53,6 +53,8 @@ Plink optional arguments:
 
 VCFtools optional arguments:
 * **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
+* **-C / --indcov:** Filter samples based on maximum allowable missing data. Feature added by @tkchafin. (default = 0.9, input = float). 
+* **-S / --snpcov:** Filter SNPs based on maximum allowable missing data. Feature added by @tkchafin. (default = 0.9, input = float).
 
 ## Example:
 

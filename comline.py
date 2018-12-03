@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import argparse
 import os.path
+import distutils.util
 
 class ComLine():
 	'Class for implementing command line options'
@@ -37,11 +38,11 @@ class ComLine():
 							default=20,
 							help="maximum K value."
 		)
-		opt_plink.add_argument("-a", "--maf",
+		opt_vcf.add_argument("-a", "--maf",
 							dest='maf',
-							type=int,
-							default=0,
-							help="Enter the minimum frequency for the minor allele frequency filter as an integer.  For example, 1 = 0.01"
+							type=float,
+							default=0.0,
+							help="Enter the minimum frequency for the minor allele filter."
 		)
 		optional.add_argument("-n", "--np",
 							dest='np',
@@ -78,6 +79,12 @@ class ComLine():
 							type=int,
 							default=20,
 							help="Number of replicates per K."
+		)
+		opt_vcf.add_argument("-b", "--bi",
+							dest='bi',
+							type=distutils.util.strtobool,
+							default='False',
+							help="Turn on filter for biallelic SNPs."
 		)
 
 		self.args = parser.parse_args()

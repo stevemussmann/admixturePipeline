@@ -10,12 +10,13 @@ import sys
 class VCF():
 	'Class for operating on VCF file using VCFtools and Plink'
 
-	def __init__(self, infile, thin, maf, ind, snp):
+	def __init__(self, infile, thin, maf, ind, snp, bi):
 		self.vcf_file = infile
 		self.thin = thin
 		self.maf = maf
 		self.ind = ind #maximum allowable missing data per snp
 		self.snp = snp #maximum allowable missing data per individual
+		self.bi = bi #controls biallelic filter
 
 		temp = os.path.splitext(os.path.basename(infile))
 		self.prefix = temp[0]
@@ -50,17 +51,21 @@ class VCF():
 
 	def convert(self):
 
-		if (self.ind < 1.0 and self.ind > 0.0):
+		if(self.ind < 1.0 and self.ind > 0.0):
 			remove = self.get_ind_coverage()
 			#print(remove)
 
 		vcf_command = "vcftools --vcf " + self.vcf_file + " --plink --out " + self.prefix
 		if(self.thin > 0):
 			vcf_command = vcf_command + " --thin " + str(self.thin)
-		if (self.snp < 1.0 and self.snp > 0.0):
+		if(self.snp < 1.0 and self.snp > 0.0):
 			vcf_command = vcf_command + " --max-missing " + str(self.snp)
-		if (len(remove) > 0):
+		if(len(remove) > 0):
 			vcf_command = vcf_command + remove
+		if(self.maf > 0.0 and self.maf < 1.0):
+			vcf_command = vcf_command + " --maf " + str(self.maf)
+		if(self.bi == True):
+			vcf_command = vcf_command + " --min-alleles 2 --max-alleles 2"
 		self.run_program(vcf_command)
 
 		self.fix_map()
@@ -98,10 +103,13 @@ class VCF():
 				fh.close()
 
 	def plink(self):
+		plink_str_com = "plink --file " + self.prefix + " --allow-extra-chr 0 --recode structure --out " + self.prefix
+		self.run_program(plink_str_com)
+
 		plink_command = "plink --file " + self.prefix + " --noweb --allow-extra-chr 0 --recode12 --out " + self.prefix
-		if(self.maf > 0):
-			maf_float = self.maf/100.0
-			plink_command = plink_command + " --maf " + str(maf_float)
+		#if(self.maf > 0):
+		#	maf_float = self.maf/100.0
+		#	plink_command = plink_command + " --maf " + str(maf_float)
 		self.run_program(plink_command)
 
 	def print_populations(self,popmap):

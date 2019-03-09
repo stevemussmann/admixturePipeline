@@ -56,6 +56,10 @@ class ComLine():
 							default=0,
 							help="Use VCFtools to thin out loci falling within the specified proximity to one another."
 		)
+		opt_vcf.add_argument("-r", "--remove",
+							dest='remove',
+							help="Specify a file of blacklisted individuals to have VCFtools remove from the analysis."
+		)
 		opt_admix.add_argument("-C", "--indcov",
 							dest='indcov',
 							type=float,
@@ -92,6 +96,8 @@ class ComLine():
 		#check if files exist
 		self.exists( self.args.popmap )
 		self.exists( self.args.vcf )
+		if self.args.remove:
+			self.exists( self.args.remove )
 
 
 

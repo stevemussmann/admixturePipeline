@@ -18,6 +18,7 @@ class VCF():
 		self.snp = snp #maximum allowable missing data per individual
 		self.bi = bi #controls biallelic filter
 		self.removeFile = r #file containing individuals to be removed
+		self.removeInds = False
 		if self.removeFile:
 			self.removeInds = True
 
@@ -122,10 +123,11 @@ class VCF():
 	def print_populations(self,popmap):
 		#make dictionary of blacklisted individuals
 		blacklist = dict()
-		rmf = self.readfile(self.removeFile)
-		for key in rmf:
-			key.rstrip()
-			blacklist[key]=1 
+		if(self.removeInds == True):
+			rmf = self.readfile(self.removeFile)
+			for key in rmf:
+				key.rstrip()
+				blacklist[key]=1 
 
 		#print(blacklist)
 

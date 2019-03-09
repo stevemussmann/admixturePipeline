@@ -10,11 +10,9 @@ This pipeline has three dependencies that must be installed:
 * VCFtools (https://vcftools.github.io/index.html)
 * Admixture (https://www.genetics.ucla.edu/software/admixture/download.html)
 
-The VCFtools package can be easily installed on Ubuntu.  The following command should work:
-```
-sudo apt-get install vcftools
-```
-The PLINK version in the standard Ubuntu repository is unsupported.  Please install it and Admixture manually.  The executable for each program should be the lowercase version of its name (i.e., plink, vcftools, admixture), and should be placed in your path.  
+As of March 9, 2019, the VCFtools version in the standard Ubuntu repository is unsupported.  Please install it manually.
+
+The PLINK version in the standard Ubuntu repository is also unsupported.  Please install it and Admixture manually.  The executable for each program should be the lowercase version of its name (i.e., plink, vcftools, admixture), and should be placed in your path.  
 
 You may have to modify the first line of the admixturePipeline.py file, which by default reads:
 ```
@@ -51,6 +49,7 @@ Admixture optional arguments:
 VCFtools optional arguments:
 * **-a / --maf:** Enter a minimum frequency for the minor allele frequency filter. (default = off, specify a value between 0.0 and 1.0 to turn it on).
 * **-b / --bi:** Turns biallelic filter on/off. (default = off, turn on to recover only biallelic SNPs)  
+* **-r / --remove:** Provide a blacklist of individuals that will be filtered out by VCFtools. This is a textfile with each name on its own line. Names of individuals must match those in the .vcf file exactly. 
 * **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
 * **-C / --indcov:** Filter samples based on maximum allowable missing data. Feature added by @tkchafin. (default = 0.9, input = float). 
 * **-S / --snpcov:** Filter SNPs based on maximum allowable missing data. Feature added by @tkchafin. (default = 0.9, input = float).

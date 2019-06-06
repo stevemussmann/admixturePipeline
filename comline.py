@@ -38,6 +38,13 @@ class ComLine():
 							default=20,
 							help="maximum K value."
 		)
+		opt_vcf.add_argument("-M", "--mac",
+					dest='mac',
+					type=int,
+					default=0,
+					help="Enter the minimum count for the minor allele filter."
+		)
+
 		opt_vcf.add_argument("-a", "--maf",
 							dest='maf',
 							type=float,

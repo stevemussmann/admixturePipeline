@@ -10,10 +10,11 @@ import sys
 class VCF():
 	'Class for operating on VCF file using VCFtools and Plink'
 
-	def __init__(self, infile, thin, maf, ind, snp, bi, r):
+	def __init__(self, infile, thin, maf, mac, ind, snp, bi, r):
 		self.vcf_file = infile
 		self.thin = thin
 		self.maf = maf
+		self.mac = mac
 		self.ind = ind #maximum allowable missing data per snp
 		self.snp = snp #maximum allowable missing data per individual
 		self.bi = bi #controls biallelic filter
@@ -68,6 +69,8 @@ class VCF():
 			vcf_command = vcf_command + remove
 		if(self.maf > 0.0 and self.maf < 1.0):
 			vcf_command = vcf_command + " --maf " + str(self.maf)
+		if(self.mac > 0):
+			vcf_command = vcf_command + " --mac " + str(self.mac)
 		if(self.bi == True):
 			vcf_command = vcf_command + " --min-alleles 2 --max-alleles 2"
 		if(self.removeInds == True ):

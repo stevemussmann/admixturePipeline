@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/96546673.svg)](https://zenodo.org/badge/latestdoi/96546673)
+
 # Admixture Pipeline: A Method for Parsing and Filtering VCF Files for Admixture Analysis
 A pipeline that accepts a VCF file to run through Admixture
 

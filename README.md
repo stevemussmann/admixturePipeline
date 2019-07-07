@@ -1,5 +1,10 @@
-# admixturePipeline
+# Admixture Pipeline: A Method for Parsing and Filtering VCF Files for Admixture Analysis
 A pipeline that accepts a VCF file to run through Admixture
+
+## Citing Admixture Pipeline
+A manuscript will be prepared describing this method. For now, cite this github repository.
+
+S.M. Mussmann, T.K. Chafin 2019. Admixture Pipeline: A Method for Parsing and Filtering VCF Files for Admixture Analysis. 
 
 ## Installation & Setup:
 

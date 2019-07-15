@@ -58,8 +58,8 @@ VCFtools optional arguments:
 * **-b / --bi:** Turns biallelic filter on/off. (default = off, turn on to recover only biallelic SNPs)  
 * **-r / --remove:** Provide a blacklist of individuals that will be filtered out by VCFtools. This is a textfile with each name on its own line. Names of individuals must match those in the .vcf file exactly. 
 * **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
-* **-C / --indcov:** Filter samples based on maximum allowable missing data. Feature added by @tkchafin. (default = 0.9, input = float). 
-* **-S / --snpcov:** Filter SNPs based on maximum allowable missing data. Feature added by @tkchafin. (default = 0.9, input = float).
+* **-C / --indcov:** Filter samples based on maximum allowable missing data. Feature added by tkchafin. (default = 0.9, input = float). 
+* **-S / --snpcov:** Filter SNPs based on proportion of allowable missing data. Feature added by tkchafin. (default = 0.1; defined to be between 0 and 1, where 0 allows sites that are completely missing and 1 indicates no missing data allowed; input = float).
 
 ## Example:
 

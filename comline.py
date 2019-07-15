@@ -76,8 +76,8 @@ class ComLine():
 		opt_admix.add_argument("-S", "--snpcov",
 							dest='snpcov',
 							type=float,
-							default=0.9,
-							help="Specify the maximum allowable missing data per SNP"
+							default=0.1,
+							help="Specify the allowable proportion of missing data per SNP. 0 allows sites that are completely missing and 1 indicates no missing data allowed."
 		)
 		opt_admix.add_argument("-c", "--cv",
 							dest='cv',

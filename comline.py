@@ -67,13 +67,13 @@ class ComLine():
 							dest='remove',
 							help="Specify a file of blacklisted individuals to have VCFtools remove from the analysis."
 		)
-		opt_admix.add_argument("-C", "--indcov",
+		opt_vcf.add_argument("-C", "--indcov",
 							dest='indcov',
 							type=float,
 							default=0.9,
 							help="Specify the maximum allowable missing data per individual"
 		)
-		opt_admix.add_argument("-S", "--snpcov",
+		opt_vcf.add_argument("-S", "--snpcov",
 							dest='snpcov',
 							type=float,
 							default=0.1,

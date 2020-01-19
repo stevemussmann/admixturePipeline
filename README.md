@@ -15,7 +15,7 @@ This pipeline was written to be run on Unix based operating systems, such as the
 This pipeline has three dependencies that must be installed:
 * PLINK 1.9 beta 4.5 or newer (https://www.cog-genomics.org/plink2)
 * VCFtools (https://vcftools.github.io/index.html)
-* Admixture (https://www.genetics.ucla.edu/software/admixture/download.html)
+* Admixture (http://software.genetics.ucla.edu/admixture/download.html)
 
 As of March 9, 2019, the VCFtools version in the standard Ubuntu repository is unsupported.  Please install it manually.
 

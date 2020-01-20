@@ -74,8 +74,30 @@ admixturePipeline.py -m popmap.txt -v input.vcf -k 1 -K 10 -n 16 -t 100 -a 0.05
 For the example line of code above, the following outputs will be produced:
 * **input.ped**, **input.map**: output of plink
 * **results.zip**: a compressed file that can be input into a pipeline such as CLUMPAK
-* **results.zip**: a compressed file that can be input into a pipeline such as CLUMPAK
 * **loglik.txt**: a file containing the log likelihood values of each iteration of each K value.
 * **input.{k}\_{r}.P** and **input.{k}\_{r}.Q**: Admixture output files for each iteration{r} of each K{k} value
 * **input\_pops.txt**: a list of population data that can be input into a pipeline such as CLUMPAK
 * **input.recode.strct_in**: a structure-formatted file of filtered SNPs
+
+Once you have finished running this stage of the pipeline, you can submit the two files designated as CLUMPAK inputs above to CLUMPAK (http://clumpak.tau.ac.il/). Once that analysis finishes, you can continue on with the 
+
+# distructRerun.py
+
+This code was written to help streamline the process of re-running distruct on the major clusters that are found by CLUMPAK .  This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
+
+## Usage:
+
+Download your results from the CLUMPAK server.  This should give you a zipped folder of your results, named something like "1516030453.zip".  First, unzip this folder:
+```
+unzip 1516030453.zip
+```
+This should produce a folder in your current directory named 1516030453.  Now, run distruct-rerun.py on your folder.  Assuming that you have installed distruct-rerun.py somewhere in your path, the command will be something like the below command.  In this example, -d is used to give the name of the directory that the program will use as input, -k specifies the lowest clustering value that you tested in Admixture, and -K specifies the highest clustering value you tested.
+
+```
+distruct-rerun.py -d 1516030453/ -k 1 -K 12
+```
+This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distruct-rerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK.  **Copy this file to the directory that contains your output files produced by the admixturePipeline, and cd into that directory.**  You can now get the CV values produced by Admixture by running the following code:
+```
+for file in `cat MajorClusterRuns.txt`; do grep CV $file >> cv_file.txt; done;
+```
+You should now have a file named cv_file.txt that contains all of the CV values for your major cluster runs.  The rest of the processing can be accomplished through my admixture_cv_sum repository.

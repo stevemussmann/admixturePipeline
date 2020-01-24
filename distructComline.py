@@ -29,6 +29,11 @@ class ComLine():
 							required=True,
 							help="Provide the lowest clustering value tested for clumpak run"
 		)
+		parser.add_argument("-w", "--width",
+							dest='width',
+							default="4",
+							help="Provide the width of each individual bar in the distruct output"
+		)
 		parser.add_argument("-m", "--mc",
 							dest='mc',
 							default="MajorClusterRuns.txt",

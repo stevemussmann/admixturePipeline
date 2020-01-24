@@ -22,7 +22,7 @@ def main():
 
 		d = Distruct(input.args.directory, input.args.otl)
 		d.copyFiles()
-		d.writeDrawparams(drawp, popq, indivq, str(k), outfile, c.pops, c.inds)
+		d.writeDrawparams(drawp, popq, indivq, str(k), outfile, c.pops, c.inds, input.args.width)
 
 main()
 

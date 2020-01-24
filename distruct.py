@@ -26,7 +26,7 @@ class Distruct():
 		if not os.path.exists(nd):
 			os.makedirs(nd)
 
-	def writeDrawparams(self,pfile, popq, indivq, k, outfile, pops, numind):
+	def writeDrawparams(self,pfile, popq, indivq, k, outfile, pops, numind, width):
 		drawp = os.path.join(self.nd, pfile)
 		fh = open(drawp, 'w')
 		fh.write("#define INFILE_POPQ ")
@@ -64,7 +64,9 @@ class Distruct():
 		fh.write("#define DIST_ABOVE -160\n")
 		fh.write("#define DIST_BELOW -50\n")
 		fh.write("#define BOXHEIGHT 150\n")
-		fh.write("#define INDIVWIDTH 4\n")
+		fh.write("#define INDIVWIDTH ")
+                fh.write(width)
+                fh.write("\n")
 		fh.write("#define ORIENTATION 1\n")
 		fh.write("#define XORIGIN 200\n")
 		fh.write("#define YORIGIN 10\n")

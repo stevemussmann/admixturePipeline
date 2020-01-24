@@ -24,6 +24,8 @@ def main():
 		d.copyFiles()
 		d.writeDrawparams(drawp, popq, indivq, str(k), outfile, c.pops, c.inds, input.args.width)
 
+        d.runDistruct()
+
 main()
 
 raise SystemExit

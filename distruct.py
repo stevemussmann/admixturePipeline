@@ -3,6 +3,8 @@ from __future__ import print_function
 from shutil import copyfile
 
 import os
+import subprocess
+import sys
 
 class Distruct():
 	'Class for preparing distruct output from the output produced by clumpak'
@@ -28,20 +30,25 @@ class Distruct():
 
 	def writeDrawparams(self,pfile, popq, indivq, k, outfile, pops, numind, width):
 		drawp = os.path.join(self.nd, pfile)
+                popqdir = os.path.join(self.nd,popq)
+                indivqdir = os.path.join(self.nd,indivq)
+                topdir = os.path.join(self.nd,self.oldtoplabels)
+                btmdir = os.path.join(self.nd,self.oldbottomlabels)
 		fh = open(drawp, 'w')
 		fh.write("#define INFILE_POPQ ")
-		fh.write(popq)
+		fh.write(popqdir)
 		fh.write("\n")
 		fh.write("#define INFILE_INDIVQ ")
-		fh.write(indivq)
+		fh.write(indivqdir)
 		fh.write("\n")
 		fh.write("#define INFILE_LABEL_BELOW ")
-		fh.write(self.oldbottomlabels)
+		fh.write(btmdir)
 		fh.write("\n")
 		fh.write("#define INFILE_LABEL_ATOP ")
-		fh.write(self.oldtoplabels)
+		fh.write(topdir)
 		fh.write("\n")
-		fh.write("#define INFILE_CLUST_PERM /home/mussmann/local/src/distruct1.1/ColorBrewer/BrBG_")
+		#fh.write("#define INFILE_CLUST_PERM /home/mussmann/local/src/distruct1.1/ColorBrewer/BrBG_")
+		fh.write("#define INFILE_CLUST_PERM BrBG_")
 		fh.write(k)
 		fh.write("_div\n")
 		fh.write("#define OUTFILE ")
@@ -83,6 +90,38 @@ class Distruct():
 		fh.write("#define PRINT_INFILE_NAME 0\n")
 		fh.write("#define PRINT_COLOR_BREWER 1\n")
 		fh.close()
+
+        def runDistruct(self):
+                print("Now running distruct for all drawparams files...")
+                contents = os.listdir(self.nd)
+                
+                for f in contents:
+                        if f.startswith("drawparams"):
+                                fpath = os.path.join(self.nd, f).rstrip()
+                                print(fpath)
+                                distructCommand = "distruct -d " + str(fpath)
+                                self.run_program(distructCommand)
+
+        def run_program(self, string):
+                print(string)
+                try:
+                        process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+                        output, err = process.communicate()
+                        print(output)
+                        print(err)
+                        if process.returncode !=0:
+                                    print("Non-zero exit status:")
+                                    print(process.returncode)
+
+                                    # I commented out the raise SystemExit here because distruct always seems to exit with a non-zero status.
+                                    #raise SystemExit
+                except (KeyboardInterrupt, SystemExit):
+                        raise
+                except:
+                        print("Unexpected error:")
+                        print(sys.exc_info())
+                        raise SystemExit
+
 
 	def fileExists(self, filename):
 		if( os.path.isfile(filename) != True ):

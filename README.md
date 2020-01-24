@@ -8,20 +8,18 @@ A manuscript will be prepared describing this method. For now, cite this github 
 
 S.M. Mussmann, T.K. Chafin 2019. Admixture Pipeline: A Method for Parsing and Filtering VCF Files for Admixture Analysis. DOI: 10.5281/zenodo.3270852
 
-## Installation & Setup:
+## Installation & Setup for admixturePipeline.py:
 
 This pipeline was written to be run on Unix based operating systems, such as the various Linux distributions and Mac OS X.  To get started, clone this project to the desired location on your computer.  
 
 This pipeline has three dependencies that must be installed:
-* PLINK 1.9 beta 4.5 or newer (https://www.cog-genomics.org/plink2)
-* VCFtools (https://vcftools.github.io/index.html)
-* Admixture (http://software.genetics.ucla.edu/admixture/download.html)
+* **PLINK 1.9 beta 4.5 or newer** (https://www.cog-genomics.org/plink2)
+* **VCFtools** (https://vcftools.github.io/index.html)
+* **Admixture** (http://software.genetics.ucla.edu/admixture/download.html)
 
-As of March 9, 2019, the VCFtools version in the standard Ubuntu repository is unsupported.  Please install it manually.
+It is advised that you install the latest version of each program manually. For example, admixturePipeline.py utilizes options in PLINK and VCFtools that are not present in the versions curated within the standard Ubuntu repositories. Each program should be added to your $PATH as the lowercase version of its name (i.e., plink, vcftools, admixture).
 
-The PLINK version in the standard Ubuntu repository is also unsupported.  Please install it and Admixture manually.  The executable for each program should be the lowercase version of its name (i.e., plink, vcftools, admixture), and should be placed in your path.  
-
-You may have to modify the first line of the admixturePipeline.py file, which by default reads:
+You may also have to modify the first line of the admixturePipeline.py file, which by default reads:
 ```
 #!/usr/bin/env Python
 ```
@@ -32,7 +30,7 @@ which python
 ```
 Then modify the first line of admixturePipeline.py to reflect the location of your Python installation.
 
-## Running the pipeline:
+## Running admixturePipeline.py:
 
 You can run the program to print help options with the following command:
 
@@ -79,11 +77,18 @@ For the example line of code above, the following outputs will be produced:
 * **input\_pops.txt**: a list of population data that can be input into a pipeline such as CLUMPAK
 * **input.recode.strct_in**: a structure-formatted file of filtered SNPs
 
-Once you have finished running this stage of the pipeline, you can submit the two files designated as CLUMPAK inputs above to CLUMPAK (http://clumpak.tau.ac.il/). Once that analysis finishes, you can continue on with the 
+Once you have finished running this stage of the pipeline, you can submit the two above files designated as CLUMPAK inputs to the online resource CLUMPAK (http://clumpak.tau.ac.il/). Once that analysis finishes, you can continue on with the pipeline using distructRerun.py
 
 # distructRerun.py
 
 This code was written to help streamline the process of re-running distruct on the major clusters that are found by CLUMPAK .  This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
+
+## Installation & Setup for distructRerun.py:
+
+distructRerun.py has a single dependency that should be installed:
+* **distruct** (https://rosenberglab.stanford.edu/distructDownload.html)
+
+It is advised that you install distruct manually. It should be added to your $PATH as the lowercase version of its name (i.e., distruct).
 
 ## Usage:
 
@@ -91,12 +96,12 @@ Download your results from the CLUMPAK server.  This should give you a zipped fo
 ```
 unzip 1516030453.zip
 ```
-This should produce a folder in your current directory named 1516030453.  Now, run distruct-rerun.py on your folder.  Assuming that you have installed distruct-rerun.py somewhere in your path, the command will be something like the below command.  In this example, -d is used to give the name of the directory that the program will use as input, -k specifies the lowest clustering value that you tested in Admixture, and -K specifies the highest clustering value you tested.
+This should produce a folder in your current directory named 1516030453.  Now, run distructRerun.py on your folder.  Assuming that you have installed distruct-rerun.py somewhere in your path, the command will be something like the below command.  In this example, -d is used to give the name of the directory that the program will use as input, -k specifies the lowest clustering value that you tested in Admixture, and -K specifies the highest clustering value you tested.
 
 ```
-distruct-rerun.py -d 1516030453/ -k 1 -K 12
+distructRerun.py -d 1516030453/ -k 1 -K 12
 ```
-This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distruct-rerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK.  **Copy this file to the directory that contains your output files produced by the admixturePipeline, and cd into that directory.**  You can now get the CV values produced by Admixture by running the following code:
+This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK.  **Copy this file to the directory that contains your output files produced by the admixturePipeline, and cd into that directory.**  You can now get the CV values produced by Admixture by running the following code:
 ```
 for file in `cat MajorClusterRuns.txt`; do grep CV $file >> cv_file.txt; done;
 ```

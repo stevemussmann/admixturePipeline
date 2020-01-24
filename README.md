@@ -116,3 +116,17 @@ List of current options:
 The following outputs will be produced in the directory where distructRerun.py was executed:
 * **MajorClusterRuns.txt**: contains all of the names of the .stdout files produced by admixturePipeline.py that correspond to each of the major clusters recovered by CLUMPAK.
 * **cv_file.txt**: CV values for all of the major clusters
+
+# cvSum.py
+
+This code was written to summarize the variability of cross-validation values across multiple runs of admixture.
+
+## Installation & Setup for distructRerun.py:
+
+The only additional requirement for this section of the pipeline is the python **matplotlib** library. 
+
+## Usage:
+It is assumed that you have already processed your data with admixturePipeline.py and distructRerun.py. Simply execute the cvSum.py script in the directory containing your cv_file.txt output from distructRerun.py to generate the summary information for your major cluster runs identified by CLUMPAK. If you have changed the name of cv_file.txt then you must use the -c flag to specify the new file name.
+
+The output of this program is a plot of boxplots representing the variation in the CV values found by different runs of ADMIXTURE.  The X axis of the plot corresponds to K values, while the Y axis corresponds to the CV values.  Lower CV values are preferred.  The output file will be named "cv_file.png" unless you use the -o option to specify a custom file name.  
+

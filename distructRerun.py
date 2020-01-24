@@ -15,9 +15,10 @@ def main():
 		drawp = "drawparams." + str(k)
 		outfile = "K" + str(k) + ".ps"
 
-		c = Clumpp(input.args.directory, str(k))
+		c = Clumpp(input.args.directory, str(k), input.args.ad)
 		popq,indivq = c.copyFiles()
 		c.getMajorClusterRuns(input.args.mc)
+                c.getCVvalues(input.args.mc)
 
 		d = Distruct(input.args.directory, input.args.otl)
 		d.copyFiles()

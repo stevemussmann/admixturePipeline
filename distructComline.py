@@ -9,6 +9,11 @@ class ComLine():
 
 	def __init__(self, args):
 		parser = argparse.ArgumentParser()
+		parser.add_argument("-a", "--ad",
+							dest='ad',
+                                                        required=True,
+							help="Provide a path to admixture output"
+		)
 		parser.add_argument("-d", "--directory",
 							dest='directory',
 							default=os.getcwd().rstrip(),

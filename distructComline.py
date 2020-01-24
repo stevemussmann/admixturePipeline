@@ -43,7 +43,7 @@ class ComLine():
                 parser.add_argument("-l", "--otl",
 							dest='otl',
 							default="AdmixturePopIdToPopName",
-							help="Provide file that will hold names of labels in the distruct plots. Default value works for ADMIXTURE output analyzed in CLUMPAK. Change value to pops.txt for manipulating STRUCTURE output that has been analyzed in CLUMPAK"
+                                                        help="Provide file that will hold names of labels in the distruct plots. Default value works for ADMIXTURE output analyzed in CLUMPAK. Change value to your custom DISTRUCT labels file that you uploaded to CLUMPAK if you want to manipulate STRUCTURE output that has been analyzed in CLUMPAK (note: this option is currently experimental and may result in unexpected behavior)"
 
                 )
 		self.args = parser.parse_args()

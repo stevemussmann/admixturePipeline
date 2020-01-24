@@ -96,13 +96,16 @@ Download your results from the CLUMPAK server.  This should give you a zipped fo
 ```
 unzip 1516030453.zip
 ```
-This should produce a folder in your current directory named 1516030453.  Now, run distructRerun.py on your folder.  Assuming that you have installed distruct-rerun.py somewhere in your path, the command will be something like the below command.  In this example, -d is used to give the name of the directory that the program will use as input, -k specifies the lowest clustering value that you tested in Admixture, and -K specifies the highest clustering value you tested.
+This should produce a folder in your current directory named 1516030453.  Now, run distructRerun.py on your folder.  Assuming that you have installed distruct-rerun.py somewhere in your path, the command will be something like the below command.  In this example, -a is used to provide the path to the directory of results produced by admixturePipeline.py, -d is used to give the name of the directory that the program will use as input, -k (lower case) specifies the lowest clustering value that you tested in Admixture, and -K (upper case) specifies the highest clustering value you tested.
 
 ```
-distructRerun.py -d 1516030453/ -k 1 -K 12
+distructRerun.py -a example_admixturePipeline_result/ -d 1516030453/ -k 1 -K 12
 ```
-This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK.  **Copy this file to the directory that contains your output files produced by the admixturePipeline, and cd into that directory.**  You can now get the CV values produced by Admixture by running the following code:
-```
-for file in `cat MajorClusterRuns.txt`; do grep CV $file >> cv_file.txt; done;
-```
-You should now have a file named cv_file.txt that contains all of the CV values for your major cluster runs.  The rest of the processing can be accomplished through my admixture_cv_sum repository.
+This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK. You should also have a file named cv_file.txt that contains all of the CV values for your major cluster runs.  The rest of the processing can be accomplished through my admixture_cv_sum repository.
+
+
+## Outputs:
+
+The following outputs will be produced in the directory where distructRerun.py was executed:
+* **MajorClusterRuns.txt**: contains all of the names of the .stdout files produced by admixturePipeline.py that correspond to each of the major clusters recovered by CLUMPAK.
+* **cv_file.txt**: CV values for all of the major clusters

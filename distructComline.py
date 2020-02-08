@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import argparse
 import os
+import distutils.util
 
 class ComLine():
 	'Class for implementing command line options'
@@ -45,6 +46,12 @@ class ComLine():
 							default="AdmixturePopIdToPopName",
 							help="Provide file that will hold names of labels in the distruct plots. Default value works for ADMIXTURE output analyzed in CLUMPAK. Change value to your custom DISTRUCT labels file that you uploaded to CLUMPAK if you want to manipulate STRUCTURE output that has been analyzed in CLUMPAK (note: this option is currently experimental and may result in unexpected behavior)"
 		)
+		parser.add_argument("-r", "--run",
+							dest='run',
+							action='store_true',
+							help="Run Distruct on all drawparams files"
+		)
+
 		self.args = parser.parse_args()
 
 		#check if files exist

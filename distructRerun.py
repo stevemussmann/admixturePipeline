@@ -24,7 +24,8 @@ def main():
 		d.copyFiles()
 		d.writeDrawparams(drawp, popq, indivq, str(k), outfile, c.pops, c.inds, input.args.width)
 
-		d.runDistruct()
+		if input.args.run==True:
+			d.runDistruct()
 
 main()
 

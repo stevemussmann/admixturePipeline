@@ -20,6 +20,7 @@ class VCF():
 		self.bi = bi #controls biallelic filter
 		self.removeFile = r #file containing individuals to be removed
 		self.removeInds = False
+		self.blacklist = dict() #make dictionary of blacklisted individuals
 		if self.removeFile:
 			self.removeInds = True
 
@@ -74,7 +75,7 @@ class VCF():
 		if(self.bi == True):
 			vcf_command = vcf_command + " --min-alleles 2 --max-alleles 2"
 		if(self.removeInds == True ):
-			vcf_command = vcf_command + " --remove " + self.removeFile
+			vcf_command = vcf_command + " --remove " + str(self.removeFile)
 		self.run_program(vcf_command)
 
 		self.fix_map()
@@ -82,7 +83,7 @@ class VCF():
 	def get_ind_coverage(self):
 		vcf_command = "vcftools --vcf " + self.vcf_file + " --missing-indv --out " + self.prefix
 		if( self.removeInds == True ):
-			vcf_command = vcf_command + " --remove " + self.removeFile
+			vcf_command = vcf_command + " --remove " + str(self.removeFile)
 		self.run_program(vcf_command)
 
 		fname = self.prefix + ".imiss"
@@ -102,6 +103,7 @@ class VCF():
 						#print(stuff)
 						if float(stuff[4]) > self.ind:
 							print("Removing individual %s: %s missing data"%(stuff[0],stuff[4]))
+							self.blacklist[stuff[0]]=1
 							ret = ret + " --remove-indv " + str(stuff[0])
 				return(ret)
 			except IOError as e:
@@ -124,29 +126,22 @@ class VCF():
 		self.run_program(plink_command)
 
 	def print_populations(self,popmap):
-		#make dictionary of blacklisted individuals
-		blacklist = dict()
 		if(self.removeInds == True):
 			rmf = self.readfile(self.removeFile)
 			for key in rmf:
 				key.rstrip()
-				blacklist[key]=1 
+				self.blacklist[key]=1 
 
-		#print(blacklist)
+		print(self.blacklist)
 
 		#print populations file, excluding blacklisted individuals
 		data = self.readfile(self.vcf_file)
 		popfile = self.prefix + "_pops.txt"
 		f = open(popfile,'w')
-		for line in data:
-			if line.startswith("#CHROM"):
-				mylist = line.split()
-				del mylist[0:9]
-				#print(mylist)
-				for ind in mylist:
-					if ind not in blacklist:
-						f.write(popmap.get_pop(ind))
-						f.write("\n")
+		for ind in popmap.get_list():
+			if ind not in self.blacklist:
+				f.write(popmap.get_pop(ind))
+				f.write("\n")
 		f.close()
 
 	def readfile(self,infile):

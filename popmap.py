@@ -22,3 +22,6 @@ class Popmap():
 
 	def get_pop(self,ind):
 		return self.popmap.get(ind)
+
+	def get_list(self):
+		return list(self.popmap.keys())

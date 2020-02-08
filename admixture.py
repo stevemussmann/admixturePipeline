@@ -27,7 +27,7 @@ class Admixture():
 			fn = self.prefix + "." + str(i) + "_" + str(j) + ".stdout" #make name for stdout log file
 			process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 			output, err = process.communicate()
-			f = open(fn, 'w')
+			f = open(fn, 'wb')
 			f.write(output)
 			f.close()
 			print(err)
@@ -44,10 +44,10 @@ class Admixture():
 
 	def admix(self):
 		ks = range(self.minK, self.maxK+1)
-		print(ks)
+		#print(ks)
 		#for each k value
 		for i in ks:
-			for j in xrange(self.rep):
+			for j in range(self.rep):
 				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " --cv=" + str(self.cv) + " " + self.prefix + ".ped " + str(i)
 				#print(command_string)
 				self.run_program(command_string,i,j)
@@ -94,7 +94,7 @@ class Admixture():
 			raise SystemExit
 
 	def loglik(self):
-		fh = open("loglik.txt", 'w')
+		fh = open("loglik.txt", 'wb')
 		for fn in os.listdir("."):
 			if fn.endswith("stdout"):
 				temp = open(fn, 'r')
@@ -106,10 +106,10 @@ class Admixture():
 					if line.startswith("Loglikelihood:"):
 						mylist = line.split()
 						#print(mylist)
-						fh.write(kval)
-						fh.write("\t")
-						fh.write(mylist[-1])
-						fh.write("\n")
+						fh.write(kval.encode())
+						fh.write("\t".encode())
+						fh.write(mylist[-1].encode())
+						fh.write("\n".encode())
 				temp.close()
 		fh.close()
 

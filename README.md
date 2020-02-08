@@ -134,5 +134,15 @@ The only additional requirement for this section of the pipeline is the python *
 ## Usage:
 It is assumed that you have already processed your data with admixturePipeline.py and distructRerun.py. Simply execute the cvSum.py script in the directory containing your cv_file.txt output from distructRerun.py to generate the summary information for your major cluster runs identified by CLUMPAK. If you have changed the name of cv_file.txt then you must use the -c flag to specify the new file name.
 
-The output of this program is a plot of boxplots representing the variation in the CV values found by different runs of ADMIXTURE.  The X axis of the plot corresponds to K values, while the Y axis corresponds to the CV values.  Lower CV values are preferred.  The output file will be named "cv_file.png" unless you use the -o option to specify a custom file name.  
+The output of this program is a plot of boxplots representing the variation in the CV values found by different runs of ADMIXTURE.  The X axis of the plot corresponds to K values, while the Y axis corresponds to the CV values.  Lower CV values are preferred.  The plot file name will be same as your input file, but with a .png extension (i.e., "cv_file.png"). The summary statistics are saved in a file named "cv_output.txt" unless you use the -o option to specify a custom file name.  
+
+List of current options:
+* **-c / --cv:** Specify the name of your file with cross-validation values for your admixture runs (optional, default = cv_file.txt).
+* **-o / --out:** Specify the name of your output file (optional, default = cv_output.txt).
+
+## Outputs:
+
+The following outputs will be produced in the directory where cvSum.py was executed:
+* **cv_file.png**: Boxplot chart providing a visual summary of your your CV values.
+* **cv_output.txt**: Text file containing summary statistics of CV values for each K.
 

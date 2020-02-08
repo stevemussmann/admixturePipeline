@@ -105,12 +105,13 @@ This should have produced a file named MajorClusterRuns.txt in the directory fro
 
 List of current options:
 * **-a / --ad:** Specify the directory containing the output of your admixturePipeline.py run (required).
-* **-c / --colorbrew:** Specify a color palette from the colorbrewer options in distruct 1.1. Enter the prefix of the color palette you want (for example, BrBG) and the pipeline will take care of adding the appropriate K value and palette suffix. If a palette is not available at a particular K value, then distruct will revert to the default palette. 
+* **-c / --colorbrew:** Specify a color palette from the colorbrewer options in distruct 1.1. Enter the prefix of the color palette you want (for example, BrBG) and the pipeline will take care of adding the appropriate K value and palette suffix. If a palette is not available at a particular K value, then distruct will revert to the default palette. (optional, default = BrBG)
 * **-d / --directory:** Specify the directory containing the output of your CLUMPAK run (required).
 * **-k / --minK:** Specify the minimum K value to be tested (required).
 * **-K / --maxK:** Specify the maximum K value to be tested (required).
 * **-m / --mc:** Provide the name of the output file that will hold the names of runs corresponding to the major clusters (optional; default = MajorClusterRuns.txt)
 * **-p / --pathtocolorbrew:** Specify the full path to the location of distruct1.1's colorbrewer files on your computer. 
+* **-r / --run:** Boolean switch. Using this option will run distruct for each drawparams file. (optional, default = off)
 * **-w / --width:** Provide the width of each individual bar in the distruct output (optional; default = 2).
 
 Experimental options:

@@ -16,7 +16,7 @@ class ComLine():
 		)
 		parser.add_argument("-o", "--out",
 							dest='out',
-							default="output.txt",
+							default="cv_output.txt",
 							help="Specify an output file name."
 		)
 		

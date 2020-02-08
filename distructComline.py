@@ -11,12 +11,12 @@ class ComLine():
 		parser = argparse.ArgumentParser()
 		parser.add_argument("-a", "--ad",
 							dest='ad',
-                                                        required=True,
+							required=True,
 							help="Provide a path to admixture output"
 		)
 		parser.add_argument("-d", "--directory",
 							dest='directory',
-							default=os.getcwd().rstrip(),
+							required=True,
 							help="Provide a path to clumpak output"
 		)
 		parser.add_argument("-K", "--maxK",
@@ -31,7 +31,7 @@ class ComLine():
 		)
 		parser.add_argument("-w", "--width",
 							dest='width',
-							default="4",
+							default="2",
 							help="Provide the width of each individual bar in the distruct output"
 		)
 		parser.add_argument("-m", "--mc",

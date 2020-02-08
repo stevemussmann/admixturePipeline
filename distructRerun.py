@@ -11,7 +11,7 @@ import sys
 def main():
 	input = ComLine(sys.argv[1:])
 
-	for k in xrange(int(input.args.mink),int(input.args.maxk)+1):
+	for k in range(int(input.args.mink),int(input.args.maxk)+1):
 		drawp = "drawparams." + str(k)
 		outfile = "K" + str(k) + ".ps"
 

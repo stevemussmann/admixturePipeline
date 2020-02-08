@@ -51,6 +51,16 @@ class ComLine():
 							action='store_true',
 							help="Run Distruct on all drawparams files"
 		)
+		parser.add_argument("-c", "--colorbrew",
+							dest='colorbrew',
+							default="BrBG",
+							help="Provide a prefix for for distruct1.1 color brewer options."
+		)
+		parser.add_argument("-p", "--pathtocolorbrew",
+							dest='pathtocolorbrew',
+							default="/home/mussmann/local/src/distruct1.1/ColorBrewer/",
+							help="Provide the path to where colorbrewer palettes are stored on your machine."
+		)
 
 		self.args = parser.parse_args()
 

@@ -9,16 +9,20 @@ import sys
 class Distruct():
 	'Class for preparing distruct output from the output produced by clumpak'
 
-	def __init__(self,wd,otl):
+	def __init__(self,wd,otl,cb,ptcb):
 		self.wd = wd
 		self.nd = os.path.join(self.wd, "best_results")
-
+		
 		self.oldtoplabels = otl
 		self.oldbottomlabels = "bottomlabels"
 		self.toplabels = os.path.join(wd,self.oldtoplabels)
 
 		#Check if file exists
 		self.fileExists(self.toplabels)
+
+		self.colorbrew = cb
+		self.pathtocb = ptcb
+		self.cbdict=self.makecbsuffixdict()
 
 	def copyFiles(self):
 		nf = os.path.join(self.nd, self.oldtoplabels)
@@ -48,9 +52,14 @@ class Distruct():
 		fh.write(topdir)
 		fh.write("\n")
 		#fh.write("#define INFILE_CLUST_PERM /home/mussmann/local/src/distruct1.1/ColorBrewer/BrBG_")
-		fh.write("#define INFILE_CLUST_PERM BrBG_")
+		fh.write("#define INFILE_CLUST_PERM ")
+		fh.write(self.pathtocb)
+		fh.write(self.colorbrew)
+		fh.write("_")
 		fh.write(k)
-		fh.write("_div\n")
+		fh.write("_")
+		fh.write(self.cbdict[self.colorbrew])
+		fh.write("\n")
 		fh.write("#define OUTFILE ")
 		fh.write(outfile)
 		fh.write("\n")
@@ -131,3 +140,43 @@ class Distruct():
 			raise SystemExit
 		else:
 			print(filename, "Exists")
+
+	def makecbsuffixdict(self):
+		cbdict = dict()
+		cbdict["Accent"]="qual"
+		cbdict["Blues"]="seq"
+		cbdict["BrBG"]="div"
+		cbdict["BuGn"]="seq"
+		cbdict["BuPu"]="seq"
+		cbdict["Dark2"]="qual"
+		cbdict["GnBu"]="seq"
+		cbdict["Greens"]="seq"
+		cbdict["Greys"]="seq"
+		cbdict["Oranges"]="seq"
+		cbdict["OrRd"]="seq"
+		cbdict["Paired"]="qual"
+		cbdict["Pastel1"]="qual"
+		cbdict["Pastel2"]="qual"
+		cbdict["PiYG"]="div"
+		cbdict["PRGn"]="div"
+		cbdict["PuBuGn"]="seq"
+		cbdict["PuBu"]="seq"
+		cbdict["PuOr"]="div"
+		cbdict["PuRd"]="seq"
+		cbdict["Purples"]="seq"
+		cbdict["RdBu"]="div"
+		cbdict["RdGy"]="div"
+		cbdict["RdPu"]="seq"
+		cbdict["RdYlBu"]="div"
+		cbdict["RdYlGn"]="div"
+		cbdict["Reds"]="seq"
+		cbdict["Set1"]="qual"
+		cbdict["Set2"]="qual"
+		cbdict["Set3"]="qual"
+		cbdict["Spectral"]="div"
+		cbdict["YlGnBu"]="seq"
+		cbdict["YlGn"]="seq"
+		cbdict["YlOrBr"]="seq"
+		cbdict["YlOrRd"]="seq"
+
+		return cbdict

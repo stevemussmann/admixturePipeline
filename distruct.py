@@ -30,10 +30,10 @@ class Distruct():
 
 	def writeDrawparams(self,pfile, popq, indivq, k, outfile, pops, numind, width):
 		drawp = os.path.join(self.nd, pfile)
-                popqdir = os.path.join(self.nd,popq)
-                indivqdir = os.path.join(self.nd,indivq)
-                topdir = os.path.join(self.nd,self.oldtoplabels)
-                btmdir = os.path.join(self.nd,self.oldbottomlabels)
+		popqdir = os.path.join(self.nd,popq)
+		indivqdir = os.path.join(self.nd,indivq)
+		topdir = os.path.join(self.nd,self.oldtoplabels)
+		btmdir = os.path.join(self.nd,self.oldbottomlabels)
 		fh = open(drawp, 'w')
 		fh.write("#define INFILE_POPQ ")
 		fh.write(popqdir)
@@ -72,8 +72,8 @@ class Distruct():
 		fh.write("#define DIST_BELOW -50\n")
 		fh.write("#define BOXHEIGHT 150\n")
 		fh.write("#define INDIVWIDTH ")
-                fh.write(width)
-                fh.write("\n")
+		fh.write(width)
+		fh.write("\n")
 		fh.write("#define ORIENTATION 1\n")
 		fh.write("#define XORIGIN 200\n")
 		fh.write("#define YORIGIN 10\n")
@@ -91,36 +91,36 @@ class Distruct():
 		fh.write("#define PRINT_COLOR_BREWER 1\n")
 		fh.close()
 
-        def runDistruct(self):
-                print("Now running distruct for all drawparams files...")
-                contents = os.listdir(self.nd)
-                
-                for f in contents:
-                        if f.startswith("drawparams"):
-                                fpath = os.path.join(self.nd, f).rstrip()
-                                print(fpath)
-                                distructCommand = "distruct -d " + str(fpath)
-                                self.run_program(distructCommand)
+	def runDistruct(self):
+		print("Now running distruct for all drawparams files...")
+		contents = os.listdir(self.nd)
+		
+		for f in contents:
+			if f.startswith("drawparams"):
+				fpath = os.path.join(self.nd, f).rstrip()
+				print(fpath)
+				distructCommand = "distruct -d " + str(fpath)
+				self.run_program(distructCommand)
 
-        def run_program(self, string):
-                print(string)
-                try:
-                        process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-                        output, err = process.communicate()
-                        print(output)
-                        print(err)
-                        if process.returncode !=0:
-                                    print("Non-zero exit status:")
-                                    print(process.returncode)
-
-                                    # I commented out the raise SystemExit here because distruct always seems to exit with a non-zero status.
-                                    #raise SystemExit
-                except (KeyboardInterrupt, SystemExit):
-                        raise
-                except:
-                        print("Unexpected error:")
-                        print(sys.exc_info())
-                        raise SystemExit
+	def run_program(self, string):
+		print(string)
+		try:
+			process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+			output, err = process.communicate()
+			print(output)
+			print(err)
+			if process.returncode !=0:
+				print("Non-zero exit status:")
+				print(process.returncode)
+				
+				# I commented out the raise SystemExit here because distruct always seems to exit with a non-zero status.
+				#raise SystemExit
+		except(KeyboardInterrupt, SystemExit):
+			raise
+		except:
+			print("Unexpected error:")
+			print(sys.exc_info())
+			raise SystemExit
 
 
 	def fileExists(self, filename):

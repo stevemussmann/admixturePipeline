@@ -10,7 +10,7 @@ class Clumpp():
 	def __init__(self,wd,k,ad):
 		self.wd = wd
 		self.k = k
-                self.ad = ad
+		self.ad = ad
 
 		#Construct path to where files should reside
 		tempdir = "K=" + self.k
@@ -50,18 +50,17 @@ class Clumpp():
 				mcruns.write(temp)
 				mcruns.write("\n")
 
-        def getCVvalues(self, mc):
-                with open(mc) as mcruns:
-                        mcfiles = mcruns.readlines()
-
-                with open("cv_file.txt", 'a') as cvf:
-                        for f in mcfiles:
-                                filepath = os.path.join(self.ad, f).rstrip()
-                                #print(filepath)
-                                with open(filepath, 'r') as cvin:
-                                        for line in cvin.readlines():
-                                                if 'CV' in line:
-                                                        cvf.write(line)
+	def getCVvalues(self, mc):
+		with open(mc) as mcruns:
+			mcfiles = mcruns.readlines()
+		with open("cv_file.txt", 'a') as cvf:
+			for f in mcfiles:
+				filepath = os.path.join(self.ad, f).rstrip()
+				#print(filepath)
+				with open(filepath, 'r') as cvin:
+					for line in cvin.readlines():
+						if 'CV' in line:
+							cvf.write(line)
 
 	def copyFiles(self):
 		nd = self.makeDir()

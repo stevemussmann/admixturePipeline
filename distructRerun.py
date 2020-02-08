@@ -18,13 +18,13 @@ def main():
 		c = Clumpp(input.args.directory, str(k), input.args.ad)
 		popq,indivq = c.copyFiles()
 		c.getMajorClusterRuns(input.args.mc)
-                c.getCVvalues(input.args.mc)
+		c.getCVvalues(input.args.mc)
 
 		d = Distruct(input.args.directory, input.args.otl)
 		d.copyFiles()
 		d.writeDrawparams(drawp, popq, indivq, str(k), outfile, c.pops, c.inds, input.args.width)
 
-        d.runDistruct()
+		d.runDistruct()
 
 main()
 

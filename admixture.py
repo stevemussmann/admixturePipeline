@@ -68,7 +68,8 @@ class Admixture():
 
 	def zipdir(self,path,ziph):
 		files = [f for f in os.listdir('.') if os.path.isfile(f)]
-		for root,dirs,files in os.walk(path):
+		for root,dirs,files in os.walk(path, topdown=True):
+			[dirs.remove(d) for d in list(dirs)]
 			for f in files:
 				if f.endswith('.Q'):
 					ziph.write(os.path.join(root,f))

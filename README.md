@@ -101,7 +101,7 @@ This should produce a folder in your current directory named 1516030453.  Now, r
 ```
 distructRerun.py -a example_admixturePipeline_result/ -d 1516030453/ -k 1 -K 12
 ```
-This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK. You should also have a file named cv_file.txt that contains all of the CV values for your major cluster runs.  Finally, distruct will return a postscript file (.ps) for the major cluster of each K value that you evaluated. The rest of the processing can be accomplished through my admixture_cv_sum repository.
+This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK. You should also have a file named cv_file.txt that contains all of the CV values for your major cluster runs.  Finally, if you have chosen to run distruct (by invoking the -r option), then distruct will return a postscript file (.ps) for the major cluster of each K value that you evaluated. These .ps files will appear in the directory from which you executed distructRerun.py. The rest of the processing can be accomplished through cvSum.py.
 
 List of current options:
 * **-a / --ad:** Specify the directory containing the output of your admixturePipeline.py run (required).

@@ -76,4 +76,9 @@ ln -s $HOME/local/scripts/python/admixturePipeline/distructRerun.py
 ## Make sure your $HOME/local/bin folder is in your path
 echo 'export PATH=$HOME/local/bin:$PATH' >> $HOME/.bashrc
 
+## Install matplotlib for cvSum.py program. You may need administrator privledges to install these packages
+apt-get install python-matplotlib
+## or
+apt-get install python3-matplotlib
+
 exit

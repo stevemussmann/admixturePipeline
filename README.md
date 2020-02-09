@@ -17,7 +17,7 @@ This pipeline has three dependencies that must be installed:
 * **VCFtools** (https://vcftools.github.io/index.html)
 * **Admixture** (http://software.genetics.ucla.edu/admixture/download.html)
 
-It is advised that you install the latest version of each program manually. For example, admixturePipeline.py utilizes options in PLINK and VCFtools that are not present in the versions curated within the standard Ubuntu repositories. Each program should be added to your $PATH as the lowercase version of its name (i.e., plink, vcftools, admixture).
+It is advised that you install the latest version of each program manually. For example, admixturePipeline.py utilizes options in PLINK and VCFtools that are not present in the versions curated within the standard Ubuntu repositories. Each program should be added to your $PATH as the lowercase version of its name (i.e., plink, vcftools, admixture). For an example of how I accomplish this, open the example_install.sh script in a text editor. This script contains commented commands that explain what each step of installation accomplishes. 
 
 You may also have to modify the first line of the admixturePipeline.py file, which by default reads:
 ```

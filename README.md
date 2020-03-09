@@ -6,7 +6,7 @@ A pipeline that accepts a VCF file to run through Admixture
 ## Citing AdmixPipe
 A manuscript will be prepared describing this method. For now, cite this github repository.
 
-S.M. Mussmann, T.K. Chafin 2019. AdmixPipe: A Method for Parsing and Filtering VCF Files for Admixture Analysis. DOI: 10.5281/zenodo.3270852
+S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: Population analyses in ADMIXTURE for non-model organisms . DOI: 10.5281/zenodo.3270852
 
 ## Installation & Setup for AdmixPipe:
 

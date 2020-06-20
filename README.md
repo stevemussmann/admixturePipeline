@@ -1,14 +1,14 @@
 [![DOI](https://zenodo.org/badge/96546673.svg)](https://zenodo.org/badge/latestdoi/96546673)
 
-# Admixture Pipeline: A Method for Parsing and Filtering VCF Files for Admixture Analysis
+# AdmixPipe: A Method for Parsing and Filtering VCF Files for Admixture Analysis
 A pipeline that accepts a VCF file to run through Admixture
 
-## Citing Admixture Pipeline
+## Citing AdmixPipe
 A manuscript will be prepared describing this method. For now, cite this github repository.
 
-S.M. Mussmann, T.K. Chafin 2019. Admixture Pipeline: A Method for Parsing and Filtering VCF Files for Admixture Analysis. DOI: 10.5281/zenodo.3270852
+S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: Population analyses in ADMIXTURE for non-model organisms . DOI: 10.5281/zenodo.3270852
 
-## Installation & Setup for admixturePipeline.py:
+## Installation & Setup for AdmixPipe:
 
 This pipeline was written to be run on Unix based operating systems, such as the various Linux distributions and Mac OS X.  To get started, clone this project to the desired location on your computer.  
 

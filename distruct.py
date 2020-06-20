@@ -14,7 +14,7 @@ class Distruct():
 		self.nd = os.path.join(self.wd, "best_results")
 		
 		self.oldtoplabels = otl
-		self.oldbottomlabels = "bottomlabels"
+		self.bottomlabels = "bottomlabels"
 		self.toplabels = os.path.join(wd,self.oldtoplabels)
 
 		#Check if file exists
@@ -34,22 +34,22 @@ class Distruct():
 
 	def writeDrawparams(self,pfile, popq, indivq, k, outfile, pops, numind, width):
 		drawp = os.path.join(self.nd, pfile)
-		popqdir = os.path.join(self.nd,popq)
-		indivqdir = os.path.join(self.nd,indivq)
-		topdir = os.path.join(self.nd,self.oldtoplabels)
-		btmdir = os.path.join(self.nd,self.oldbottomlabels)
+		#popqdir = os.path.join(self.nd,popq)
+		#indivqdir = os.path.join(self.nd,indivq)
+		#topdir = os.path.join(self.nd,self.oldtoplabels)
+		#btmdir = os.path.join(self.nd,self.oldbottomlabels)
 		fh = open(drawp, 'w')
 		fh.write("#define INFILE_POPQ ")
-		fh.write(popqdir)
+		fh.write(popq)
 		fh.write("\n")
 		fh.write("#define INFILE_INDIVQ ")
-		fh.write(indivqdir)
+		fh.write(indivq)
 		fh.write("\n")
 		fh.write("#define INFILE_LABEL_BELOW ")
-		fh.write(btmdir)
+		fh.write(self.bottomlabels)
 		fh.write("\n")
 		fh.write("#define INFILE_LABEL_ATOP ")
-		fh.write(topdir)
+		fh.write(self.oldtoplabels)
 		fh.write("\n")
 		#fh.write("#define INFILE_CLUST_PERM /home/mussmann/local/src/distruct1.1/ColorBrewer/BrBG_")
 		fh.write("#define INFILE_CLUST_PERM ")

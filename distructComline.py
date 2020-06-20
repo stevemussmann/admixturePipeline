@@ -68,6 +68,7 @@ class ComLine():
 		#self.exists( self.args.cv )
 
 		#check if directories exist
+		#self.args.directory = os.path.abspath(self.args.directory)
 		self.dirExists(self.args.directory)
 		if(os.path.isfile(self.args.mc) == True ):
 			os.remove(self.args.mc)

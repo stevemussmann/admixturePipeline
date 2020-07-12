@@ -93,8 +93,8 @@ class ComLine():
 		)
 		opt_vcf.add_argument("-b", "--bi",
 							dest='bi',
-							action='store_false',
-							help="Turn on filter for biallelic SNPs."
+							action='store_true',
+							help="Turn off filter for biallelic SNPs."
 		)
 
 		self.args = parser.parse_args()

@@ -4,9 +4,9 @@
 A pipeline that accepts a VCF file to run through Admixture
 
 ## Citing AdmixPipe
-A manuscript will be prepared describing this method. For now, cite this github repository.
+AdmixPipe is now published in BMC Bioinformatics.
 
-S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: Population analyses in ADMIXTURE for non-model organisms . DOI: 10.5281/zenodo.3270852
+S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: population analyses in ADMIXTURE for non-model organisms. BMC Bioinformatics 21:337. DOI: 10.1186/s12859-020-03701-4
 
 ## Installation & Setup for AdmixPipe:
 

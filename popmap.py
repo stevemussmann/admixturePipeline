@@ -1,13 +1,14 @@
 from __future__ import print_function
 
 from collections import defaultdict
+from collections import OrderedDict
 
 class Popmap():
 	'Class for parsing a popmap'
 
 	def __init__(self, infile):
 		#member variables
-		self.popmap = dict()
+		self.popmap = OrderedDict()
 		self.popnums = defaultdict(int)
 		
 		data = open(infile, 'r')

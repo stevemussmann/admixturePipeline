@@ -8,7 +8,7 @@ import math
 class CVStats():
 	'Class for calculating summary statistics on CV output'
 	
-	def __init__(self, dictoflists,output):
+	def __init__(self, dictoflists, output):
 		self.output = output
 		self.d = dictoflists
 		self.dmeans = dict()
@@ -16,9 +16,11 @@ class CVStats():
 		self.dmed = dict()
 		self.dmin = dict()
 		self.dmax = dict()
+		self.klist = list()
 
 	def calcStats(self):
 		for k,l in self.d.items():
+			self.klist.append(k)
 			mean = self.calcMeans(l)
 			stdev = self.calcStdev(l,mean)
 			med = self.calcMed(l)
@@ -27,7 +29,8 @@ class CVStats():
 			self.dmed[k] = med
 			self.dmin[k] = min(l)
 			self.dmax[k] = max(l)
-	
+		self.klist = sorted(self.klist)
+		
 	def calcMeans(self,l):
 		total = self.calcSum(l)
 		mean = (total/len(l))
@@ -66,7 +69,7 @@ class CVStats():
 		fh = open(self.output, 'w')
 		print("K\tMean\tStDev\tMedian\tMin\tMax")
 		fh.write("K\tMean\tStDev\tMedian\tMin\tMax\n")
-		for k in range(1,len(self.dmeans.keys())+1):
+		for k in self.klist:
 			print(k, "\t", round(self.dmeans[k],5), "\t", round(self.dstdev[k],5), "\t", round(self.dmed[k],5), "\t", round(self.dmin[k],5), "\t", round(self.dmax[k],5))
 			fh.write(str(k))
 			fh.write("\t")

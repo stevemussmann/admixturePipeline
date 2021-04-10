@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+from syscall import SysCall
+
 import argparse
 import csv
 import os
@@ -10,7 +12,7 @@ import numpy as np
 import zipfile
 
 class Admixture():
-	'Class for operating on VCF file using VCFtools and Plink'
+	'Class for executing Admixture commands'
 
 
 	def __init__(self, prefix, NP, minK, maxK, rep, cv):
@@ -21,27 +23,6 @@ class Admixture():
 		self.rep = rep
 		self.cv = cv
 
-	def run_program(self,string,i,j):
-		print(string)
-		try:
-			fn = self.prefix + "." + str(i) + "_" + str(j) + ".stdout" #make name for stdout log file
-			process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-			output, err = process.communicate()
-			f = open(fn, 'wb')
-			f.write(output)
-			f.close()
-			print(err)
-			if process.returncode !=0:
-				print("Non-zero exit status:")
-				print(process.returncode)
-				raise SystemExit
-		except (KeyboardInterrupt, SystemExit):
-			raise
-		except:
-			print("Unexpected error:")
-			print(sys.exc_info())
-			raise SystemExit
-
 	def admix(self):
 		ks = range(self.minK, self.maxK+1)
 		#print(ks)
@@ -49,16 +30,12 @@ class Admixture():
 		for i in ks:
 			for j in range(self.rep):
 				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " --cv=" + str(self.cv) + " " + self.prefix + ".ped " + str(i)
-				#print(command_string)
-				self.run_program(command_string,i,j)
+				
+				#call Admixture
+				admixtureCall = SysCall(command_string)
+				admixtureCall.run_admixture(self.prefix,i,j)
 
 				#Manually re-name output files to include _j rep number
-				# oldP = self.prefix + "." + str(i) + ".P"
-				# newP = self.prefix + "." + str(i) + "_" + str(j) + ".P"
-				# os.rename(oldP, newP)
-				# oldQ = self.prefix + "." + str(i) + ".Q"
-				# newQ = self.prefix + "." + str(i) + "_" + str(j) + ".Q"
-				# os.rename(oldQ, newQ)
 				for filename in os.listdir("."):
 					fn = self.prefix + "." + str(i) + "."
 					if fn in filename:
@@ -80,19 +57,11 @@ class Admixture():
 		zipf.close()
 
 	def print_cv(self):
-		try:
-			command="grep -h CV " + self.prefix + "*.stdout > " + self.prefix + "_cv_summary.txt"
-			process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-			output,err = process.communicate()
-			print(err)
-			if process.returncode != 0:
-				print("Non-zero exit status:")
-				print(process.returncode)
-				raise SystemExit
-		except:
-			print("Unexpected error:")
-			print(sys.exc_info())
-			raise SystemExit
+		print("Printing CV values...")
+		command="grep -h CV " + self.prefix + "*.stdout > " + self.prefix + "_cv_summary.txt"
+
+		grepCall = SysCall(command)
+		grepCall.run_program()
 
 	def loglik(self):
 		fh = open("loglik.txt", 'wb')
@@ -114,16 +83,8 @@ class Admixture():
 				temp.close()
 		fh.close()
 
-		try:
-			command="sort -n -k1 -o loglik.txt loglik.txt"
-			process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-			output, err = process.communicate()
-			print(err)
-			if process.returncode != 0:
-				print("Non-zero exit status:")
-				print(process.returncode)
-				raise SystemExit
-		except:
-			print("Unexpected error:")
-			print(sys.exc_info())
-			raise SystemExit
+		print("Sorting log(likelihood) values...")
+		command="sort -n -k1 -o loglik.txt loglik.txt"
+
+		sortCall = SysCall(command)
+		sortCall.run_program()

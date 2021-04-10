@@ -32,8 +32,8 @@ class ComLine():
 		)
 		parser.add_argument("-M", "--mc",
 							dest='mc',
-							default="MajorClusterRuns.txt",
-							help="Provide path to file that will hold names of runs corresponding to the major clusters. By default it expects this file to be present in the directory from which you executed this code."
+							default="none",
+							help="Provide path to file that will hold names of runs corresponding to the major clusters."
 							
 		)
 		parser.add_argument("-R", "--evalAdmixRcode",
@@ -51,23 +51,13 @@ class ComLine():
 		self.args = parser.parse_args()
 
 		#check if files exist
-		#self.exists( self.args.cv )
-
-		#check if directories exist
-		#self.args.directory = os.path.abspath(self.args.directory)
-		#self.dirExists(self.args.directory)
-		if(os.path.isfile(self.args.mc) == False ):
-			print( self.args.mc, "does not exist" )
-			print( "Check to make sure you have specified the correct path to this file." )
-			print( "Exiting program..." )
-			print( "" )
-			#raise SystemExit
-
-
+		if(self.args.mc != "none"):
+			self.exists(self.args.mc)
 
 	def exists(self, filename):
 		if( os.path.isfile(filename) != True ):
-			print( filename, "does not exist" )
+			print( filename, "does not exist." )
+			print( "Check to make sure you have specified the correct path to this file." )
 			print( "Exiting program..." )
 			print( "" )
 			raise SystemExit

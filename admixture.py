@@ -1,9 +1,11 @@
 from __future__ import print_function
 
 from syscall import SysCall
+from DefaultListOrderedDict import DefaultListOrderedDict
 
 import argparse
 import csv
+import json
 import os
 import os.path
 import subprocess
@@ -22,6 +24,7 @@ class Admixture():
 		self.maxK = maxK
 		self.rep = rep
 		self.cv = cv
+		self.qfiles = DefaultListOrderedDict()
 
 	def admix(self):
 		ks = range(self.minK, self.maxK+1)
@@ -41,7 +44,15 @@ class Admixture():
 					if fn in filename:
 						oldname, extension = os.path.splitext(filename)
 						newname = oldname + "_" + str(j) + extension
+						if(extension.endswith("Q")):
+							print(newname)
+							self.qfiles[str(i)].append(newname)
 						os.rename(filename, newname)
+
+		# write dict of .Q files
+		jsonFile=self.prefix + ".qfiles.json"
+		with open(jsonFile, 'w') as json_file:
+			json.dump(self.qfiles, json_file)
 
 	def zipdir(self,path,ziph):
 		files = [f for f in os.listdir('.') if os.path.isfile(f)]

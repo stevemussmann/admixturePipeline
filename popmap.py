@@ -11,15 +11,12 @@ class Popmap():
 		self.popmap = OrderedDict()
 		self.popnums = defaultdict(int)
 		
-		data = open(infile, 'r')
-		content = data.readlines()
-		data.close()
-
-		content = [x.rstrip('\n') for x in content]
+		with open(infile, 'r') as data:
+			content = data.read().splitlines()
 
 		for line in content:
 			temp = line.split()
-			self.popmap[temp[0].strip('\t\n\r')] = temp[1].strip('\t\n\r') #make map of individual->population
+			self.popmap[temp[0]] = temp[1] #make map of individual->population
 
 	def get_pop(self,ind):
 		return self.popmap.get(ind)

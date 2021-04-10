@@ -27,15 +27,27 @@ class EvalAdmix():
 			print("Exiting program...")
 			raise SystemExit
 
-	def evalAdmix(self, k, K, np):
-		qf = self.prefix + "." + str(k) + "_1.Q"
-		eAf = self.prefix + "." + str(k) + "_1.corres"
-		evalAdmix_str_com = "evalAdmix -plink " + self.prefix + " -fname " + self.prefix + "." + str(k) + "_1.P -qname " + qf + " -o " + eAf + " -P " + str(np)
+	def evalAdmix(self, minK, maxK, np):
+		ks = range(int(minK), int(maxK)+1)
+		for k in ks:
+			for qf in self.qfiles[str(k)]:
+				temp = qf.split(".")
 
-		call = SysCall(evalAdmix_str_com)
-		call.run_program()
+				#make .P file name
+				temp[-1] = "P"
+				pf = ".".join(temp)
 
-	def Rcode(self, funcs, k, K):
+				#make output .corres file name
+				temp[-1] = "corres"
+				eAf = ".".join(temp)
+
+				#build command for evalAdmix
+				evalAdmix_str_com = "evalAdmix -plink " + self.prefix + " -fname " + pf + " -qname " + qf + " -o " + eAf + " -P " + str(np)
+
+				call = SysCall(evalAdmix_str_com)
+				call.run_program()
+
+	def Rcode(self, funcs, minK, maxK):
 	
 		# import R functions
 		utils = importr('utils')
@@ -49,25 +61,32 @@ class EvalAdmix():
 
 		#make file names
 		famf = self.prefix + ".fam"
-		qscoresf = self.prefix + "." + str(k) + "_1.Q"
-		eAf = self.prefix + "." + str(k) + "_1.corres"
-		output = eAf + ".png"
 
-		# read in files
-		pop = base.as_matrix(utils.read_table(famf))
-		q = utils.read_table(qscoresf)
-		cor = base.as_matrix(utils.read_table(eAf))
+		ks = range(int(minK), int(maxK)+1)
+		for k in ks:
+			title="K="+str(k)
+			for qf in self.qfiles[str(k)]:
+				temp = qf.split(".")
+				temp[-1] = "corres"
+				eAf = ".".join(temp)
+				output = eAf + ".png"
 
-		print(pop)
-		print(type(pop))
-		print(pop.rx(True,2))
-		#print(q)
+				# read in files
+				pop = base.as_matrix(utils.read_table(famf))
+				print(qf)
+				q = utils.read_table(qf)
+				cor = base.as_matrix(utils.read_table(eAf))
 
-		# run plotting functions
-		ordr = myfunc.orderInds(pop=base.as_vector(pop.rx(True,2)), q=q)
-		print(type(ordr))
-		print(ordr)
+				#print(pop)
+				#print(type(pop))
+				#print(pop.rx(True,2))
+				#print(q)
 
-		grdevices.png(file=output)
-		myfunc.plotCorRes(cor_mat=cor, pop=base.as_vector(pop.rx(True,2)), ord=ordr, title="test", max_z=0.1, min_z=-0.1)
-		grdevices.dev_off()
+				# run plotting functions
+				ordr = myfunc.orderInds(pop=base.as_vector(pop.rx(True,2)), q=q)
+				#print(type(ordr))
+				#print(ordr)
+
+				grdevices.png(file=output)
+				myfunc.plotCorRes(cor_mat=cor, pop=base.as_vector(pop.rx(True,2)), ord=ordr, title=title, max_z=0.1, min_z=-0.1)
+				grdevices.dev_off()

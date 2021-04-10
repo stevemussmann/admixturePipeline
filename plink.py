@@ -28,3 +28,29 @@ class Plink():
 		plink_command = "plink --file " + self.prefix + " --make-bed --out " + self.prefix
 		call = SysCall(plink_command)
 		call.run_program()
+
+	#adds populations to .fam file
+	def fixFam(self,popmap):
+		#get name for .fam file
+		famf = self.prefix + ".fam"
+
+		#read popmap into dict
+		d=dict()
+		with open(popmap, 'r') as f:
+			for line in f:
+				(key, val) = line.split()
+				d[key] = val
+
+		fam=list()
+		with open(famf, 'r') as f:
+			for line in f:
+				temp = line.split()
+				temp[1] = d[temp[0]]
+				newline=' '.join(temp)
+				fam.append(newline)
+
+		#print(fam)
+
+		with open(famf, 'w') as fh:
+			for line in fam:
+				fh.write('%s\n' % line)

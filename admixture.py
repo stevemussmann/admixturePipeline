@@ -45,7 +45,6 @@ class Admixture():
 						oldname, extension = os.path.splitext(filename)
 						newname = oldname + "_" + str(j) + extension
 						if(extension.endswith("Q")):
-							print(newname)
 							self.qfiles[str(i)].append(newname)
 						os.rename(filename, newname)
 

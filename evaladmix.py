@@ -6,6 +6,8 @@ from rpy2.robjects.packages import STAP
 from rpy2.robjects.packages import importr
 from rpy2.robjects import r
 
+import json
+import os.path
 import sys
 
 class EvalAdmix():
@@ -13,8 +15,19 @@ class EvalAdmix():
 
 	def __init__(self,prefix):
 		self.prefix = prefix
+		self.qfiles = dict()
 
-	def evalAdmix(self, k, np):
+	def loadQ(self):
+		qfn = self.prefix + ".qfiles.json"
+		if os.path.isfile(qfn):
+			with open(qfn) as fh:
+				self.qfiles = json.load(fh)
+		else:
+			print("ERROR:", qfn, "does not exist.")
+			print("Exiting program...")
+			raise SystemExit
+
+	def evalAdmix(self, k, K, np):
 		qf = self.prefix + "." + str(k) + "_1.Q"
 		eAf = self.prefix + "." + str(k) + "_1.corres"
 		evalAdmix_str_com = "evalAdmix -plink " + self.prefix + " -fname " + self.prefix + "." + str(k) + "_1.P -qname " + qf + " -o " + eAf + " -P " + str(np)
@@ -22,7 +35,7 @@ class EvalAdmix():
 		call = SysCall(evalAdmix_str_com)
 		call.run_program()
 
-	def Rcode(self, funcs, k):
+	def Rcode(self, funcs, k, K):
 	
 		# import R functions
 		utils = importr('utils')

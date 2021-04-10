@@ -15,10 +15,15 @@ class ComLine():
 							required=True,
 							help="Provide the ped file prefix from your initial admixturePipeline.py run."
 		)
-		parser.add_argument("-k", "--testK",
-							dest='testK',
+		parser.add_argument("-k", "--minK",
+							dest='minK',
 							required=True,
-							help="Provide the clustering value for which you want to run evalAdmix"
+							help="Provide the minimum K value for which you want to run evalAdmix"
+		)
+		parser.add_argument("-K", "--maxK",
+							dest='maxK',
+							required=True,
+							help="Provide the maximum K value for which you want to run evalAdmix"
 		)
 		parser.add_argument("-m", "--popmap",
 							dest='popmap',

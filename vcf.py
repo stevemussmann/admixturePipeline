@@ -1,6 +1,8 @@
 from __future__ import print_function
 
 from popmap import Popmap
+from plink import Plink
+from syscall import SysCall
 
 import argparse
 import os.path
@@ -26,23 +28,7 @@ class VCF():
 
 		temp = os.path.splitext(os.path.basename(infile))
 		self.prefix = temp[0]
-
-	def run_program(self,string):
-		print(string)
-		try:
-			process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-			output, err = process.communicate()
-			print(err)
-			if process.returncode != 0:
-				print("Non-zero exit status:")
-				print(process.returncode)
-				raise SystemExit
-		except (KeyboardInterrupt, SystemExit):
-			raise
-		except:
-			print("Unexpected error:")
-			print(sys.exec_info())
-			raise SystemExit
+		self.get_indlist()
 
 	def fix_map(self):
 		name = self.prefix + ".map"
@@ -76,7 +62,9 @@ class VCF():
 			vcf_command = vcf_command + " --min-alleles 2 --max-alleles 2"
 		if(self.removeInds == True ):
 			vcf_command = vcf_command + " --remove " + str(self.removeFile)
-		self.run_program(vcf_command)
+
+		call = SysCall(vcf_command)
+		call.run_program()
 
 		self.fix_map()
 
@@ -84,7 +72,9 @@ class VCF():
 		vcf_command = "vcftools --vcf " + self.vcf_file + " --missing-indv --out " + self.prefix
 		if( self.removeInds == True ):
 			vcf_command = vcf_command + " --remove " + str(self.removeFile)
-		self.run_program(vcf_command)
+
+		call = SysCall(vcf_command)
+		call.run_program()
 
 		fname = self.prefix + ".imiss"
 		ret = ""
@@ -116,14 +106,25 @@ class VCF():
 				fh.close()
 
 	def plink(self):
-		plink_str_com = "plink --file " + self.prefix + " --allow-extra-chr 0 --recode structure --out " + self.prefix
-		self.run_program(plink_str_com)
+		pl = Plink(self.prefix)
+		pl.recodeStructure()
+		pl.recodePlink()
 
-		plink_command = "plink --file " + self.prefix + " --noweb --allow-extra-chr 0 --recode12 --out " + self.prefix
-		#if(self.maf > 0):
-		#	maf_float = self.maf/100.0
-		#	plink_command = plink_command + " --maf " + str(maf_float)
-		self.run_program(plink_command)
+	def get_indlist(self):
+		string_vtools = "vcf-query -l " + self.vcf_file + " > vcf_indlist.txt"
+		string_btools = "bcftools query -l " + self.vcf_file + " > vcf_indlist.txt"
+
+		try: 
+			print(string_btools)
+			self.runCode(string_btools)
+		except:
+			try:
+				print("BCFtools failed.")
+				print(string_vtools)
+				self.runCode(string_vtools)
+			except:
+				print("VCFtools failed.")
+
 
 	def print_populations(self,popmap):
 		if(self.removeInds == True):

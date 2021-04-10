@@ -14,7 +14,7 @@ def main():
 	pl.makeBED()
 	pl.fixFam(input.args.popmap)
 
-	ea = EvalAdmix(input.args.prefix)
+	ea = EvalAdmix(input.args.prefix, input.args.mc)
 	ea.loadQ()
 	ea.evalAdmix(input.args.minK, input.args.maxK, input.args.np)
 	ea.Rcode(input.args.evalAdmixRcode, input.args.minK, input.args.maxK)

@@ -13,9 +13,22 @@ import sys
 class EvalAdmix():
 	'Class for executing evalAdmix commands'
 
-	def __init__(self,prefix):
+	def __init__(self,prefix,mc):
 		self.prefix = prefix
+		self.mc = mc
+		self.mcOnly = False
+		if(self.mc != "none"):
+			self.mcOnly = True
 		self.qfiles = dict()
+
+		if(self.mcOnly == True):
+			self.parseMC()
+
+	def parseMC(self):
+		print("Parsing MC")
+		with open(self.mc) as fh:
+			newlist = fh.read().splitlines()
+			print(newlist)
 
 	def loadQ(self):
 		qfn = self.prefix + ".qfiles.json"

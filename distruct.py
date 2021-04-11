@@ -105,11 +105,11 @@ class Distruct():
 		print("Now running distruct for all drawparams files...")
 		contents = os.listdir(self.nd)
 		
+		os.chdir(self.nd)
+
 		for f in contents:
 			if f.startswith("drawparams"):
-				fpath = os.path.join(self.nd, f).rstrip()
-				print(fpath)
-				distructCommand = "distruct -d " + str(fpath) + "; echo"
+				distructCommand = "distruct -d " + str(f) + "; echo"
 				call = SysCall(distructCommand)
 				call.run_program()
 

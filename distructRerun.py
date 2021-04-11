@@ -8,7 +8,8 @@ import sys
 
 def main():
 	input = ComLine(sys.argv[1:])
-
+	
+	d = Distruct(input.args.directory, input.args.otl, input.args.colorbrew, input.args.pathtocolorbrew)
 	for k in range(int(input.args.mink),int(input.args.maxk)+1):
 		drawp = "drawparams." + str(k)
 		outfile = "K" + str(k) + ".ps"
@@ -23,7 +24,6 @@ def main():
 		c.getMajorClusterCVvalues(input.args.majc)
 		c.getMinorClusterCVvalues()
 
-		d = Distruct(input.args.directory, input.args.otl, input.args.colorbrew, input.args.pathtocolorbrew)
 		d.copyFiles()
 
 		#drawparams for major clusters
@@ -36,8 +36,8 @@ def main():
 			outfileMinC = "K" + str(k) + "." + temp[-1] + ".ps"
 			d.writeDrawparams(drawpMinC, pq, iq, str(k), outfileMinC, c.pops, c.inds, input.args.width)
 
-		if input.args.run==True:
-			d.runDistruct()
+	if input.args.run==True:
+		d.runDistruct()
 
 main()
 

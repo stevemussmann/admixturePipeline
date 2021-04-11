@@ -11,7 +11,7 @@ class ComLine():
 		parser = argparse.ArgumentParser()
 		parser.add_argument("-c", "--cv",
 							dest='cv',
-							default="cv_file.txt",
+							default="cv_file.MajClust.txt",
 							help="Provide a file with cross-validation values for multiple admixture runs"
 		)
 		parser.add_argument("-o", "--out",

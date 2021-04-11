@@ -8,9 +8,16 @@ AdmixPipe is now published in BMC Bioinformatics.
 
 S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: population analyses in ADMIXTURE for non-model organisms. BMC Bioinformatics 21:337. DOI: 10.1186/s12859-020-03701-4
 
+## IMPORTANT NOTE BEFORE PROCEEDING (11-April-2021)
+
+The remainder of this current README.md file is a description of AdmixPipe v2. I am currently working on v3, which will have several "behind the scenes" changes, bug fixes, enhancements to existing modules, and a new module which will help assess the best K using the evalAdmix package (http://www.popgen.dk/software/index.php/EvalAdmix). Consequently, **I strongly recommend at this time that you download the latest release version (AdmixPipe v2.0.2) rather than clone this repository.**  If you do proceed with cloning the master branch of the repository, I will warn you that: 
+1) whereas AdmixPipe v2 was backward compatible with Python 2.7.x, v3 will probably require Python 3 
+2) some command line options might have changed slightly (especially long form commands - you can get the current list of commands by running any module with the --help option)
+3) the evalAdmix module will require rpy2 which can be a pain to get working on some systems.
+
 ## Installation & Setup for AdmixPipe:
 
-This pipeline was written to be run on Unix based operating systems, such as the various Linux distributions and Mac OS X.  To get started, clone this project to the desired location on your computer.  
+This pipeline was written to be run on Unix based operating systems, such as the various Linux distributions and Mac OS X.  To get started, download the latest release version (currently v2.0.2) to the desired location on your computer.
 
 This pipeline has three dependencies that must be installed:
 * **PLINK 1.9 beta 4.5 or newer** (https://www.cog-genomics.org/plink2)

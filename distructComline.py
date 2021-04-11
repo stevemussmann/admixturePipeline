@@ -73,6 +73,10 @@ class ComLine():
 		if(os.path.isfile(self.args.majc) == True ):
 			os.remove(self.args.majc)
 
+		# remove cv_file.txt if it exists
+		if(os.path.isfile("cv_file.MajClust.txt") == True):
+			os.remove("cv_file.MajClust.txt")
+
 
 	def exists(self, filename):
 		if( os.path.isfile(filename) != True ):

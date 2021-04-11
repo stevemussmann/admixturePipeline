@@ -95,7 +95,7 @@ class Clumpp():
 	def getCVvalues(self, mc):
 		with open(mc) as mcruns:
 			mcfiles = mcruns.readlines()
-		with open("cv_file.txt", 'a') as cvf:
+		with open("cv_file.MajClust.txt", 'a') as cvf:
 			for f in mcfiles:
 				filepath = os.path.join(self.ad, f).rstrip()
 				#print(filepath)
@@ -105,7 +105,27 @@ class Clumpp():
 							cvf.write(line)
 
 	def getMinorClusterCVvalues(self):
-		print("test")
+		match = "MinorClusterRuns.K" + str(self.k) + "."
+		content = os.listdir(os.getcwd())
+		for f in content:
+			if f.startswith(match):
+				with open(f) as mcruns:
+					mcfiles = mcruns.readlines()
+				temp = f.split(".")
+				newlist = list()
+				newlist.append("cv_file")
+				newlist.append("MinClust")
+				for item in temp[-2:]:
+					newlist.append(item)
+				newlist.append("txt")
+				outfile = ".".join(newlist)
+				with open(outfile, 'w') as cvf:
+					for f in mcfiles:
+						filepath = os.path.join(self.ad, f).rstrip()
+						with open(filepath, 'r') as cvin:
+							for line in cvin.readlines():
+								if 'CV' in line:
+									cvf.write(line)
 
 	def copyFiles(self):
 		nd = self.makeDir()

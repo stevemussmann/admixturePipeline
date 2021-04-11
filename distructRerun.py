@@ -1,12 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 from distructComline import ComLine
 from distruct import Distruct
 from clumpp import Clumpp
 
 import sys
-
-
 
 def main():
 	input = ComLine(sys.argv[1:])
@@ -28,7 +26,15 @@ def main():
 		d = Distruct(input.args.directory, input.args.otl, input.args.colorbrew, input.args.pathtocolorbrew)
 		d.copyFiles()
 
+		#drawparams for major clusters
 		d.writeDrawparams(drawp, popq, indivq, str(k), outfile, c.pops, c.inds, input.args.width)
+
+		#drawparams for minor clusters
+		for pq, iq in zip(popqList, indivqList):
+			temp = pq.split(".")
+			drawpMinC = drawp + "." + temp[-1]
+			outfileMinC = "K" + str(k) + "." + temp[-1] + ".ps"
+			d.writeDrawparams(drawpMinC, pq, iq, str(k), outfileMinC, c.pops, c.inds, input.args.width)
 
 		if input.args.run==True:
 			d.runDistruct()

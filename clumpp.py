@@ -3,6 +3,7 @@ from __future__ import print_function
 from shutil import copyfile
 
 import os
+import sys
 
 class Clumpp():
 	'Class for finding and preparing clumpp output from the output produced by clumpak'
@@ -59,6 +60,49 @@ class Clumpp():
 		self.inds = self.linecount(self.clumppoutind)
 		self.pops = self.linecount(self.clumppoutpop)
 
+	def copyMajClustFiles(self):
+		nd = self.makeDir()
+
+		np = self.oldpop + "." + self.k
+		newpop = os.path.join(nd, np)
+
+		ni = self.oldind + "." + self.k
+		newind = os.path.join(nd, ni)
+
+		copyfile(self.clumppoutind, newind)
+		copyfile(self.clumppoutpop, newpop)
+
+		return np,ni
+
+	def copyMinClustFiles(self):
+		nd = self.makeDir()
+		npList = list()
+		niList = list()
+
+		for f in self.minclumppoutind:
+			allLevels = self.splitAll(f)
+			minClust = allLevels[-3]
+
+			ni = self.oldind + "." + self.k + "." + minClust
+			newind = os.path.join(nd, ni)
+
+			niList.append(ni)
+
+			copyfile(f, newind)
+
+		for f in self.minclumppoutpop:
+			allLevels = self.splitAll(f)
+			minClust = allLevels[-3]
+			
+			np = self.oldpop + "." + self.k + "." + minClust
+			newpop = os.path.join(nd, np)
+
+			npList.append(np)
+
+			copyfile(f, newpop)
+
+		return npList,niList
+
 	def getMinorClusterRuns(self):
 		for d in self.mincdir:
 			bn = os.path.basename(d)
@@ -92,7 +136,7 @@ class Clumpp():
 				mcruns.write(temp)
 				mcruns.write("\n")
 
-	def getCVvalues(self, mc):
+	def getMajorClusterCVvalues(self, mc):
 		with open(mc) as mcruns:
 			mcfiles = mcruns.readlines()
 		with open("cv_file.MajClust.txt", 'a') as cvf:
@@ -127,20 +171,6 @@ class Clumpp():
 								if 'CV' in line:
 									cvf.write(line)
 
-	def copyFiles(self):
-		nd = self.makeDir()
-
-		np = self.oldpop + "." + self.k
-		newpop = os.path.join(nd, np)
-
-		ni = self.oldind + "." + self.k
-		newind = os.path.join(nd, ni)
-
-		copyfile(self.clumppoutind, newind)
-		copyfile(self.clumppoutpop, newpop)
-
-		return np,ni
-
 	def makeDir(self):
 		nd = os.path.join(self.wd, "best_results")
 		if not os.path.exists(nd):
@@ -170,3 +200,18 @@ class Clumpp():
 			raise SystemExit
 		else:
 			print(directory, "Exists")
+	
+	def splitAll(self,path):
+		allparts = list()
+		while 1:
+			parts = os.path.split(path)
+			if parts[0] == path:
+				allparts.insert(0, parts[0])
+				break
+			elif parts[1] == path:
+				allparts.insert(0, parts[1])
+				break
+			else:
+				path = parts[0]
+				allparts.insert(0, parts[1])
+		return allparts

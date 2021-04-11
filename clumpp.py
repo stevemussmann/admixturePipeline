@@ -14,9 +14,20 @@ class Clumpp():
 
 		#Construct path to where files should reside
 		tempdir = "K=" + self.k
-		self.mcdir = os.path.join(self.wd, tempdir, "MajorCluster")
-		self.clusdir = os.path.join(self.mcdir,"clusterFiles")
-		self.cdir = os.path.join(self.mcdir, "CLUMPP.files")
+		self.kdir = os.path.join(self.wd, tempdir) 
+		self.majcdir = os.path.join(self.kdir, "MajorCluster")
+		self.clusdir = os.path.join(self.majcdir,"clusterFiles")
+		self.cdir = os.path.join(self.majcdir, "CLUMPP.files")
+
+		#Check if minor clusters exist
+		self.mincdir = list()
+		dirContents = os.listdir(self.kdir)
+		for d in dirContents:
+			td = os.path.join(self.kdir, d)
+			if os.path.isdir(td):
+				if os.path.basename(td).startswith("MinorCluster"):
+					self.mincdir.append(td)
+		#print(self.mincdir)
 
 		# check to see if directory exists
 		self.dirExists(self.cdir)

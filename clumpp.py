@@ -19,6 +19,20 @@ class Clumpp():
 		self.clusdir = os.path.join(self.majcdir,"clusterFiles")
 		self.cdir = os.path.join(self.majcdir, "CLUMPP.files")
 
+		# check to see if major cluster directory exists
+		self.dirExists(self.cdir)
+
+		self.oldind = "ClumppIndFile.output"
+		self.oldpop = "ClumppPopFile"
+
+		#Get the files that contain clumpp output from major cluster directory
+		self.clumppoutind = os.path.join(self.cdir, self.oldind)
+		self.clumppoutpop = os.path.join(self.cdir, self.oldpop)
+
+		#Check if major cluster files exist
+		self.fileExists(self.clumppoutind)
+		self.fileExists(self.clumppoutpop)
+
 		#Check if minor clusters exist
 		self.mincdir = list()
 		dirContents = os.listdir(self.kdir)
@@ -29,23 +43,40 @@ class Clumpp():
 					self.mincdir.append(td)
 		#print(self.mincdir)
 
-		# check to see if directory exists
-		self.dirExists(self.cdir)
+		#Get the files that contain clumpp output from minor cluster directories
+		self.minclumppoutind = list()
+		self.minclumppoutpop = list()
+		for d in self.mincdir:
+			tdi = os.path.join(d, "CLUMPP.files", self.oldind)
+			self.minclumppoutind.append(tdi)
+			self.fileExists(tdi)
 
-		self.oldind = "ClumppIndFile.output"
-		self.oldpop = "ClumppPopFile"
-
-		#Get the files that contain clumpp output
-		self.clumppoutind = os.path.join(self.cdir, self.oldind)
-		self.clumppoutpop = os.path.join(self.cdir, self.oldpop)
-
-		#Check if files exist
-		self.fileExists(self.clumppoutind)
-		self.fileExists(self.clumppoutpop)
+			tdp = os.path.join(d, "CLUMPP.files", self.oldpop)
+			self.minclumppoutpop.append(tdp)
+			self.fileExists(tdp)
 
 		#find number of individuals and populations
 		self.inds = self.linecount(self.clumppoutind)
 		self.pops = self.linecount(self.clumppoutpop)
+
+	def getMinorClusterRuns(self):
+		for d in self.mincdir:
+			bn = os.path.basename(d)
+			num = bn.replace("MinorCluster", "")
+			fn = "MinorClusterRuns.K" + str(self.k) + "." + str(num)
+			with open(fn, 'w') as mcruns:
+				content = list()
+				clusDir = os.path.join(d, "clusterFiles")
+				with open(clusDir) as f:
+					content = f.readlines()
+				for line in content:
+					tlist = line.split(".")
+					tlist.pop(-1)
+					tlist.pop(-1)
+					tlist.append("stdout")
+					temp = ".".join(tlist)
+					mcruns.write(temp)
+					mcruns.write("\n")
 
 	def getMajorClusterRuns(self,mc):
 		with open(mc, 'a') as mcruns:
@@ -72,6 +103,9 @@ class Clumpp():
 					for line in cvin.readlines():
 						if 'CV' in line:
 							cvf.write(line)
+
+	def getMinorClusterCVvalues(self):
+		print("test")
 
 	def copyFiles(self):
 		nd = self.makeDir()

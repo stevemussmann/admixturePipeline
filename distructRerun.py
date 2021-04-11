@@ -17,8 +17,10 @@ def main():
 
 		c = Clumpp(input.args.directory, str(k), input.args.ad)
 		popq,indivq = c.copyFiles()
-		c.getMajorClusterRuns(input.args.mc)
-		c.getCVvalues(input.args.mc)
+		c.getMajorClusterRuns(input.args.majc)
+		c.getMinorClusterRuns()
+		c.getCVvalues(input.args.majc)
+		c.getMinorClusterCVvalues()
 
 		d = Distruct(input.args.directory, input.args.otl, input.args.colorbrew, input.args.pathtocolorbrew)
 		d.copyFiles()

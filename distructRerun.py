@@ -20,8 +20,9 @@ def main():
 
 		c.getMajorClusterRuns(input.args.majc)
 		c.getMinorClusterRuns()
-
-		c.getMajorClusterCVvalues(input.args.majc)
+		
+		if(k == int(input.args.maxk)):
+			c.getMajorClusterCVvalues(input.args.majc)
 		c.getMinorClusterCVvalues()
 
 		d.copyFiles()

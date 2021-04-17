@@ -1,7 +1,6 @@
-import matplotlib
-matplotlib.use('agg')
 import matplotlib.pyplot
 import os
+import pandas
 
 class Graphics():
 	'Class to print plots of data'
@@ -12,21 +11,9 @@ class Graphics():
 
 
 	def printFigure(self):
-		(data_to_plot, klist) = self.prepData()
-
-		fig = matplotlib.pyplot.figure(1, figsize=(18,12))		
-		ax = fig.add_subplot(111)
-		bp=ax.boxplot(data_to_plot, positions=klist)
+		#make pandas dataframe to include NaN values
+		df = pandas.DataFrame(dict([ (k,pandas.Series(v)) for k,v in self.data.items() ]), dtype=float)
+		print(df)
+		fig = matplotlib.pyplot.figure(figsize=(12.8,9.6),dpi=300,frameon=False)
+		df.boxplot()
 		fig.savefig(self.output, bbox_inches='tight')
-
-	def prepData(self):
-		lists = list()
-		klist=list()
-		for k, v in self.data.items():
-			templist = list()
-			klist.append(k)
-			for item in v:
-				templist.append(float(item))
-			lists.append(templist)
-		klist=sorted(klist)
-		return(lists, klist)

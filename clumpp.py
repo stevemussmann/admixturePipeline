@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from shutil import copyfile
+from DefaultListOrderedDict import DefaultListOrderedDict
 
 import os
 import sys
@@ -104,6 +105,7 @@ class Clumpp():
 		return npList,niList
 
 	def getMinorClusterRuns(self):
+		mcRunsDict = DefaultListOrderedDict() #dict of runs associated with K for json dump
 		for d in self.mincdir:
 			bn = os.path.basename(d)
 			num = bn.replace("MinorCluster", "")
@@ -121,8 +123,12 @@ class Clumpp():
 					temp = ".".join(tlist)
 					mcruns.write(temp)
 					mcruns.write("\n")
+					newKey = str(self.k) + ".MinClust." + str(num) #make new key for minor cluster
+					mcRunsDict[newKey].append(temp)
+		return mcRunsDict
 
 	def getMajorClusterRuns(self,mc):
+		mcRunsDict = DefaultListOrderedDict() #dict of runs associated with K for json dump
 		with open(mc, 'a') as mcruns:
 			content = list()
 			with open(self.clusdir) as f:
@@ -135,6 +141,8 @@ class Clumpp():
 				temp = ".".join(tlist)
 				mcruns.write(temp)
 				mcruns.write("\n")
+				mcRunsDict[self.k].append(temp)
+		return mcRunsDict
 
 	def getMajorClusterCVvalues(self, mc):
 		with open(mc) as mcruns:

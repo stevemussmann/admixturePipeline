@@ -129,7 +129,10 @@ class EvalAdmix():
 			title=k
 
 			self.grdevices.png(file=output)
-			self.myfunc.plotCorRes(cor_mat=cor, pop=self.base.as_vector(pop.rx(True,2)), ord=ordr, title=title, max_z=0.1, min_z=-0.1)
+			try:
+				self.myfunc.plotCorRes(cor_mat=cor, pop=self.base.as_vector(pop.rx(True,2)), ord=ordr, title=title, max_z=0.1, min_z=-0.1)
+			except rpy2.rinterface_lib.embedded.RRuntimeError:
+				print("Error in R code (plotting functions) from evalAdmix.")
 			self.grdevices.dev_off()
 
 	def parseClumpp(self,f):
@@ -165,5 +168,8 @@ class EvalAdmix():
 				ordr = self.myfunc.orderInds(pop=self.base.as_vector(pop.rx(True,2)), q=q)
 
 				self.grdevices.png(file=output)
-				self.myfunc.plotCorRes(cor_mat=cor, pop=self.base.as_vector(pop.rx(True,2)), ord=ordr, title=title, max_z=0.1, min_z=-0.1)
+				try:
+					self.myfunc.plotCorRes(cor_mat=cor, pop=self.base.as_vector(pop.rx(True,2)), ord=ordr, title=title, max_z=0.1, min_z=-0.1)
+				except rpy2.rinterface_lib.embedded.RRuntimeError:
+					print("Something happened.")
 				self.grdevices.dev_off()

@@ -15,8 +15,7 @@ def main():
 	pl.fixFam(input.args.popmap)
 
 	ea = EvalAdmix(input.args.prefix, input.args.mc)
-	ea.loadQ()
-	ea.loadRuns()
+	ea.loadJson()
 	ea.evalAdmix(input.args.minK, input.args.maxK, input.args.np)
 	ea.Rcode(input.args.evalAdmixRcode, input.args.minK, input.args.maxK)
 

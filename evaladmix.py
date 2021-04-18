@@ -2,12 +2,15 @@ from evalAdmixComline import ComLine
 from syscall import SysCall
 
 from rpy2.robjects import StrVector
+from rpy2.robjects.conversion import localconverter
 from rpy2.robjects.packages import STAP
 from rpy2.robjects.packages import importr
-from rpy2.robjects import r
+from rpy2.robjects import r, pandas2ri
 
 import json
 import os.path
+import pandas
+import rpy2.robjects
 import sys
 
 class EvalAdmix():
@@ -21,6 +24,7 @@ class EvalAdmix():
 			self.mcOnly = True
 		self.qfiles = dict()
 		self.runs = dict()
+		self.qfilePaths = dict()
 
 		if(self.mcOnly == True):
 			self.parseMC()
@@ -30,6 +34,11 @@ class EvalAdmix():
 		with open(self.mc) as fh:
 			newlist = fh.read().splitlines()
 			print(newlist)
+
+	def loadJson(self):
+		self.loadQ()
+		self.loadRuns()
+		self.loadQfilePaths()
 
 	def loadQ(self):
 		qfn = self.prefix + ".qfiles.json"
@@ -46,6 +55,16 @@ class EvalAdmix():
 		if os.path.isfile(rfn):
 			with open(rfn) as fh:
 				self.runs = json.load(fh)
+		else:
+			print("ERROR:", rfn, "does not exist.")
+			print("Exiting program...")
+			raise SystemExit
+
+	def loadQfilePaths(self):
+		rfn = "qfilePaths.json"
+		if os.path.isfile(rfn):
+			with open(rfn) as fh:
+				self.qfilePaths = json.load(fh)
 		else:
 			print("ERROR:", rfn, "does not exist.")
 			print("Exiting program...")
@@ -69,14 +88,15 @@ class EvalAdmix():
 				#build command for evalAdmix
 				evalAdmix_str_com = "evalAdmix -plink " + self.prefix + " -fname " + pf + " -qname " + qf + " -o " + eAf + " -P " + str(np)
 
-				#call = SysCall(evalAdmix_str_com)
-				#call.run_program()
+				call = SysCall(evalAdmix_str_com)
+				call.run_program()
 
 	def averageCorres(self, funcs):
 		
 		#import R functions
 		utils = importr('utils')
 		base = importr('base')
+		grdevices = importr('grDevices')
 		
 		# import R plotting functions from evalAdmix
 		with open(funcs, 'r') as f:
@@ -98,7 +118,32 @@ class EvalAdmix():
 					print("Exiting program...")
 					raise SystemExit
 			reducedList = base.Reduce('+', matrixList) #sum matrices in list
-			meanList = reducedList.ro/float(len(matrixList)) #div by num elements in list to get mean
+			cor = reducedList.ro/float(len(matrixList)) #div by num elements in list to get mean
+			q = self.parseClumpp(self.qfilePaths[k])
+			famf = self.prefix + ".fam"
+			pop = base.as_matrix(utils.read_table(famf))
+
+			output = k + ".png"
+			ordr = myfunc.orderInds(pop=base.as_vector(pop.rx(True,2)), q=q)
+			title=k
+			#print(type(ordr))
+			#print(ordr)
+
+			grdevices.png(file=output)
+			myfunc.plotCorRes(cor_mat=cor, pop=base.as_vector(pop.rx(True,2)), ord=ordr, title=title, max_z=0.1, min_z=-0.1)
+			grdevices.dev_off()
+
+
+	def parseClumpp(self,f):
+		if(os.path.isfile(f)):
+			df = pandas.read_csv(f, delimiter="\s+", header=None, index_col=False)
+			df.drop(df.columns[0:5],axis=1,inplace=True)
+			#print(df)
+			with localconverter(rpy2.robjects.default_converter + pandas2ri.converter):
+				Rdf = rpy2.robjects.conversion.py2rpy(df)
+			#print(Rdf)
+			return Rdf
+		
 
 
 					

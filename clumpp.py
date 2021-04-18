@@ -73,7 +73,7 @@ class Clumpp():
 		copyfile(self.clumppoutind, newind)
 		copyfile(self.clumppoutpop, newpop)
 
-		return np,ni
+		return np,ni,nd
 
 	def copyMinClustFiles(self):
 		nd = self.makeDir()

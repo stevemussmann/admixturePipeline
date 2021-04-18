@@ -20,6 +20,7 @@ class EvalAdmix():
 		if(self.mc != "none"):
 			self.mcOnly = True
 		self.qfiles = dict()
+		self.runs = dict()
 
 		if(self.mcOnly == True):
 			self.parseMC()
@@ -39,11 +40,22 @@ class EvalAdmix():
 			print("ERROR:", qfn, "does not exist.")
 			print("Exiting program...")
 			raise SystemExit
+	
+	def loadRuns(self):
+		rfn = "cvRuns.json"
+		if os.path.isfile(rfn):
+			with open(rfn) as fh:
+				self.runs = json.load(fh)
+		else:
+			print("ERROR:", rfn, "does not exist.")
+			print("Exiting program...")
+			raise SystemExit
 
 	def evalAdmix(self, minK, maxK, np):
 		ks = range(int(minK), int(maxK)+1)
 		for k in ks:
 			for qf in self.qfiles[str(k)]:
+				print(qf)
 				temp = qf.split(".")
 
 				#make .P file name
@@ -57,8 +69,39 @@ class EvalAdmix():
 				#build command for evalAdmix
 				evalAdmix_str_com = "evalAdmix -plink " + self.prefix + " -fname " + pf + " -qname " + qf + " -o " + eAf + " -P " + str(np)
 
-				call = SysCall(evalAdmix_str_com)
-				call.run_program()
+				#call = SysCall(evalAdmix_str_com)
+				#call.run_program()
+
+	def averageCorres(self, funcs):
+		
+		#import R functions
+		utils = importr('utils')
+		base = importr('base')
+		
+		# import R plotting functions from evalAdmix
+		with open(funcs, 'r') as f:
+			string = f.read()
+		myfunc = STAP(string, "myfunc")
+		
+		for k in self.runs:
+			matrixList = list()
+			print(k)
+			for run in self.runs[k]:
+				temp = run.split(".")
+				temp[-1] = "corres"
+				eAf = ".".join(temp)
+				if(os.path.isfile(eAf)):
+					cor = base.as_matrix(utils.read_table(eAf))
+					matrixList.append(cor)
+				else:
+					print("ERROR:", eAf, "does not exist.")
+					print("Exiting program...")
+					raise SystemExit
+			reducedList = base.Reduce('+', matrixList) #sum matrices in list
+			meanList = reducedList.ro/float(len(matrixList)) #div by num elements in list to get mean
+
+
+					
 
 	def Rcode(self, funcs, minK, maxK):
 	

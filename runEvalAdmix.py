@@ -16,8 +16,11 @@ def main():
 
 	ea = EvalAdmix(input.args.prefix, input.args.mc)
 	ea.loadQ()
+	ea.loadRuns()
 	ea.evalAdmix(input.args.minK, input.args.maxK, input.args.np)
 	ea.Rcode(input.args.evalAdmixRcode, input.args.minK, input.args.maxK)
+
+	ea.averageCorres(input.args.evalAdmixRcode)
 
 main()
 

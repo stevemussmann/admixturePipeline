@@ -210,23 +210,27 @@ The following outputs will be produced in the directory where distructRerun.py w
 
 This code was written to summarize the variability of cross-validation values across multiple runs of admixture.
 
-## Installation & Setup for distructRerun.py:
+## Installation & Setup for cvSum.py:
 
-The only additional requirement for this section of the pipeline is the python **matplotlib** library. 
+The plotting and data processing functions of cvSum.py underwent a complete rewrite in AdmixPipe v3. There are now two additional python3 libraries required for this module: **matplotlib** and **pandas**. Each can be installed by the following. Commands may need to be run as 'sudo' depending upon your system configuration:
+```
+pip3 install pandas
+pip3 install matplotlib
+```
 
 ## Usage:
-It is assumed that you have already processed your data with admixturePipeline.py and distructRerun.py. Simply execute the cvSum.py script in the directory containing your cv_file.txt output from distructRerun.py to generate the summary information for your major cluster runs identified by CLUMPAK. If you have changed the name of cv_file.txt then you must use the -c flag to specify the new file name.
+It is assumed that you have already processed your data with admixturePipeline.py and distructRerun.py. Simply execute the cvSum.py script in the directory containing your cv_file.MajClust.txt output from distructRerun.py to generate the summary information for your major and minor cluster runs identified by CLUMPAK.
 
-The output of this program is a plot of boxplots representing the variation in the CV values found by different runs of ADMIXTURE.  The X axis of the plot corresponds to K values, while the Y axis corresponds to the CV values.  Lower CV values are preferred.  The plot file name will be same as your input file, but with a .png extension (i.e., "cv_file.png"). The summary statistics are saved in a file named "cv_output.txt" unless you use the -o option to specify a custom file name.  
+The output of this program is a plot of boxplots representing the variation in the CV values found by different runs of ADMIXTURE.  The X axis of the plot corresponds to K values, while the Y axis corresponds to the CV values.  Lower CV values are preferred.  The plot file name will be same as your input file, but with a .png extension (i.e., "cv_file.MajClust.png"). Boxplots for minor clusters, if present, are plotted alongside the major cluster CV value distributions in this same plot. The summary statistics are saved in a file named "cv_output.txt" unless you use the -o option to specify a custom file name.  
 
 List of current options:
-* **-c / --cv:** Specify the name of your file with cross-validation values for your admixture runs (optional, default = cv_file.txt).
+* **-c / --cv:** Specify the name of your file with cross-validation values for your admixture runs (optional, default = cv_file.MajClust.txt).
 * **-o / --out:** Specify the name of your output file (optional, default = cv_output.txt).
 
 ## Outputs:
 
 The following outputs will be produced in the directory where cvSum.py was executed:
-* **cv_file.png**: Boxplot chart providing a visual summary of your your CV values.
+* **cv_file.MajClust.png**: Boxplot chart providing a visual summary of your your CV values for both major and minor cluster runs.
 * **cv_output.txt**: Text file containing summary statistics of CV values for each K.
 
 # 5. runEvalAdmix.py <a name="runevaladmix"></a>

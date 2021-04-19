@@ -53,12 +53,16 @@ which python3
 ```
 This will return your /path/to/python3. Then modify the first line of each module to reflect the location of your python3 installation.
 
-#Running AdmixPipe v3
+# Running AdmixPipe v3
 
-AdmixPipe v3 is composed of five different modules. Follow the links below in the table of contents to find specific requirements and instructions for running each module.
+AdmixPipe v3 is composed of five different modules. This is because some dependencies may be challenging to install on different systems, and I wanted to maximize the utility of the program even in cases where some dependencies prove problematic. Follow the links below in the table of contents to find specific requirements and instructions for running each module.
 
 ### Table of Contents:
 1. [admixturePipeline.py](#admixturepipeline)
+2. [submitClumpak.py](#submitclumpak)
+3. [distructRerun.py](#distructrerun)
+4. [cvSum.py](#cvsum)
+5. [runEvalAdmix.py](#runevaladmix)
 
 ## Running admixturePipeline.py: <a name="admixturepipeline"></a>
 
@@ -109,7 +113,9 @@ For the example line of code above, the following outputs will be produced:
 
 Once you have finished running this stage of the pipeline, you can submit the two above files designated as CLUMPAK inputs to the online resource CLUMPAK (http://clumpak.tau.ac.il/). Once that analysis finishes, you can continue on with the pipeline using distructRerun.py
 
-# distructRerun.py
+# submitClumpak.py <a name="submitclumpak"></a>
+
+# distructRerun.py <a name="distructrerun"></a>
 
 This code was written to help streamline the process of re-running distruct on the major clusters that are found by CLUMPAK .  This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
 
@@ -153,7 +159,7 @@ The following outputs will be produced in the directory where distructRerun.py w
 * **MajorClusterRuns.txt**: contains all of the names of the .stdout files produced by admixturePipeline.py that correspond to each of the major clusters recovered by CLUMPAK.
 * **cv_file.txt**: CV values for all of the major clusters
 
-# cvSum.py
+# cvSum.py <a name="cvsum"></a>
 
 This code was written to summarize the variability of cross-validation values across multiple runs of admixture.
 
@@ -176,3 +182,4 @@ The following outputs will be produced in the directory where cvSum.py was execu
 * **cv_file.png**: Boxplot chart providing a visual summary of your your CV values.
 * **cv_output.txt**: Text file containing summary statistics of CV values for each K.
 
+# runEvalAdmix.py <a name="runevaladmix"></a>

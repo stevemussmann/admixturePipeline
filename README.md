@@ -163,29 +163,26 @@ List of current options:
 
 Currently this module does not write any output to your computer. You must retrieve the zipped CLUMPAK output from their webserver after your job completes running.
 
-# distructRerun.py <a name="distructrerun"></a>
+# 3. distructRerun.py <a name="distructrerun"></a>
 
-This code was written to help streamline the process of re-running distruct on the major clusters that are found by CLUMPAK .  This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
+This code was written to help streamline the process of re-running distruct on the major clusters that are found by CLUMPAK .  This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an experimental option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
 
 ## Installation & Setup for distructRerun.py:
 
-distructRerun.py has a single dependency that should be installed:
-* **distruct** (https://rosenberglab.stanford.edu/distructDownload.html)
-
-It is advised that you install distruct manually. It should be added to your $PATH as the lowercase version of its name (i.e., distruct).
+There are no additional dependencies for distructRerun.py (assuming you have already installed distruct itself. However, it is advised if you want to use the colorbrewer options in distruct that you modify the default location of the ColorBrewer palettes in the distructComline.py file (line 61) so that you do not need to specify this path each time you run this module.
 
 ## Usage:
 
-Download your results from the CLUMPAK server.  This should give you a zipped folder of your results, named something like "1516030453.zip".  First, unzip this folder:
+Download your results from the CLUMPAK server. This should give you a zipped folder of your results, named something like "1516030453.zip".  First, unzip this folder:
 ```
 unzip 1516030453.zip
 ```
-This should produce a folder in your current directory named 1516030453.  Now, run distructRerun.py on your folder.  Assuming that you have installed distruct-rerun.py somewhere in your path, the command will be something like the below command.  In this example, -a is used to provide the path to the directory of results produced by admixturePipeline.py, -d is used to give the name of the directory that the program will use as input, -k (lower case) specifies the lowest clustering value that you tested in Admixture, and -K (upper case) specifies the highest clustering value you tested.
+This should produce a folder in your current directory named 1516030453.  Now, run distructRerun.py on your folder.  Assuming that you have installed distructRerun.py somewhere in your path, the command will be something like the below command.  In this example, -a is used to provide the path to the directory of results produced by admixturePipeline.py, -d is used to give the name of the directory that the program will use as input, -k (lower case) specifies the lowest clustering value that you tested in Admixture, and -K (upper case) specifies the highest clustering value you tested.
 
 ```
 distructRerun.py -a example_admixturePipeline_result/ -d 1516030453/ -k 1 -K 12
 ```
-This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK. You should also have a file named cv_file.txt that contains all of the CV values for your major cluster runs.  Finally, if you have chosen to run distruct (by invoking the -r option), then distruct will return a postscript file (.ps) for the major cluster of each K value that you evaluated. These .ps files will appear in the directory from which you executed distructRerun.py. The rest of the processing can be accomplished through cvSum.py.
+This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK. AdmixPipe v3 also produces a similar file for each Minor Cluster detected by CLUMPAK (if any were present). These will be named something like 'MinorClusterRuns.K{i}.{j}, where '{i}' is the associated K value, and '{j}' represents sequentially numbered minor clusters. You should also have a file named cv_file.MajClust.txt that contains all of the CV values for your major cluster runs, and a separate file for each minor cluster (e.g., cv_file.MinClust.K{i}.{j}.  Finally, if you have chosen to run distruct itself (by invoking the -r option), then distruct will return a postscript file (.ps) for each major and minor cluster of each K value that you evaluated. These .ps files will appear in a 'best_results' subdirectory within your CLUMPAK output folder (e.g., '1516030453/best_results/' for the above example). The rest of the processing can be accomplished through cvSum.py and runEvalAdmix.py.
 
 List of current options:
 * **-a / --ad:** Specify the directory containing the output of your admixturePipeline.py run (required).
@@ -193,7 +190,7 @@ List of current options:
 * **-d / --directory:** Specify the directory containing the output of your CLUMPAK run (required).
 * **-k / --minK:** Specify the minimum K value to be tested (required).
 * **-K / --maxK:** Specify the maximum K value to be tested (required).
-* **-m / --mc:** Provide the name of the output file that will hold the names of runs corresponding to the major clusters (optional; default = MajorClusterRuns.txt)
+* **-m / --majc:** Provide the name of the output file that will hold the names of runs corresponding to the major clusters (optional; default = MajorClusterRuns.txt)
 * **-p / --pathtocolorbrew:** Specify the full path to the location of distruct1.1's colorbrewer files on your computer. 
 * **-r / --run:** Boolean switch. Using this option will run distruct for each drawparams file. (optional, default = off)
 * **-w / --width:** Provide the width of each individual bar in the distruct output (optional; default = 2).
@@ -205,9 +202,11 @@ Experimental options:
 
 The following outputs will be produced in the directory where distructRerun.py was executed:
 * **MajorClusterRuns.txt**: contains all of the names of the .stdout files produced by admixturePipeline.py that correspond to each of the major clusters recovered by CLUMPAK.
-* **cv_file.txt**: CV values for all of the major clusters
+* **MinorClusterRuns.K{i}.{j}**: contains the names of the .stdout files associated with the jth minor cluster for K=i. These files will not appear if there were no minor clusters detected by CLUMPAK.
+* **cv_file.MajClust.txt**: CV values for all of the major clusters
+* **cv_file.MinClust.K{i}.{j}**: CV values for the jth minor cluster for K=i. These files will not appear if there were no minor clusters detected by CLUMPAK.
 
-# cvSum.py <a name="cvsum"></a>
+# 4. cvSum.py <a name="cvsum"></a>
 
 This code was written to summarize the variability of cross-validation values across multiple runs of admixture.
 
@@ -230,4 +229,4 @@ The following outputs will be produced in the directory where cvSum.py was execu
 * **cv_file.png**: Boxplot chart providing a visual summary of your your CV values.
 * **cv_output.txt**: Text file containing summary statistics of CV values for each K.
 
-# runEvalAdmix.py <a name="runevaladmix"></a>
+# 5. runEvalAdmix.py <a name="runevaladmix"></a>

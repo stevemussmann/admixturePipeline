@@ -205,6 +205,8 @@ The following outputs will be produced in the directory where distructRerun.py w
 * **MinorClusterRuns.K{i}.{j}**: contains the names of the .stdout files associated with the jth minor cluster for K=i. These files will not appear if there were no minor clusters detected by CLUMPAK.
 * **cv_file.MajClust.txt**: CV values for all of the major clusters
 * **cv_file.MinClust.K{i}.{j}**: CV values for the jth minor cluster for K=i. These files will not appear if there were no minor clusters detected by CLUMPAK.
+* **cvRuns.json**: Run names associated with each major and minor cluster, stored in JSON format. This file is stored in your admixturePipeline.py output directory, and will be utilized by runEvalAdmix.py.
+* **qfilePaths.json**: CLUMPP output .Q files associated with each major and minor cluster, stored in JSON format. This file is stored in your admixturePipeline.py output directory, and will be utilized by runEvalAdmix.py.
 
 # 4. cvSum.py <a name="cvsum"></a>
 
@@ -234,3 +236,52 @@ The following outputs will be produced in the directory where cvSum.py was execu
 * **cv_output.txt**: Text file containing summary statistics of CV values for each K.
 
 # 5. runEvalAdmix.py <a name="runevaladmix"></a>
+
+This code was written to aid in identifying the best K value by running the evalAdmix program on each individual run of Admixture, as well as the summarized .Q outputs from CLUMPAK for all major and minor clusters. 
+
+## Installation and Setup for runEvalAdmix.py:
+
+This module has several requirements in addition to installation of the evalAdmix program itself and PLINK. Some requirements are particularly challenging to get functioning correctly. First, two python3 libraries are required: pandas and rpy2. Specifically, a recent version of rpy2 (>= v3.4) is required.
+```
+pip3 install pandas
+pip3 install rpy2
+```
+
+R (>= version 4.0.2) is also required. I advise compiling and installing from source because rpy2 will not work if the libR.so library is statically linked to R. If you go down this route, I provide an example of how to do this while installing R to a custom location. First, download the source code for R from https://cran.r-project.org/src/base/R-4/ (I recommend version 4.0.2 because I have only tested this module with this version). Follow the following commands, and replace '/path/to/install/' with your preferred installation directory. Additionally, I want to stress the importance of running ./configure with the --enable-R-shlib command. This is absolutely vital to creating the dynamically-linked libR.so library which allows rpy2 to function properly.
+```
+tar -zxvf R-4.0.2.tar.gz
+cd R-4.0.2/
+./configure --prefix=/path/to/install/ --enable-R-shlib
+make
+sudo make install
+```
+After installing R from source, you may also need to set the $LD_LIBRARY_PATH of your system so that rpy2 knows where to find the libR.so library. To accomplish this, you can add the below 'export' command to your ~/.bashrc file. If you do not want to permanently pollute your $LD_LIBRARY_PATH variable with this new location, then you will need to run this command whenever you open a new terminal window to execute runEvalAdmix.py. Again, '/path/to/install' is the location where you chose to install R when running the ./configure command in the above block of code.
+
+```
+export LD_LIBRARY_PATH="/path/to/install/lib/R/lib/:$LD_LIBRARY_PATH"
+```
+Lastly, the runEvalAdmix.py module requires the location of the 'visFuns.R' file that is included in the evalAdmix package (https://github.com/GenisGE/evalAdmix). You can specify this location via command line input whenever the program is run; however, I would recommend modifying the evalAdmixComline.py file included with AdmixPipe so that you do not ned to do this. You can specify your path to 'visFuns.R' on line 41 of this file.
+
+## Usage:
+Change directories to the folder containing the output from admixturePipeline.py. You must be in this folder to execute commands for runEvalAdmix.py because it requires JSON files that were written in this location by some of the earlier modules of this pipeline that you ran (specifically, admixturePipeline.py and distructRerun.py). These are new outputs as of AdmixPipe v3, so you cannot execute the runEvalAdmix.py module on outputs from earlier versions of AdmixPipe. The following is an example command for this module:
+```
+runEvalAdmix.py -p prefix -k 1 -K 12 -m popmap.txt -n 8
+```
+The above command will first execute PLINK to convert your .ped file to a .bed file. Then it will run evalAdmix on all original .Q files produced by admixturePipeline.py before finally running evalAdmix on the .Q outputs for major and minor clusters identified by CLUMPAK. The plots for the major and minor clusters are produced by averaging across the .corres files produced for each run corresponding to a particular major or minor cluster, then input into evalAdmix using the .Q scores file for that cluster which was output by CLUMPP when the CLUMPAK pipeline was run.
+
+List of current options:
+* **-p / --prefix:** Specify your .ped file previx from your initial admixturePipeline.py run. This should be the same as the name of your original input VCF file, except without the .vcf extension (required).
+* **-k / --minK:** Specify the minimum K value (required).
+* **-K / --maxK:** Specify the maximum K value (required).
+* **-m / --popmap:** Specify a tab-delimited population map (sample --> population) (required).  
+* **-M / --mc:** Provide path to the file that will hold names of runs corresponding to the major clusters (optional; should not be necessary unless you have renamed files or specified custom names).
+* **-R / --evalAdmixRcode:** Provide the path to where visualization functions for evalAdmix are stored on your machine.
+* **-n / --np:** Provide the number of processors to use for evalAdmix (optional; default=1).
+
+## Outputs:
+
+The following outputs will be produced in the directory where runEvalAdmix.py was executed:
+* **prefix.{i}\_{j}.corres**: Matrix produced by R code in visFuns.R for the jth run at K=i.
+* **prefix.{i}\_{j}.corres.png**: Plot produced by R code in visFuns.R from the prefix.{i}\_{j}.corres file for the jth run at K=i
+* **{i}.png**: Plot produced by R code in visFuns.R summarizing the major cluster at K=i. 
+* **{i}.MinClust.{j}.png**: Plot produced by R code in visFuns.R summarizing the jth minor cluster at K=i. 

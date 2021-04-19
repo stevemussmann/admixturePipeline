@@ -21,6 +21,18 @@ class ComLine():
 							required=True,
 							help="Specify your email address for the CLUMPAK submission form."
 		)
+		parser.add_argument("-m", "--MCL",
+							dest='MCL',
+							#default=1.0,
+							type=float,
+							help="[optional] Provide user-defined MCL threshold for similarity scores. Must be >=0 and <=0.99."
+		)
+		parser.add_argument("-d", "--DISTRUCT",
+							dest='DISTRUCT',
+							#default=1.0,
+							type=float,
+							help="[optional] Provide user-defined DISTRUCT threshold for minimal. Must be >=0 and <=0.95."
+		)
 		
 		self.args = parser.parse_args()
 

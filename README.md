@@ -165,11 +165,11 @@ Currently this module does not write any output to your computer. You must retri
 
 # 3. distructRerun.py <a name="distructrerun"></a>
 
-This code was written to help streamline the process of re-running distruct on the major clusters that are found by CLUMPAK .  This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an experimental option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
+This code was written to help streamline the process of re-running distruct on the major and minor clusters that are found by CLUMPAK.  This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an experimental option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
 
 ## Installation & Setup for distructRerun.py:
 
-There are no additional dependencies for distructRerun.py (assuming you have already installed distruct itself. However, it is advised if you want to use the colorbrewer options in distruct that you modify the default location of the ColorBrewer palettes in the distructComline.py file (line 61) so that you do not need to specify this path each time you run this module.
+There are no additional dependencies for distructRerun.py (assuming you have already installed distruct itself). However, it is advised if you want to use the colorbrewer options in distruct that you modify the default location of the ColorBrewer palettes in the distructComline.py file (line 61) so that you do not need to specify this path each time you run this module.
 
 ## Usage:
 

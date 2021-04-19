@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/96546673.svg)](https://zenodo.org/badge/latestdoi/96546673)
 
-# AdmixPipe: A Method for Parsing and Filtering VCF Files for Admixture Analysis
+# AdmixPipe v3: A Method for Parsing and Filtering VCF Files for Admixture Analysis
 A pipeline that accepts a VCF file to run through Admixture
 
 ## Citing AdmixPipe
@@ -22,25 +22,34 @@ However, as of 19-April-2021 I have begun documenting these new changes and feat
 3) The submitClumpak.py module has not been robustly tested. It requires selenium and currently is only compatible if you have Firefox installed. 
 4) the evalAdmix module will require rpy2 which can be a pain to get working on some systems.
 
-## Installation & Setup for AdmixPipe:
+## Installation & Setup for AdmixPipe v3:
 
-This pipeline was written to be run on Unix based operating systems, such as the various Linux distributions and Mac OS X.  To get started, download the latest release version (currently v2.0.2) to the desired location on your computer.
+This pipeline was written to be run on Unix based operating systems, such as the various Linux distributions and Mac OS X.  To get started, clone this repository. If you do not want to utilize the new (and sometimes experimental) features of AdmixPipe v3, then I strongly recommend downloading the version 2.0.2 release. If using v2.0.2, then refer to the README.md file distributed with that release for installation details.
 
-This pipeline has three dependencies that must be installed:
+### Program Dependencies
+The complete pipeline has five external program dependencies that must be installed. The modules from which they are called are listed below each program name:
 * **PLINK 1.9 beta 4.5 or newer** (https://www.cog-genomics.org/plink2)
+  * admixturePipeline.py
+  * runEvalAdmix.py
 * **VCFtools** (https://vcftools.github.io/index.html)
+  * admixturePipeline.py
 * **Admixture** (http://software.genetics.ucla.edu/admixture/download.html)
+  * admixturePipeline.py
+* **distruct** (https://rosenberglab.stanford.edu/distructDownload.html)
+  * distructRerun.py
+* **evalAdmix** (https://github.com/GenisGE/evalAdmix)
+  * runEvalAdmix.py
 
-It is advised that you install the latest version of each program manually. For example, admixturePipeline.py utilizes options in PLINK and VCFtools that are not present in the versions curated within the standard Ubuntu repositories. Each program should be added to your $PATH as the lowercase version of its name (i.e., plink, vcftools, admixture). For an example of how I accomplish this, open the example_install.sh script in a text editor. This script contains commented commands that explain what each step of installation accomplishes. 
+It is advised that you install the latest version of each program manually. For example, admixturePipeline.py utilizes options in PLINK and VCFtools that are not present in the versions curated within the standard Ubuntu repositories. Each program should be added to your $PATH as the lowercase version of its name (i.e., 'plink', 'vcftools', 'admixture', 'distruct') with the exception of evalAdmix (which should be in your path as 'evalAdmix'). For an example of how I accomplish this, open the example_install.sh script in a text editor. This script contains commented commands that explain what each step of installation accomplishes. **NOTE: The example_install.sh script has not yet been updated for AdmixPipe v3.**
 
-You may also have to modify the first line of the admixturePipeline.py file, which by default reads:
+You may also have to modify the first line of each of the five module files (admixturePipeline.py, submitClumpak.py, distructRerun.py, cvSum.py, and runEvalAdmix.py). By default, the first line of each reads:
 ```
-#!/usr/bin/env Python
+#!/usr/bin/env python3
 ```
 
 To find the location of your Python installation, you can type the following at the bash command prompt:
 ```
-which python
+which python3
 ```
 Then modify the first line of admixturePipeline.py to reflect the location of your Python installation.
 

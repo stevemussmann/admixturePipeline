@@ -17,8 +17,8 @@ The remainder of this current README.md file is a description of AdmixPipe v2. I
 Consequently, if you do not want to try these experimental features yet, then **I strongly recommend at this time that you download the latest release version (AdmixPipe v2.0.2) rather than clone this repository.**  
 
 However, as of 19-April-2021 I have begun documenting these new changes and features on this page. Therefore, if you proceed with cloning the master branch of the repository, I will warn you that: 
-1) whereas AdmixPipe v2 was backward compatible with Python 2.7.x, v3 requires Python 3 
-2) Some command line options have changed slightly (especially long form commands - you can get the current list of commands by running any module with the --help option)
+1) whereas AdmixPipe v2 was backward compatible with Python 2.7.x, v3 requires Python 3.
+2) Some command line options have changed slightly (especially long form commands - you can get the current list of commands by running any module with the --help option).
 3) The submitClumpak.py module has not been robustly tested. It requires selenium and currently is only compatible if you have Firefox installed. 
 4) the evalAdmix module will require rpy2 which can be a pain to get working on some systems.
 

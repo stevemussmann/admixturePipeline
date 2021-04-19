@@ -51,9 +51,16 @@ To find the location of your Python installation, you can type the following at 
 ```
 which python3
 ```
-Then modify the first line of admixturePipeline.py to reflect the location of your Python installation.
+This will return your /path/to/python3. Then modify the first line of each module to reflect the location of your python3 installation.
 
-## Running admixturePipeline.py:
+#Running AdmixPipe v3
+
+AdmixPipe v3 is composed of five different modules. Follow the links below in the table of contents to find specific requirements and instructions for running each module.
+
+### Table of Contents:
+1. [admixturePipeline.py](#admixturepipeline)
+
+## Running admixturePipeline.py: <a name="admixturepipeline"></a>
 
 You can run the program to print help options with the following command:
 

@@ -64,7 +64,7 @@ AdmixPipe v3 is composed of five different modules. This is because some depende
 4. [cvSum.py](#cvsum)
 5. [runEvalAdmix.py](#runevaladmix)
 
-# admixturePipeline.py: <a name="admixturepipeline"></a>
+# 1. admixturePipeline.py: <a name="admixturepipeline"></a>
 
 You can run the program to print help options with the following command:
 
@@ -115,7 +115,7 @@ For the example line of code above, the following outputs will be produced:
 
 Once you have finished running this stage of the pipeline, you can submit the two above files designated as CLUMPAK inputs to the online resource CLUMPAK (http://clumpak.tau.ac.il/). Once that analysis finishes, you can continue on with the pipeline using distructRerun.py
 
-# submitClumpak.py <a name="submitclumpak"></a>
+# 2. submitClumpak.py <a name="submitclumpak"></a>
 
 This module was developed to automate the process of submitting admixturePipeline.py results to the CLUMPAK website (http://clumpak.tau.ac.il/). This module is still a work in progress and has not been robustly tested on a variety of systems. I have so far only tested this under Ubuntu 18.04.
 

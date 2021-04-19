@@ -64,7 +64,7 @@ AdmixPipe v3 is composed of five different modules. This is because some depende
 4. [cvSum.py](#cvsum)
 5. [runEvalAdmix.py](#runevaladmix)
 
-## Running admixturePipeline.py: <a name="admixturepipeline"></a>
+# admixturePipeline.py: <a name="admixturepipeline"></a>
 
 You can run the program to print help options with the following command:
 
@@ -86,6 +86,7 @@ Admixture optional arguments:
 * **-R / --rep:** Specify the number of replicates for each K value (default = 20)
 
 VCFtools optional arguments:
+* **-M / --mac:** Enter the minimum count for the minor allele filter. (default = off, specify a positive integer to turn it on).
 * **-a / --maf:** Enter a minimum frequency for the minor allele frequency filter. (default = off, specify a value between 0.0 and 1.0 to turn it on).
 * **-b / --bi:** Turns biallelic filter off. (default = on, **we do not recommend turning this setting off because ADMIXTURE only processes biallelic SNPs**)  
 * **-r / --remove:** Provide a blacklist of individuals that will be filtered out by VCFtools. This is a textfile with each name on its own line. Names of individuals must match those in the .vcf file exactly. 
@@ -110,10 +111,57 @@ For the example line of code above, the following outputs will be produced:
 * **input.{k}\_{r}.P** and **input.{k}\_{r}.Q**: Admixture output files for each iteration{r} of each K{k} value
 * **input\_pops.txt**: a list of population data that can be input into a pipeline such as CLUMPAK
 * **input.recode.strct_in**: a structure-formatted file of filtered SNPs
+* **input.qfiles.json**: a json file containing all .Q file names per K value that were produced by this pipeline (new in AdmixPipe v3; required for runEvalAdmix.py module) 
 
 Once you have finished running this stage of the pipeline, you can submit the two above files designated as CLUMPAK inputs to the online resource CLUMPAK (http://clumpak.tau.ac.il/). Once that analysis finishes, you can continue on with the pipeline using distructRerun.py
 
 # submitClumpak.py <a name="submitclumpak"></a>
+
+This module was developed to automate the process of submitting admixturePipeline.py results to the CLUMPAK website (http://clumpak.tau.ac.il/). This module is still a work in progress and has not been robustly tested on a variety of systems. I have so far only tested this under Ubuntu 18.04.
+
+## Installation & Setup for submitClumpak.py:
+
+This module has three requirements:
+1. selenium (python library)
+2. Firefox web browser
+3. Firefox gecko driver (firefox-geckodriver)
+
+Currently, Firefox is the only supported web browser. Assuming you already have Firefox installed, you will only need to install selenium and the gecko driver. These can be accomplished with the following commands (you may have to run each as 'sudo' depending upon your system configuration and/or use a different package manager and/or package name for the gecko driver installation if you are not using Ubuntu or another Debian-based distribution):
+
+selenium:
+```
+pip3 install selenium
+```
+
+gecko driver:
+```
+apt-get install firefox-geckodriver
+```
+
+Once all dependencies are installed, you can run the program to print help options with the following command:
+
+```
+submitClumpak.py -h
+```
+
+## Usage:
+
+Change directories into the folder where the admixturePipeline.py module wrote all output. Execute submitClumpak.py from this directory. The only things you must specify are the prefix of your VCF file (i.e., the VCF file name without the .vcf extension) and an email address which is submitted to the online CLUMPAK server. For example:
+
+```
+submitClumpak.py -p prefix -e email@domain.com
+```
+
+List of current options:
+* **-r / --results:** Provide the results.zip file from your admixpipe run. Specifying the name is only necessary if you have changed it from the default of 'results.zip'.
+* **-p / --prefix:** Specify the prefix from your admixpipe run. This will be the same name as your VCF file without the .vcf file extension.
+* **-e / --email:** Specify your email address for submission to the CLUMPAK web server.
+* **-m / --MCL:** \[optional\] Provide user-defined MCL threshold for similarity scores. Must be >=0 and <=0.99.
+* **-d / --DISTRUCT:** \[optional\] Provide user-defined DISTRUCT threshold for minimal distruct cluster threshold. Must be >=0 and <=0.95.
+
+## Outputs:
+
+Currently this module does not write any output to your computer. You must retrieve the zipped CLUMPAK output from their webserver after your job completes running.
 
 # distructRerun.py <a name="distructrerun"></a>
 

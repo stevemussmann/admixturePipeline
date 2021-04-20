@@ -10,13 +10,13 @@ S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: populati
 
 ## IMPORTANT NOTE BEFORE PROCEEDING (19-April-2021)
 
-The remainder of this current README.md file is a description of AdmixPipe v2. I am currently working on v3, which will have several "behind the scenes" changes, bug fixes, and enhancements to existing modules. Two new modules are also being developed: 
+The remainder of this current README.md file is an early draft of the documentation for AdmixPipe v3, which has several "behind the scenes" changes, bug fixes, and enhancements to existing modules. Two new modules have been developed: 
 1) a new module will allow for automatic submission of admixturePipeline.py output to the CLUMPAK website.
 2) a second new module will help assess the best K using the evalAdmix package (http://www.popgen.dk/software/index.php/EvalAdmix). 
 
 Consequently, if you do not want to try these experimental features yet, then **I strongly recommend at this time that you download the latest release version (AdmixPipe v2.0.2) rather than clone this repository.**  
 
-However, as of 19-April-2021 I have begun documenting these new changes and features on this page. Therefore, if you proceed with cloning the master branch of the repository, I will warn you that: 
+If you proceed with cloning the master branch of the repository, I will warn you that: 
 1) whereas AdmixPipe v2 was backward compatible with Python 2.7.x, v3 requires Python 3.
 2) Some command line options have changed slightly (especially long form commands - you can get the current list of commands by running any module with the --help option).
 3) The submitClumpak.py module has not been robustly tested. It requires selenium and currently is only compatible if you have Firefox installed. 

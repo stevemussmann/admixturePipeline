@@ -260,7 +260,7 @@ After installing R from source, you may also need to set the $LD_LIBRARY_PATH of
 ```
 export LD_LIBRARY_PATH="/path/to/install/lib/R/lib/:$LD_LIBRARY_PATH"
 ```
-Lastly, the runEvalAdmix.py module requires the location of the 'visFuns.R' file that is included in the evalAdmix package (https://github.com/GenisGE/evalAdmix). You can specify this location via command line input whenever the program is run; however, I would recommend modifying the evalAdmixComline.py file included with AdmixPipe so that you do not ned to do this. You can specify your path to 'visFuns.R' on line 41 of this file.
+Lastly, the runEvalAdmix.py module requires the location of the 'visFuns.R' file that is included in the evalAdmix package (https://github.com/GenisGE/evalAdmix). You can specify this location via command line input whenever the program is run; however, I would recommend modifying the evalAdmixComline.py file included with AdmixPipe so that you do not need to do this. You can specify your path to 'visFuns.R' on line 41 of this file.
 
 ## Usage:
 Change directories to the folder containing the output from admixturePipeline.py. You must be in this folder to execute commands for runEvalAdmix.py because it requires JSON files that were written in this location by some of the earlier modules of this pipeline that you ran (specifically, admixturePipeline.py and distructRerun.py). These are new outputs as of AdmixPipe v3, so you cannot execute the runEvalAdmix.py module on outputs from earlier versions of AdmixPipe. The following is an example command for this module:

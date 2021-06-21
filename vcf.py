@@ -132,7 +132,7 @@ class VCF():
 				key.rstrip()
 				self.blacklist[key]=1 
 
-		print(self.blacklist)
+		#print(self.blacklist)
 
 		#print populations file, excluding blacklisted individuals
 		data = self.readfile(self.vcf_file)
@@ -143,6 +143,26 @@ class VCF():
 				f.write(popmap.get_pop(ind))
 				f.write("\n")
 		f.close()
+
+	def print_individuals(self,popmap):
+		if(self.removeInds == True):
+			rmf = self.readfile(self.removeFile)
+			for key in rmf:
+				key.rstrip()
+				self.blacklist[key]=1 
+
+		#print(self.blacklist)
+
+		#print populations file, excluding blacklisted individuals
+		data = self.readfile(self.vcf_file)
+		popfile = self.prefix + "_inds.txt"
+		f = open(popfile,'w')
+		for ind in popmap.get_list():
+			if ind not in self.blacklist:
+				f.write(ind)
+				f.write("\n")
+		f.close()
+
 
 	def readfile(self,infile):
 		f=open(infile)

@@ -35,8 +35,8 @@ class ComLine():
 							default="2",
 							help="Provide the width of each individual bar in the distruct output"
 		)
-		parser.add_argument("-m", "--mc",
-							dest='mc',
+		parser.add_argument("-m", "--majc",
+							dest='majc',
 							default="MajorClusterRuns.txt",
 							help="Provide file that will hold names of runs corresponding to the major clusters"
 							
@@ -70,8 +70,12 @@ class ComLine():
 		#check if directories exist
 		#self.args.directory = os.path.abspath(self.args.directory)
 		self.dirExists(self.args.directory)
-		if(os.path.isfile(self.args.mc) == True ):
-			os.remove(self.args.mc)
+		if(os.path.isfile(self.args.majc) == True ):
+			os.remove(self.args.majc)
+
+		# remove cv_file.txt if it exists
+		if(os.path.isfile("cv_file.MajClust.txt") == True):
+			os.remove("cv_file.MajClust.txt")
 
 
 	def exists(self, filename):

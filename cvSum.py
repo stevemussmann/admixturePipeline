@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 from cvComline import ComLine
 from cv import CV
@@ -13,6 +13,7 @@ def main():
 	input = ComLine(sys.argv[1:])
 	cvFile = CV(input.args.cv)
 	cvFile.readText()
+	cvFile.readMinor()
 	#cvFile.printText()
 
 	so = CVStats(cvFile.d,input.args.out)

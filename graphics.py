@@ -1,7 +1,12 @@
-import matplotlib
-matplotlib.use('agg')
 import matplotlib.pyplot
 import os
+import pandas
+import re
+
+def natural_sort(l): 
+	convert = lambda text: int(text) if text.isdigit() else text.lower() 
+	alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+	return sorted(l, key = alphanum_key)
 
 class Graphics():
 	'Class to print plots of data'
@@ -12,21 +17,17 @@ class Graphics():
 
 
 	def printFigure(self):
-		(data_to_plot, klist) = self.prepData()
+		#make pandas dataframe to include NaN values
+		df = pandas.DataFrame(dict([ (k,pandas.Series(v)) for k,v in self.data.items() ]), dtype=float)
+		# get columns for sorting; sort them; then apply back to dataframe
+		c = df.columns
+		c = natural_sort(c)
+		df = df[c]
 
-		fig = matplotlib.pyplot.figure(1, figsize=(18,12))		
-		ax = fig.add_subplot(111)
-		bp=ax.boxplot(data_to_plot, positions=klist)
+		print(df)
+		fig = matplotlib.pyplot.figure(figsize=(12.8,9.6),dpi=300,frameon=True)
+		df.boxplot()
+		matplotlib.pyplot.xticks(rotation=90)
+		matplotlib.pyplot.grid(b=None,axis='both',which='major')
 		fig.savefig(self.output, bbox_inches='tight')
 
-	def prepData(self):
-		lists = list()
-		klist=list()
-		for k, v in self.data.items():
-			templist = list()
-			klist.append(k)
-			for item in v:
-				templist.append(float(item))
-			lists.append(templist)
-		klist=sorted(klist)
-		return(lists, klist)

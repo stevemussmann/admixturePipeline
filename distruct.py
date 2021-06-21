@@ -2,8 +2,9 @@ from __future__ import print_function
 
 from shutil import copyfile
 
+from syscall import SysCall
+
 import os
-import subprocess
 import sys
 
 class Distruct():
@@ -104,33 +105,17 @@ class Distruct():
 		print("Now running distruct for all drawparams files...")
 		contents = os.listdir(self.nd)
 		
+		os.chdir(self.nd)
+
 		for f in contents:
 			if f.startswith("drawparams"):
-				fpath = os.path.join(self.nd, f).rstrip()
-				print(fpath)
-				distructCommand = "distruct -d " + str(fpath)
-				self.run_program(distructCommand)
+				distructCommand = "distruct -d " + str(f) + "; echo"
+				call = SysCall(distructCommand)
+				call.run_program()
 
-	def run_program(self, string):
-		print(string)
-		try:
-			process = subprocess.Popen(string, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-			output, err = process.communicate()
-			print(output)
-			print(err)
-			if process.returncode !=0:
-				print("Non-zero exit status:")
-				print(process.returncode)
-				
-				# I commented out the raise SystemExit here because distruct always seems to exit with a non-zero status.
-				#raise SystemExit
-		except(KeyboardInterrupt, SystemExit):
-			raise
-		except:
-			print("Unexpected error:")
-			print(sys.exc_info())
-			raise SystemExit
-
+		print("WARNING: Check that distruct ran properly.")
+		print("This program does not check the exit status of DISTRUCT because its exit status always equals 1.")
+		print("")
 
 	def fileExists(self, filename):
 		if( os.path.isfile(filename) != True ):

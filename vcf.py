@@ -42,7 +42,7 @@ class VCF():
 		f.close()
 
 	def convert(self):
-
+		remove = []
 		if(self.ind < 1.0 and self.ind > 0.0):
 			remove = self.get_ind_coverage()
 			#print(remove)

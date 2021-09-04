@@ -22,10 +22,14 @@ class CV():
 	def parseText(self, lines):
 		counter=0
 		for line in lines:
-			val = Decimal(line.split().pop(-1)) #get the cv value for the line
-			match = re.search(r'(?P<kval>(K=\d+))', line) #regex to find kval
-			knum = match.group('kval').split('=').pop(-1) #get the k-value for the line
-			self.d[knum].append(val) #append to dictionary of lists
+			temp = line.split().pop(-1)
+			if temp != "-nan":
+				val = Decimal(temp) #get the cv value for the line
+				match = re.search(r'(?P<kval>(K=\d+))', line) #regex to find kval
+				knum = match.group('kval').split('=').pop(-1) #get the k-value for the line
+				self.d[knum].append(val) #append to dictionary of lists
+			else:
+				print("Warning: -NaN value found for a CV value.")
 
 	def readMinor(self):
 		path = os.getcwd()
@@ -39,9 +43,13 @@ class CV():
 				with open(f, 'r') as fh:
 					content = fh.read().splitlines()
 				for line in content:
-					val = Decimal(line.split().pop(-1))
-					match = re.search(r'(?P<kval>(K=\d+))', line) #regex to find kval
-					self.d[knum].append(val)
+					temp = line.split().pop(-1)
+					if temp != "-nan":
+						val = Decimal(temp)
+						match = re.search(r'(?P<kval>(K=\d+))', line) #regex to find kval
+						self.d[knum].append(val)
+					else:
+						print("Warning: -NaN value found for a CV value.")
 
 	def printText(self):
 		print(self.d)

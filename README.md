@@ -33,7 +33,7 @@ The complete pipeline has five external program dependencies that must be instal
   * runEvalAdmix.py
 * **VCFtools** (https://vcftools.github.io/index.html)
   * admixturePipeline.py
-* **Admixture** (http://software.genetics.ucla.edu/admixture/download.html)
+* **Admixture** (https://dalexander.github.io/admixture/download.html)
   * admixturePipeline.py
 * **distruct** (https://rosenberglab.stanford.edu/distructDownload.html)
   * distructRerun.py

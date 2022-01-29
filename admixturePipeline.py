@@ -17,8 +17,9 @@ def main():
 	#else:
 
 	#convert to Plink
-	vcf_file.convert()	
 	populations = Popmap(input.args.popmap)
+	vcf_file.compIndLists(populations)
+	vcf_file.convert()	
 	vcf_file.plink()
 	vcf_file.print_populations(populations)
 	vcf_file.print_individuals(populations)

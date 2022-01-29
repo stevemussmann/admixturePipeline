@@ -23,12 +23,14 @@ class VCF():
 		self.removeFile = r #file containing individuals to be removed
 		self.removeInds = False
 		self.blacklist = dict() #make dictionary of blacklisted individuals
+		self.discard = list() #list of individuals present in vcf but not in popmap
 		if self.removeFile:
 			self.removeInds = True
 
 		temp = os.path.splitext(os.path.basename(infile))
 		self.prefix = temp[0]
 		self.get_indlist()
+		#self.compIndLists()
 
 	def fix_map(self):
 		name = self.prefix + ".map"
@@ -62,6 +64,9 @@ class VCF():
 			vcf_command = vcf_command + " --min-alleles 2 --max-alleles 2"
 		if(self.removeInds == True ):
 			vcf_command = vcf_command + " --remove " + str(self.removeFile)
+		if(len(self.discard) > 0):
+			for ind in self.discard:
+				vcf_command = vcf_command + " --remove-indv " + str(ind)
 
 		call = SysCall(vcf_command)
 		call.run_program()
@@ -112,18 +117,12 @@ class VCF():
 
 	def get_indlist(self):
 		string_vtools = "vcf-query -l " + self.vcf_file + " > vcf_indlist.txt"
-		string_btools = "bcftools query -l " + self.vcf_file + " > vcf_indlist.txt"
 
 		try: 
-			print(string_btools)
-			self.runCode(string_btools)
+			call = SysCall(string_vtools)
+			call.run_program()
 		except:
-			try:
-				print("BCFtools failed.")
-				print(string_vtools)
-				self.runCode(string_vtools)
-			except:
-				print("VCFtools failed.")
+			print("vcf-query failed to capture list of individuals from VCF file.")
 
 
 	def print_populations(self,popmap):
@@ -170,3 +169,12 @@ class VCF():
 		data = f.read().splitlines()
 		f.close()
 		return data
+
+	def compIndLists(self,popmap):
+		vcflist = self.readfile("vcf_indlist.txt")
+		popmaplist = popmap.get_list()
+		#print(popmaplist)
+		self.discard = list(set(vcflist) - set(popmaplist))
+		for key in self.discard:
+			key.rstrip()
+			self.blacklist[key]=1

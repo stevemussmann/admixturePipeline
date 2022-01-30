@@ -22,6 +22,7 @@ Other important notes for v3.0:
 3) There is now a Docker container to streamline the installation process.
 4) The submitClumpak.py module is **completely optional**. You can accomplish the same results by manually submitting your admixturePipeline.py module outputs to the CLUMPAK website. 
 5) The submitClumpak.py module will not function in the Docker container. If you wish to use it, this module must be set up on your own computer. It requires selenium and currently is only compatible if you have Firefox installed. 
+6) The data processing and plotting functions of the cvSum.py module underwent a complete rewrite for v3.0.
 
 ## Installation & Setup for AdmixPipe v3:
 
@@ -39,7 +40,7 @@ Launch the container by placing the "runDocker.sh" script in the folder from whi
 This script creates a folder named "data" in the directory on your machine from which you launched the Docker container. You can put any input files for AdmixPipe v3.0 into this folder and they will be accessible inside the container (in /app/data/). Any outputs written to this folder and any of its subdirectories will still be accessible after you exit the container. If you write any output to other locations inside the container, they will be lost upon exit. All required AdmixPipe modules (i.e., all except submitClumpak.py) have been setup within the container and will function with the commands provided throughout the remainder of this documentation. 
 
 ### Manual Setup
-Due to the many (sometimes complex) dependencies required by this pipeline, manual installation is not advised. However, if you insist upon installing the pipeline manually, you should get started by, cloning this repository. Then install the program dependencies listed below. 
+Due to the many (sometimes complex) dependencies required by this pipeline, manual installation is not advised. However, if you insist upon installing the pipeline manually, you should get started by cloning this repository. Then install the program dependencies listed below. 
 
 #### Program Dependencies
 The complete pipeline has five external program dependencies that must be installed. The modules from which they are called are listed below each program name:

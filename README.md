@@ -27,7 +27,7 @@ Other important notes for v3.0:
 ## Installation & Setup for AdmixPipe v3:
 
 ### Docker Setup
-This pipeline was written for Unix based operating systems, such as the various Linux distributions and Mac OS X. As of v3.0, we have achieved platform independence and greater ease of installation through development of a Docker container. This is now the recommended method for running the program. To get started, install [Docker] (https://www.docker.com/) on your machine and pull the Docker image using the following command:
+This pipeline was written for Unix based operating systems, such as the various Linux distributions and Mac OS X. As of v3.0, we have achieved platform independence and greater ease of installation through development of a Docker container. This is now the recommended method for running the program. To get started, install [Docker](https://www.docker.com/) on your machine and pull the Docker image using the following command:
 
 ```
 docker pull mussmann/admixpipe:3.0

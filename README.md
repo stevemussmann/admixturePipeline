@@ -290,7 +290,7 @@ runEvalAdmix.py -p prefix -k 1 -K 12 -m popmap.txt -n 8
 The above command will first execute PLINK to convert your .ped file to a .bed file. Then it will run evalAdmix on all original .Q files produced by admixturePipeline.py before finally running evalAdmix on the .Q outputs for major and minor clusters identified by CLUMPAK. The plots for the major and minor clusters are produced by averaging across the .corres files produced for each run corresponding to a particular major or minor cluster, then input into evalAdmix using the .Q scores file for that cluster which was output by CLUMPP when the CLUMPAK pipeline was run.
 
 List of current options:
-* **-p / --prefix:** Specify your .ped file previx from your initial admixturePipeline.py run. This should be the same as the name of your original input VCF file, except without the .vcf extension (required).
+* **-p / --prefix:** Specify your .ped file prefix from your initial admixturePipeline.py run. This should be the same as the name of your original input VCF file, except without the .vcf extension (required).
 * **-k / --minK:** Specify the minimum K value (required).
 * **-K / --maxK:** Specify the maximum K value (required).
 * **-m / --popmap:** Specify a tab-delimited population map (sample --> population) (required).  

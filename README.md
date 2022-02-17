@@ -4,29 +4,45 @@
 A pipeline that accepts a VCF file to run through Admixture
 
 ## Citing AdmixPipe
-AdmixPipe is now published in BMC Bioinformatics. You should cite the following publication if you use any part of this pipeline:
+AdmixPipe v2.0 is published in BMC Bioinformatics. A manuscript is currently in preparation for v3.0. For now, you should cite the publication below if you use any part of this pipeline:
 
 S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: population analyses in ADMIXTURE for non-model organisms. BMC Bioinformatics 21:337. DOI: 10.1186/s12859-020-03701-4
 
-## IMPORTANT NOTE BEFORE PROCEEDING (19-April-2021)
+## IMPORTANT NOTE ON v3.0 (30-January-2022)
 
-The remainder of this current README.md file is an early draft of the documentation for AdmixPipe v3, which has several "behind the scenes" changes, bug fixes, and enhancements to existing modules. Two new modules have been developed: 
-1) a new module will allow for automatic submission of admixturePipeline.py output to the CLUMPAK website.
-2) a second new module will help assess the best K using the evalAdmix package (http://www.popgen.dk/software/index.php/EvalAdmix). 
+The remainder of this README.md file details documentation for AdmixPipe v3.0, which has several "behind the scenes" changes, bug fixes, and enhancements to existing modules. Two new modules have also been developed for the following purposes: 
+1) automatic submission of admixturePipeline.py output to the CLUMPAK website.
+2) assessment of the best K using the evalAdmix package (http://www.popgen.dk/software/index.php/EvalAdmix). 
 
-Consequently, if you do not want to try these experimental features yet, then **I strongly recommend at this time that you download the latest release version (AdmixPipe v2.0.2) rather than clone this repository.**  
+Some of the outputs from AdmixPipe v2.0 are not compatible with the v3.0 scripts because I use json files to track data and file names from early parts of the pipeline that are needed in some of the later modules. If you need to use the v2.0 scripts for any reason, they are still available from the prior releases on this page (v2.0.2 was the final release of AdmixPipe v2.0).  
 
-If you proceed with cloning the master branch of the repository, I will warn you that: 
-1) whereas AdmixPipe v2 was backward compatible with Python 2.7.x, v3 requires Python 3.
+Other important notes for v3.0: 
+1) whereas AdmixPipe v2.0 was backward compatible with Python 2.7.x, v3.0+ requires Python 3.
 2) Some command line options have changed slightly (especially long form commands - you can get the current list of commands by running any module with the --help option).
-3) The submitClumpak.py module has not been robustly tested. It requires selenium and currently is only compatible if you have Firefox installed. 
-4) the evalAdmix module will require rpy2 which can be a pain to get working on some systems.
+3) There is now a Docker container to streamline the installation process.
+4) The submitClumpak.py module is **completely optional**. You can accomplish the same results by manually submitting your admixturePipeline.py module outputs to the CLUMPAK website. 
+5) The submitClumpak.py module will not function in the Docker container. If you wish to use it, this module must be set up on your own computer. It requires selenium and currently is only compatible if you have Firefox installed. 
+6) The data processing and plotting functions of the cvSum.py module underwent a complete rewrite for v3.0.
 
 ## Installation & Setup for AdmixPipe v3:
 
-This pipeline was written to be run on Unix based operating systems, such as the various Linux distributions and Mac OS X.  To get started, clone this repository. If you do not want to utilize the new (and sometimes experimental) features of AdmixPipe v3, then I strongly recommend downloading the version 2.0.2 release. If using v2.0.2, then refer to the README.md file distributed with that release for installation details.
+### Docker Setup
+This pipeline was written for Unix based operating systems, such as the various Linux distributions and Mac OS X. As of v3.0, we have achieved platform independence and greater ease of installation through development of a Docker container. This is now the recommended method for running the program. To get started, install [Docker](https://www.docker.com/) on your machine and pull the Docker image using the following command:
 
-### Program Dependencies
+```
+docker pull mussmann/admixpipe:3.0
+```
+
+Launch the container by placing the "runDocker.sh" script in the folder from which you want to run the container, then executing it as shown below. This script can be found in the "Docker" folder of this github repository.
+```
+./runDocker.sh
+```
+This script creates a folder named "data" in the directory on your machine from which you launched the Docker container. You can put any input files for AdmixPipe v3.0 into this folder and they will be accessible inside the container (in /app/data/). Any outputs written to this folder and any of its subdirectories will still be accessible after you exit the container. If you write any output to other locations inside the container, they will be lost upon exit. All required AdmixPipe modules (i.e., all except submitClumpak.py) have been setup within the container and will function with the commands provided throughout the remainder of this documentation. 
+
+### Manual Setup
+Due to the many (sometimes complex) dependencies required by this pipeline, manual installation is not advised. However, if you insist upon installing the pipeline manually, you should get started by cloning this repository. Then install the program dependencies listed below. 
+
+#### Program Dependencies
 The complete pipeline has five external program dependencies that must be installed. The modules from which they are called are listed below each program name:
 * **PLINK 1.9 beta 4.5 or newer** (https://www.cog-genomics.org/plink2)
   * admixturePipeline.py
@@ -40,7 +56,7 @@ The complete pipeline has five external program dependencies that must be instal
 * **evalAdmix** (https://github.com/GenisGE/evalAdmix)
   * runEvalAdmix.py
 
-It is advised that you install the latest version of each program manually. For example, admixturePipeline.py utilizes options in PLINK and VCFtools that are not present in the versions curated within the standard Ubuntu repositories. Each program should be added to your $PATH as the lowercase version of its name (i.e., 'plink', 'vcftools', 'admixture', 'distruct') with the exception of evalAdmix (which should be in your path as 'evalAdmix'). For an example of how I accomplish this, open the example_install.sh script in a text editor. This script contains commented commands that explain what each step of installation accomplishes. **NOTE: The example_install.sh script has not yet been updated for AdmixPipe v3.**
+It is advised that you install the latest version of each program manually. For example, admixturePipeline.py utilizes options in PLINK and VCFtools that are not present in the versions curated within the standard Ubuntu repositories. Each program should be added to your $PATH as the lowercase version of its name (i.e., 'plink', 'vcftools', 'admixture', 'distruct') with the exception of evalAdmix (which should be in your path as 'evalAdmix'). Additionally, you must make sure the vcf-query script from the vcftools package is present in your $PATH because it is now required by the admixturePipeline.py script. If you installed vcftools through the "sudo make install" method, then this should have already happened. 
 
 You may also have to modify the first line of each of the five module files (admixturePipeline.py, submitClumpak.py, distructRerun.py, cvSum.py, and runEvalAdmix.py). By default, the first line of each reads:
 ```
@@ -53,9 +69,11 @@ which python3
 ```
 This will return your /path/to/python3. Then modify the first line of each module to reflect the location of your python3 installation.
 
+Other dependencies (mainly Puthon libraries) are also required for some of the modules. These dependencies are discussed alongside their associated modules below.
+
 # Running AdmixPipe v3
 
-AdmixPipe v3 is composed of five different modules. This is because some dependencies may be challenging to install on different systems, and I wanted to maximize the utility of the program even in cases where some dependencies prove problematic. Follow the links below in the table of contents to find specific requirements and instructions for running each module.
+AdmixPipe v3 is composed of five different modules. Follow the links below in the table of contents to find specific instructions for running each module.
 
 ### Table of Contents:
 1. [admixturePipeline.py](#admixturepipeline)
@@ -65,6 +83,8 @@ AdmixPipe v3 is composed of five different modules. This is because some depende
 5. [runEvalAdmix.py](#runevaladmix)
 
 # 1. admixturePipeline.py: <a name="admixturepipeline"></a>
+
+**New feature in AdmixPipe v3.0:** This module will now filter out individuals not present in your popmap file. For example, if you want to exclude an individual sample from your analysis, just leave it out of your popmap file and it will be removed from your vcf file before admixture is executed. 
 
 You can run the program to print help options with the following command:
 
@@ -96,7 +116,7 @@ VCFtools optional arguments:
 
 ## Example:
 
-The following command will run the program from K values 1 through 10, conducting 10 repetitions at each K value.  Admixture will use all 16 processors available on the hypothetical machine, VCFtools will filter SNPs at an interval of 100bp, and the minor allele frequency filter in VCFtools will drop any loci with a minor allele frequency less than 0.05:
+The following command will run the program from K values 1 through 10, conducting 10 repetitions at each K value.  Admixture will use all 16 processors available on the hypothetical machine, VCFtools will filter SNPs at an interval of 100bp, and the minor allele frequency filter in VCFtools will drop any loci with a minor allele frequency less than 0.05. Any individuals not present in popmap.txt will also be filtered out before Admixture is executed:
 
 ```
 admixturePipeline.py -m popmap.txt -v input.vcf -k 1 -K 10 -n 16 -t 100 -a 0.05
@@ -117,7 +137,7 @@ Once you have finished running this stage of the pipeline, you can submit the tw
 
 # 2. submitClumpak.py <a name="submitclumpak"></a>
 
-This module was developed to automate the process of submitting admixturePipeline.py results to the CLUMPAK website (http://clumpak.tau.ac.il/). This module is still a work in progress and has not been robustly tested on a variety of systems. I have so far only tested this under Ubuntu 18.04.
+This module was developed to automate the process of submitting admixturePipeline.py results to the CLUMPAK website (http://clumpak.tau.ac.il/). This module is **completely optional** because the same results can be accomplished by manually submitting your files to the CLUMPAK server. **You can skip this module and instead submit your files manually to the CLUMPAK server if you are using the Docker container.** Because it is optional, it is also the only module not functional in the Docker container. If you want to use this module, you will have to configure it on your own machine. Fortunately, this is easy for Ubuntu users because it just requires installation of selenium (a Python library) and the Firefox gecko driver, both of which can be installed from package repositories.
 
 ## Installation & Setup for submitClumpak.py:
 
@@ -161,28 +181,28 @@ List of current options:
 
 ## Outputs:
 
-Currently this module does not write any output to your computer. You must retrieve the zipped CLUMPAK output from their webserver after your job completes running.
+This module does not write any output to your computer. You must retrieve the zipped CLUMPAK output from their webserver after your job completes running.
 
 # 3. distructRerun.py <a name="distructrerun"></a>
 
-This code was written to help streamline the process of re-running distruct on the major and minor clusters that are found by CLUMPAK.  This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an experimental option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
+This code was written to help streamline the process of re-running distruct on the major and minor clusters that are found by CLUMPAK. This code was written with the intention of operating on CLUMPAK analysis of ADMIXTURE data, however an experimental option has been added that will allow you to run this section of the pipeline on CLUMPAK analysis of STRUCTURE data.
 
 ## Installation & Setup for distructRerun.py:
 
-There are no additional dependencies for distructRerun.py (assuming you have already installed distruct itself). However, it is advised if you want to use the colorbrewer options in distruct that you modify the default location of the ColorBrewer palettes in the distructComline.py file (line 61) so that you do not need to specify this path each time you run this module.
+You can skip reading this paragraph if you are using the Docker container. If you installed the pipeline manually, there are no additional dependencies required for distructRerun.py (assuming you have already installed distruct itself). However, it is advised if you want to use the colorbrewer options in distruct that you modify the default location of the ColorBrewer palettes in the distructComline.py file (line 61) so that you do not need to specify this path each time you run this module.
 
 ## Usage:
 
-Download your results from the CLUMPAK server. This should give you a zipped folder of your results, named something like "1516030453.zip".  First, unzip this folder:
+Download your results from the CLUMPAK server. This should give you a zipped folder of your results, named something like "1516030453.zip". If you are using the Docker container, you should put this file into the "data" folder created on your computer when you launched Docker through the runDocker.sh script. First, unzip this folder:
 ```
 unzip 1516030453.zip
 ```
-This should produce a folder in your current directory named 1516030453.  Now, run distructRerun.py on your folder.  Assuming that you have installed distructRerun.py somewhere in your path, the command will be something like the below command.  In this example, -a is used to provide the path to the directory of results produced by admixturePipeline.py, -d is used to give the name of the directory that the program will use as input, -k (lower case) specifies the lowest clustering value that you tested in Admixture, and -K (upper case) specifies the highest clustering value you tested.
+This should produce a folder in your current directory named 1516030453.  Now, run distructRerun.py on your folder.  The command will be something like the below command.  In this example, -a is used to provide the path to the directory of results produced by admixturePipeline.py, -d is used to give the name of the directory that the program will use as input, -k (lower case) specifies the lowest clustering value that you tested in Admixture, and -K (upper case) specifies the highest clustering value you tested.
 
 ```
 distructRerun.py -a example_admixturePipeline_result/ -d 1516030453/ -k 1 -K 12
 ```
-This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK. AdmixPipe v3 also produces a similar file for each Minor Cluster detected by CLUMPAK (if any were present). These will be named something like 'MinorClusterRuns.K{i}.{j}, where '{i}' is the associated K value, and '{j}' represents sequentially numbered minor clusters. You should also have a file named cv_file.MajClust.txt that contains all of the CV values for your major cluster runs, and a separate file for each minor cluster (e.g., cv_file.MinClust.K{i}.{j}.  Finally, if you have chosen to run distruct itself (by invoking the -r option), then distruct will return a postscript file (.ps) for each major and minor cluster of each K value that you evaluated. These .ps files will appear in a 'best_results' subdirectory within your CLUMPAK output folder (e.g., '1516030453/best_results/' for the above example). The rest of the processing can be accomplished through cvSum.py and runEvalAdmix.py.
+This should have produced a file named MajorClusterRuns.txt in the directory from which you executed distructRerun.py.  This file contains all of the names of the .stdout files produced by my admixturePipeline repository that correspond to each of the major clusters recovered by CLUMPAK. AdmixPipe v3 also produces a similar file for each Minor Cluster detected by CLUMPAK (if any were present). These will be named 'MinorClusterRuns.K{i}.{j}, where '{i}' is the associated K value, and '{j}' represents sequentially numbered minor clusters. You should also have a file named cv_file.MajClust.txt that contains all of the CV values for your major cluster runs, and a separate file for each minor cluster (e.g., cv_file.MinClust.K{i}.{j}.  Finally, if you have chosen to run distruct itself (by invoking the -r option), then distruct will return a postscript file (.ps) for each major and minor cluster of each K value that you evaluated. These .ps files will appear in a 'best_results' subdirectory within your CLUMPAK output folder (e.g., '1516030453/best_results/' for the above example). The rest of the processing can be accomplished through cvSum.py and runEvalAdmix.py.
 
 List of current options:
 * **-a / --ad:** Specify the directory containing the output of your admixturePipeline.py run (required).
@@ -214,7 +234,7 @@ This code was written to summarize the variability of cross-validation values ac
 
 ## Installation & Setup for cvSum.py:
 
-The plotting and data processing functions of cvSum.py underwent a complete rewrite in AdmixPipe v3. There are now two additional python3 libraries required for this module: **matplotlib** and **pandas**. Each can be installed by the following. Commands may need to be run as 'sudo' depending upon your system configuration:
+You can skip this paragraph if you are running the Docker container. If you installed the pipeline manually, there are some additional libraries you need to install. The plotting and data processing functions of cvSum.py underwent a complete rewrite in AdmixPipe v3. There are now two additional python3 libraries required for this module: **matplotlib** and **pandas**. Each can be installed by the following. Commands may need to be run as 'sudo' depending upon your system configuration:
 ```
 pip3 install pandas
 pip3 install matplotlib
@@ -241,13 +261,13 @@ This code was written to aid in identifying the best K value by running the eval
 
 ## Installation and Setup for runEvalAdmix.py:
 
-This module has several requirements in addition to installation of the evalAdmix program itself and PLINK. Some requirements are particularly challenging to get functioning correctly. First, two python3 libraries are required: pandas and rpy2. Specifically, a recent version of rpy2 (>= v3.4) is required.
+If you are using the Docker container, you can skip over this section and keep reading at the "Usage" section. This module can be particularly challenging to configure manually, so consider this your last warning to **please just use the Docker container**. This module has several requirements in addition to installation of the evalAdmix program itself and PLINK. First, two python3 libraries are required: pandas and rpy2. Specifically, a recent version of rpy2 (>= v3.4) is required.
 ```
 pip3 install pandas
 pip3 install rpy2
 ```
 
-R (>= version 4.0.2) is also required. I advise compiling and installing from source because rpy2 will not work if the libR.so library is statically linked to R. If you go down this route, I provide an example of how to do this while installing R to a custom location. First, download the source code for R from https://cran.r-project.org/src/base/R-4/ (I recommend version 4.0.2 because I have only tested this module with this version). Follow the following commands, and replace '/path/to/install/' with your preferred installation directory. Additionally, I want to stress the importance of running ./configure with the --enable-R-shlib command. This is absolutely vital to creating the dynamically-linked libR.so library which allows rpy2 to function properly.
+R (>= version 4.0.2) is also required. I advise compiling and installing from source because rpy2 will not work if the libR.so library is statically linked to R. If you go down this route, I provide an example of how to do this while installing R to a custom location. First, download the source code for R from https://cran.r-project.org/src/base/R-4/. Follow the commands below, and replace '/path/to/install/' with your preferred installation directory. Additionally, I want to stress the importance of running ./configure with the --enable-R-shlib command. This is absolutely vital to creating the dynamically-linked libR.so library which allows rpy2 to function properly.
 ```
 tar -zxvf R-4.0.2.tar.gz
 cd R-4.0.2/
@@ -270,7 +290,7 @@ runEvalAdmix.py -p prefix -k 1 -K 12 -m popmap.txt -n 8
 The above command will first execute PLINK to convert your .ped file to a .bed file. Then it will run evalAdmix on all original .Q files produced by admixturePipeline.py before finally running evalAdmix on the .Q outputs for major and minor clusters identified by CLUMPAK. The plots for the major and minor clusters are produced by averaging across the .corres files produced for each run corresponding to a particular major or minor cluster, then input into evalAdmix using the .Q scores file for that cluster which was output by CLUMPP when the CLUMPAK pipeline was run.
 
 List of current options:
-* **-p / --prefix:** Specify your .ped file previx from your initial admixturePipeline.py run. This should be the same as the name of your original input VCF file, except without the .vcf extension (required).
+* **-p / --prefix:** Specify your .ped file prefix from your initial admixturePipeline.py run. This should be the same as the name of your original input VCF file, except without the .vcf extension (required).
 * **-k / --minK:** Specify the minimum K value (required).
 * **-K / --maxK:** Specify the maximum K value (required).
 * **-m / --popmap:** Specify a tab-delimited population map (sample --> population) (required).  

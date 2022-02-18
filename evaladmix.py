@@ -126,16 +126,16 @@ class EvalAdmix():
 
 			#check if object q is NoneType
 			if q is None:
-                            print("")
-                            print("")
-                            print("ERROR from evaladmix.py:")
-			    print("Empty matrices (Python NoneType) were returned When trying to create average matrices for Major/Minor clusters.")
-			    print("Check that the paths in qfilePaths.json are valid.")
-			    print("This error could occur if you have moved your admixture run folder after running distructRerun.py.")
-			    print("Alternatively, if you are using the Docker container this could have occurred if you ran distructRerun.py on your own system outside of the container.")
-                            print("")
-                            print("")
-			    raise SystemExit
+				print("")
+				print("")
+				print("ERROR from evaladmix.py:")
+				print("Empty matrices (Python NoneType) were returned When trying to create average matrices for Major/Minor clusters.")
+				print("Check that the paths in qfilePaths.json are valid.")
+				print("This error could occur if you have moved your admixture run folder after running distructRerun.py.")
+				print("Alternatively, if you are using the Docker container this could have occurred if you ran distructRerun.py on your own system outside of the container.")
+				print("")
+				print("")
+				raise SystemExit
 
 			famf = self.prefix + ".fam"
 			pop = self.base.as_matrix(self.utils.read_table(famf))

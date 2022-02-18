@@ -43,7 +43,7 @@ class Plink():
 					d[key] = val
 		except ValueError:
 			print("Too many columns detected in your popmap file.")
-			print("Your popmap file, ", popmap, ", may have spaces in either sample or population names.")
+			print(popmap, "may have spaces in either sample or population names.")
 			print("Verify your popmap file is in the correct format and try rerunning.")
 			raise SystemExit
 

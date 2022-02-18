@@ -121,8 +121,20 @@ class EvalAdmix():
 			reducedList = self.base.Reduce('+', matrixList) #sum matrices in list
 			cor = reducedList.ro/float(len(matrixList)) #div by num elements in list to get mean
 			q = self.parseClumpp(self.qfilePaths[k])
+			#check if object q is NoneType
+			if q is None:
+			    print("Empty matrices (Python NoneType) were returned When trying to create average matrices for Major/Minor clusters.")
+			    print("Check that the paths in qfilePaths.json are valid.")
+			    print("This error could occur if you have moved your admixture run folder after running distructRerun.py.")
+			    print("Alternatively, if you are using the Docker container this could have occurred if you ran distructRerun.py on your own system outside of the container.")
+			    raise SystemExit
+
 			famf = self.prefix + ".fam"
 			pop = self.base.as_matrix(self.utils.read_table(famf))
+
+			# uncomment below lines for debugging.
+			#print(type(pop))
+			#print(type(famf))
 
 			output = k + ".png"
 			ordr = self.myfunc.orderInds(pop=self.base.as_vector(pop.rx(True,2)), q=q)
@@ -138,10 +150,18 @@ class EvalAdmix():
 	def parseClumpp(self,f):
 		if(os.path.isfile(f)):
 			df = pandas.read_csv(f, delimiter="\s+", header=None, index_col=False)
+
+			# Even though inplace=True is used in this contect, operating on the dataframe directly rather than assigning to a new variable should prevent creation of a "NoneType"
 			df.drop(df.columns[0:5],axis=1,inplace=True)
+		
+			# uncomment below lines for debugging.
+			#print(type(df))
 			#print(df)
+
 			with localconverter(rpy2.robjects.default_converter + pandas2ri.converter):
 				Rdf = rpy2.robjects.conversion.py2rpy(df)
+
+			#print(type(Rdf))
 			#print(Rdf)
 			return Rdf
 
@@ -163,6 +183,9 @@ class EvalAdmix():
 				print(qf)
 				q = self.utils.read_table(qf)
 				cor = self.base.as_matrix(self.utils.read_table(eAf))
+
+				print(type(pop))
+				print(type(famf))
 
 				# run plotting functions
 				ordr = self.myfunc.orderInds(pop=self.base.as_vector(pop.rx(True,2)), q=q)

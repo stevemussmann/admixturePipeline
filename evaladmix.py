@@ -120,20 +120,29 @@ class EvalAdmix():
 					raise SystemExit
 			reducedList = self.base.Reduce('+', matrixList) #sum matrices in list
 			cor = reducedList.ro/float(len(matrixList)) #div by num elements in list to get mean
+
+                        #get average corres matrix for major or minor cluster k
 			q = self.parseClumpp(self.qfilePaths[k])
+
 			#check if object q is NoneType
 			if q is None:
+                            print("")
+                            print("")
+                            print("ERROR from evaladmix.py:")
 			    print("Empty matrices (Python NoneType) were returned When trying to create average matrices for Major/Minor clusters.")
 			    print("Check that the paths in qfilePaths.json are valid.")
 			    print("This error could occur if you have moved your admixture run folder after running distructRerun.py.")
 			    print("Alternatively, if you are using the Docker container this could have occurred if you ran distructRerun.py on your own system outside of the container.")
+                            print("")
+                            print("")
 			    raise SystemExit
 
 			famf = self.prefix + ".fam"
 			pop = self.base.as_matrix(self.utils.read_table(famf))
 			
-			print("Type for q is:")
-			print(type(q))
+			# uncomment lines below for debugging of object types
+                        #print("Type for q is:")
+			#print(type(q))
 
 			# uncomment below lines for debugging.
 			#print(type(pop))

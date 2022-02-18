@@ -36,10 +36,16 @@ class Plink():
 
 		#read popmap into dict
 		d=dict()
-		with open(popmap, 'r') as f:
-			for line in f:
-				(key, val) = line.split()
-				d[key] = val
+		try:
+			with open(popmap, 'r') as f:
+				for line in f:
+					(key, val) = line.split()
+					d[key] = val
+		except ValueError:
+			print("Too many columns detected in your popmap file.")
+			print("Your popmap file, ", popmap, ", may have spaces in either sample or population names.")
+			print("Verify your popmap file is in the correct format and try rerunning.")
+			raise SystemExit
 
 		fam=list()
 		with open(famf, 'r') as f:

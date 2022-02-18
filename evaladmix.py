@@ -123,7 +123,8 @@ class EvalAdmix():
 			q = self.parseClumpp(self.qfilePaths[k])
 			famf = self.prefix + ".fam"
 			pop = self.base.as_matrix(self.utils.read_table(famf))
-			print(type(pop))
+			
+			print("Type for q is:")
 			print(type(q))
 
 			output = k + ".png"
@@ -141,9 +142,15 @@ class EvalAdmix():
 		if(os.path.isfile(f)):
 			df = pandas.read_csv(f, delimiter="\s+", header=None, index_col=False)
 			df.drop(df.columns[0:5],axis=1,inplace=True)
+			
+			print("Type for df is:")
+			print(type(df))
 			#print(df)
 			with localconverter(rpy2.robjects.default_converter + pandas2ri.converter):
 				Rdf = rpy2.robjects.conversion.py2rpy(df)
+			
+			print("Type for Rdf is:")
+			print(type(Rdf))
 			#print(Rdf)
 			return Rdf
 

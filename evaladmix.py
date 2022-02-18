@@ -123,6 +123,7 @@ class EvalAdmix():
 			q = self.parseClumpp(self.qfilePaths[k])
 			famf = self.prefix + ".fam"
 			pop = self.base.as_matrix(self.utils.read_table(famf))
+			print(type(pop))
 
 			output = k + ".png"
 			ordr = self.myfunc.orderInds(pop=self.base.as_vector(pop.rx(True,2)), q=q)
@@ -160,6 +161,8 @@ class EvalAdmix():
 
 				# read in files
 				pop = self.base.as_matrix(self.utils.read_table(famf))
+				print(type(pop))
+				
 				print(qf)
 				q = self.utils.read_table(qf)
 				cor = self.base.as_matrix(self.utils.read_table(eAf))

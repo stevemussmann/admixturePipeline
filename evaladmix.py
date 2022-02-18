@@ -154,30 +154,21 @@ class EvalAdmix():
 		if(os.path.isfile(f)):
 			df = pandas.read_csv(f, delimiter="\s+", header=None, index_col=False)
 
-			# Even though inplace=True is used in this contect, operating on the dataframe directly rather than assigning to a new variable should prevent creation of a "NoneType"
+			# Even though inplace=True is used in this context, operating on the dataframe directly rather than assigning to a new variable should prevent creation of a "NoneType"
 			df.drop(df.columns[0:5],axis=1,inplace=True)
-<<<<<<< HEAD
 		
 			# uncomment below lines for debugging.
+			#print("Type for df is:")
 			#print(type(df))
-=======
-			
-			print("Type for df is:")
-			print(type(df))
->>>>>>> 4367632c1ac80102fd8aef1a09bf00a4a5335400
-			#print(df)
 
 			with localconverter(rpy2.robjects.default_converter + pandas2ri.converter):
 				Rdf = rpy2.robjects.conversion.py2rpy(df)
-<<<<<<< HEAD
-
-			#print(type(Rdf))
-=======
 			
-			print("Type for Rdf is:")
-			print(type(Rdf))
->>>>>>> 4367632c1ac80102fd8aef1a09bf00a4a5335400
+                        # uncomment lines below for debugging.
+			#print("Type for Rdf is:")
+			#print(type(Rdf))
 			#print(Rdf)
+
 			return Rdf
 
 	def Rcode(self, funcs, minK, maxK):
@@ -200,14 +191,6 @@ class EvalAdmix():
 				q = self.utils.read_table(qf)
 				cor = self.base.as_matrix(self.utils.read_table(eAf))
 
-				print(type(pop))
-<<<<<<< HEAD
-				print(type(famf))
-
-=======
-				print(type(q))
-				
->>>>>>> 4367632c1ac80102fd8aef1a09bf00a4a5335400
 				# run plotting functions
 				ordr = self.myfunc.orderInds(pop=self.base.as_vector(pop.rx(True,2)), q=q)
 

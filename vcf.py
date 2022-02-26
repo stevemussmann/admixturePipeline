@@ -24,13 +24,13 @@ class VCF():
 		self.removeInds = False
 		self.blacklist = dict() #make dictionary of blacklisted individuals
 		self.discard = list() #list of individuals present in vcf but not in popmap
+		self.vcflist = list() #list of all individuals that exist in the VCF file created from vcv-query command
 		if self.removeFile:
 			self.removeInds = True
 
 		temp = os.path.splitext(os.path.basename(infile))
 		self.prefix = temp[0]
 		self.get_indlist()
-		#self.compIndLists()
 
 	def fix_map(self):
 		name = self.prefix + ".map"
@@ -123,16 +123,19 @@ class VCF():
 			call.run_program()
 		except:
 			print("vcf-query failed to capture list of individuals from VCF file.")
-
+			print("Check that vcf-query is installed on your system.")
+			raise SystemExit
 
 	def print_populations(self,popmap):
+		# sort the popmap according to the order samples appear in VCF file.
+		popmap.sort(self.vcflist)
+
+		# remove individuals
 		if(self.removeInds == True):
 			rmf = self.readfile(self.removeFile)
 			for key in rmf:
 				key.rstrip()
 				self.blacklist[key]=1 
-
-		#print(self.blacklist)
 
 		#print populations file, excluding blacklisted individuals
 		data = self.readfile(self.vcf_file)
@@ -150,8 +153,6 @@ class VCF():
 			for key in rmf:
 				key.rstrip()
 				self.blacklist[key]=1 
-
-		#print(self.blacklist)
 
 		#print populations file, excluding blacklisted individuals
 		data = self.readfile(self.vcf_file)
@@ -171,10 +172,10 @@ class VCF():
 		return data
 
 	def compIndLists(self,popmap):
-		vcflist = self.readfile("vcf_indlist.txt")
+		self.vcflist = self.readfile("vcf_indlist.txt")
 		popmaplist = popmap.get_list()
 		#print(popmaplist)
-		self.discard = list(set(vcflist) - set(popmaplist))
+		self.discard = list(set(self.vcflist) - set(popmaplist))
 		for key in self.discard:
 			key.rstrip()
 			self.blacklist[key]=1

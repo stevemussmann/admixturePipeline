@@ -10,16 +10,27 @@ class Popmap():
 		#member variables
 		self.popmap = OrderedDict()
 		self.popnums = defaultdict(int)
-		
-		with open(infile, 'r') as data:
-			content = data.read().splitlines()
-
-		for line in content:
-			temp = line.split()
-			self.popmap[temp[0]] = temp[1] #make map of individual->population
+	
+		try:
+			with open(infile, 'r') as f:
+				for line in f:
+					(key, val) = line.split()
+					self.popmap[key] = val #make map of individual->population
+		except ValueError:
+			print("Too many columns detected in your popmap file.")
+			print(infile, "may have spaces in either sample or population names.")
+			print("Verify your popmap file is in the correct format and try rerunning.")
+			raise SystemExit
 
 	def get_pop(self,ind):
 		return self.popmap.get(ind)
 
 	def get_list(self):
 		return list(self.popmap.keys())
+
+	def sort(self, vcflist):
+		newdict = OrderedDict()
+		for key in vcflist:
+			if key in self.popmap:
+				newdict[key] = self.popmap[key]
+		self.popmap = newdict

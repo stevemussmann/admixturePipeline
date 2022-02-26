@@ -12,14 +12,10 @@ def main():
 	
 	vcf_file = VCF(input.args.vcf, input.args.thin, input.args.maf, input.args.mac, input.args.indcov, input.args.snpcov, input.args.bi, input.args.remove)
 
-	#if input.args.filter == True:
-	#	vcf_file.convert_filter()
-	#else:
-
 	#convert to Plink
 	populations = Popmap(input.args.popmap)
 	vcf_file.compIndLists(populations)
-	vcf_file.convert()	
+	vcf_file.convert()
 	vcf_file.plink()
 	vcf_file.print_populations(populations)
 	vcf_file.print_individuals(populations)

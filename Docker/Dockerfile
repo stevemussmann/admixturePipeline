@@ -12,7 +12,7 @@ ENV HOME /home/$USERNAME
 ENV IMAGE_NAME $IMAGE_NAME
 ENV IMAGE_TAG $IMAGE_TAG
 
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential r-base r-base-dev python3.6 python3-pip python3-setuptools python3-dev git autoconf automake
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential r-base r-base-dev python3.6 python3-pip python3-setuptools python3-dev git autoconf automake vim wget less
 
 WORKDIR /app
 
@@ -93,5 +93,5 @@ RUN echo "export PATH=/app/bin:/app/scripts/python/admixturePipeline:${PATH}" >>
 
 USER $USER
 
-WORKDIR /app
+WORKDIR /app/data
 

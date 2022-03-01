@@ -69,7 +69,7 @@ which python3
 ```
 This will return your /path/to/python3. Then modify the first line of each module to reflect the location of your python3 installation.
 
-Other dependencies (mainly Puthon libraries) are also required for some of the modules. These dependencies are discussed alongside their associated modules below.
+Other dependencies (mainly Python libraries) are also required for some of the modules. These dependencies are discussed alongside their associated modules below.
 
 # Running AdmixPipe v3
 

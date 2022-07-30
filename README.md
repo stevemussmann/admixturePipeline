@@ -127,8 +127,7 @@ admixturePipeline.py -m popmap.txt -v input.vcf -k 1 -K 10 -n 16 -t 100 -a 0.05
 For the example line of code above, the following outputs will be produced:
 * **input.ped**, **input.map**: output of plink
 * **results.zip**: a compressed file that can be input into a pipeline such as CLUMPAK
-* **loglik.txt**: a file containing the log likelihood values of each iteration of each K value.
-* **input.{k}\_{r}.P** and **input.{k}\_{r}.Q**: Admixture output files for each iteration{r} of each K{k} value
+* **input.{k}\_{r}.P** and **input.{k}\_{r}.Q**: Admixture output files for each iteration {r} of each K value {k}
 * **input\_pops.txt**: a list of population data that can be input into a pipeline such as CLUMPAK
 * **input.recode.strct_in**: a structure-formatted file of filtered SNPs
 * **input.qfiles.json**: a json file containing all .Q file names per K value that were produced by this pipeline (new in AdmixPipe v3; required for runEvalAdmix.py module) 
@@ -225,6 +224,8 @@ The following outputs will be produced in the directory where distructRerun.py w
 * **MinorClusterRuns.K{i}.{j}**: contains the names of the .stdout files associated with the jth minor cluster for K=i. These files will not appear if there were no minor clusters detected by CLUMPAK.
 * **cv_file.MajClust.txt**: CV values for all of the major clusters
 * **cv_file.MinClust.K{i}.{j}**: CV values for the jth minor cluster for K=i. These files will not appear if there were no minor clusters detected by CLUMPAK.
+* **loglikelihood_file.MajClust.txt**: Loglikelihood values for all of the major clusters
+* **loglikelihood_file.MinClust.K{i}.{j}**: Loglikelihood values for the jth minor cluster for K=i. These files will not appear if there were no minor clusters detected by CLUMPAK.
 * **cvRuns.json**: Run names associated with each major and minor cluster, stored in JSON format. This file is stored in your admixturePipeline.py output directory, and will be utilized by runEvalAdmix.py.
 * **qfilePaths.json**: CLUMPP output .Q files associated with each major and minor cluster, stored in JSON format. This file is stored in your admixturePipeline.py output directory, and will be utilized by runEvalAdmix.py.
 
@@ -241,19 +242,23 @@ pip3 install matplotlib
 ```
 
 ## Usage:
-It is assumed that you have already processed your data with admixturePipeline.py and distructRerun.py. Simply execute the cvSum.py script in the directory containing your cv_file.MajClust.txt output from distructRerun.py to generate the summary information for your major and minor cluster runs identified by CLUMPAK.
+It is assumed that you have already processed your data with admixturePipeline.py and distructRerun.py. Simply execute the cvSum.py script in the directory containing your cv_file.MajClust.txt and loglikelihood_file.MajClust.txt outputs from distructRerun.py to generate the summary information for your major and minor cluster runs identified by CLUMPAK.
 
-The output of this program is a plot of boxplots representing the variation in the CV values found by different runs of ADMIXTURE.  The X axis of the plot corresponds to K values, while the Y axis corresponds to the CV values.  Lower CV values are preferred.  The plot file name will be same as your input file, but with a .png extension (i.e., "cv_file.MajClust.png"). Boxplots for minor clusters, if present, are plotted alongside the major cluster CV value distributions in this same plot. The summary statistics are saved in a file named "cv_output.txt" unless you use the -o option to specify a custom file name.  
+The output of this program is a plot of boxplots representing the variation in the CV values found by different runs of ADMIXTURE.  The X axis of the plot corresponds to K values, while the Y axis corresponds to the CV values.  Lower CV values are preferred.  The plot file name will be same as your input file, but with a .png extension (i.e., "cv_file.MajClust.png"). Boxplots for minor clusters, if present, are plotted alongside the major cluster CV value distributions in this same plot. The summary statistics are saved in a file named "cv_output.txt" unless you use the -o option to specify a custom file name.  As of version 3.0.2, the same summary statistics and boxplots are also prepared by this module for loglikelihood values.
 
 List of current options:
 * **-c / --cv:** Specify the name of your file with cross-validation values for your admixture runs (optional, default = cv_file.MajClust.txt).
-* **-o / --out:** Specify the name of your output file (optional, default = cv_output.txt).
+* **-l / --ll:** Specify the name of your file with loglikelihood values for your admixture runs (optional, default = loglikelihood.MajClust.txt).
+* **-o / --out:** Specify the name of your cv value output file (optional, default = cv_output.txt).
+* **-L / --llout:** Specify the name of your loglikelihood output file (optional, default = loglikelihood_output.txt).
 
 ## Outputs:
 
 The following outputs will be produced in the directory where cvSum.py was executed:
 * **cv_file.MajClust.png**: Boxplot chart providing a visual summary of your your CV values for both major and minor cluster runs.
 * **cv_output.txt**: Text file containing summary statistics of CV values for each K.
+* **loglikelihood_file.MajClust.png**: Boxplot chart providing a visual summary of your your loglikelihood values for both major and minor cluster runs.
+* **loglikelihood_output.txt**: Text file containing summary statistics of loglikelihood values for each K.
 
 # 5. runEvalAdmix.py <a name="runevaladmix"></a>
 

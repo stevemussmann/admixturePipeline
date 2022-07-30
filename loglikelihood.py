@@ -1,14 +1,11 @@
-from __future__ import print_function
-
 from collections import defaultdict
 from decimal import *
 
 import os
 import re
 
-class CV():
-	'Class for operating on cross-validation values from admixture'
-	
+class LogLikelihood():
+
 	def __init__(self, f):
 		self.infile = f
 		self.d = defaultdict(list)
@@ -22,20 +19,19 @@ class CV():
 	def parseText(self, lines):
 		counter=0
 		for line in lines:
-			temp = line.split().pop(-1)
-			if temp != "-nan":
-				val = Decimal(temp) #get the cv value for the line
-				match = re.search(r'(?P<kval>(K=\d+))', line) #regex to find kval
-				knum = match.group('kval').split('=').pop(-1) #get the k-value for the line
-				self.d[knum].append(val) #append to dictionary of lists
+			templist = line.split()
+			if templist[-1] != "-nan":
+				val = Decimal(templist[-1])
+				knum = templist[0]
+				self.d[knum].append(val)
 			else:
-				print("Warning: -NaN value found for a CV value.")
+				print("Warning: -NaN value found for a Loglikelihood value.")
 
 	def readMinor(self):
 		path = os.getcwd()
 		files = os.listdir(path)
 		for f in files:
-			if f.startswith("cv_file.MinClust.K"):
+			if f.startswith("loglikelihood_file.MinClust.K"):
 				temp = f.split(".")
 				knum = temp[2] + ".MinClust." + temp[3]
 				knum = knum.replace("K","")
@@ -46,10 +42,12 @@ class CV():
 					temp = line.split().pop(-1)
 					if temp != "-nan":
 						val = Decimal(temp)
-						#match = re.search(r'(?P<kval>(K=\d+))', line) #regex to find kval
 						self.d[knum].append(val)
 					else:
-						print("Warning: -NaN value found for a CV value.")
+						print("Warning: -NaN value found for a Loglikelihood value.")
 
 	def printText(self):
 		print(self.d)
+			
+
+	

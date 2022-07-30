@@ -66,35 +66,39 @@ class Admixture():
 		self.zipdir('./', zipf)
 		zipf.close()
 
-	def print_cv(self):
-		print("Printing CV values...")
-		command="grep -h CV " + self.prefix + "*.stdout > " + self.prefix + "_cv_summary.txt"
-
-		grepCall = SysCall(command)
-		grepCall.run_program()
-
-	def loglik(self):
-		fh = open("loglik.txt", 'wb')
-		for fn in os.listdir("."):
-			if fn.endswith("stdout"):
-				temp = open(fn, 'r')
-				fnlist = fn.split("_")
-				fnlist2 = fnlist[-2].split(".")
-				kval = fnlist2[-1]
-				print(fnlist2)
-				for line in temp.readlines():
-					if line.startswith("Loglikelihood:"):
-						mylist = line.split()
-						#print(mylist)
-						fh.write(kval.encode())
-						fh.write("\t".encode())
-						fh.write(mylist[-1].encode())
-						fh.write("\n".encode())
-				temp.close()
-		fh.close()
-
-		print("Sorting log(likelihood) values...")
-		command="sort -n -k1 -o loglik.txt loglik.txt"
-
-		sortCall = SysCall(command)
-		sortCall.run_program()
+#	def print_cv(self):
+#		print("Printing CV values...")
+#		command="grep -h CV " + self.prefix + "*.stdout > " + self.prefix + "_cv_summary.txt"
+#
+#		grepCall = SysCall(command)
+#		grepCall.run_program()
+#
+#	def loglik(self):
+#		fh = open("loglik.txt", 'wb')
+#		for fn in os.listdir("."):
+#			if fn.endswith("stdout"):
+#				temp = open(fn, 'r')
+#				fnlist = fn.split("_")
+#				fnlist2 = fnlist[-2].split(".")
+#				kval = fnlist2[-1]
+#				runNums = fnlist[-1].split(".")
+#				runNum = runNums[0]
+#				print(fnlist2)
+#				for line in temp.readlines():
+#					if line.startswith("Loglikelihood:"):
+#						mylist = line.split()
+#						#print(mylist)
+#						fh.write(kval.encode())
+#						fh.write("\t".encode())
+#						fh.write(runNum.encode())
+#						fh.write("\t".encode())
+#						fh.write(mylist[-1].encode())
+#						fh.write("\n".encode())
+#				temp.close()
+#		fh.close()
+#
+#		print("Sorting log(likelihood) values...")
+#		command="sort -n -k1 -o loglik.txt loglik.txt"
+#
+#		sortCall = SysCall(command)
+#		sortCall.run_program()

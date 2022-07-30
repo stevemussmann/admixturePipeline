@@ -1,6 +1,6 @@
+import pandas
 import matplotlib.pyplot
 import os
-import pandas
 import re
 
 def natural_sort(l): 

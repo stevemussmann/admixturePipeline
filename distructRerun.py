@@ -4,6 +4,7 @@ from distructComline import ComLine
 from distruct import Distruct
 from clumpp import Clumpp
 from DefaultListOrderedDict import DefaultListOrderedDict
+from pathlib import Path
 
 import json
 import os
@@ -27,6 +28,14 @@ def jsonDump(admixDir, outfile, outputDict):
 
 def main():
 	input = ComLine(sys.argv[1:])
+
+	# The next six lines remove files to prevent duplication of data if distructRerun is executed multiple times on the same files.
+	cvpath = Path("cv_file.MajClust.txt")
+	llpath = Path("loglikelihood_file.MajClust.txt")
+	if cvpath.is_file():
+		os.remove(cvpath)
+	if llpath.is_file():
+		os.remove(llpath)
 	
 	d = Distruct(input.args.directory, input.args.otl, input.args.colorbrew, input.args.pathtocolorbrew)
 	runsDict = DefaultListOrderedDict()
@@ -56,10 +65,14 @@ def main():
 		for key, v in tempMinQfilesDict.items():
 			tempDict = locationsDict(qdir, v, key)
 			qfilesDict = mergeDicts(qfilesDict, tempDict)
-		
+
+		# code to get CV and Loglikelihood values for major clusters must only be run once.
 		if(k == int(input.args.maxk)):
 			c.getMajorClusterCVvalues(input.args.majc)
+			c.getMajorClusterLoglikelihood(input.args.majc)
+		# code to get values for minor clusters operates on individual K values
 		c.getMinorClusterCVvalues()
+		c.getMinorClusterLoglikelihood()
 
 		d.copyFiles()
 

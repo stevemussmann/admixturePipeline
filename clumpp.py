@@ -144,6 +144,47 @@ class Clumpp():
 				mcRunsDict[self.k].append(temp)
 		return mcRunsDict
 
+	def getMajorClusterLoglikelihood(self, mc):
+		with open(mc) as mcruns:
+			mcfiles = mcruns.readlines()
+		with open("loglikelihood_file.MajClust.txt", 'a') as llf:
+			for f in mcfiles:
+				templist = f.split(".")
+				templist2 = templist[-2].split("_")
+				k=templist2[0]
+				filepath = os.path.join(self.ad, f).rstrip()
+				with open(filepath, 'r') as llin:
+					for line in llin.readlines():
+						if line.startswith('Loglikelihood'):
+							llf.write(str(k))
+							llf.write("\t")
+							llf.write(line)
+	
+	def getMinorClusterLoglikelihood(self):
+		match = "MinorClusterRuns.K" + str(self.k) + "."
+		content = os.listdir(os.getcwd())
+		for f in content:
+			if f.startswith(match):
+				with open(f) as mcruns:
+					mcfiles = mcruns.readlines()
+				temp = f.split(".")
+				newlist = list()
+				newlist.append("loglikelihood_file")
+				newlist.append("MinClust")
+				for item in temp[-2:]:
+					newlist.append(item)
+				newlist.append("txt")
+				outfile = ".".join(newlist)
+				with open(outfile, 'w') as llf:
+					for f in mcfiles:
+						filepath = os.path.join(self.ad, f).rstrip()
+						with open(filepath, 'r') as llin:
+							for line in llin.readlines():
+								if line.startswith('Loglikelihood'):
+									llf.write(str(self.k))
+									llf.write("\t")
+									llf.write(line)
+
 	def getMajorClusterCVvalues(self, mc):
 		with open(mc) as mcruns:
 			mcfiles = mcruns.readlines()

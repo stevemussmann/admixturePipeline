@@ -23,8 +23,8 @@ def main():
 	admix_run = Admixture(vcf_file.prefix, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv)
 	admix_run.admix()
 	admix_run.create_zip()
-	admix_run.loglik()
-	admix_run.print_cv()
+#	admix_run.loglik()
+#	admix_run.print_cv()
 
 main()
 

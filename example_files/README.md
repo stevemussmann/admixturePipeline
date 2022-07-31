@@ -78,12 +78,12 @@ Next, run distructRerun.py to process the output. You must run distructRerun.py 
 distructRerun.py -d 1659307908/ -a exampleDir/ -k 1 -K 8
 ```
 
-You can now get the cv value and log likelihood summary stats and plots for your major and minor clusters by running cvSum.py
+You can now get the cv value and log likelihood summary stats/plots for your major/minor clusters by running cvSum.py
 ```
 cvSum.py
 ```
 
-Finally, you can run EvalAdmix on your run. Change back to the /app/data/exampleDir directory and run it with the following command:
+Finally, you can run EvalAdmix on your admixture analysis. Change back to the /app/data/exampleDir directory and run it with the following command:
 ```
 cd exampleDir/
 runEvalAdmix.py -p example -k 1 -K 8 -m example_map.txt -n 8

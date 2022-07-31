@@ -59,6 +59,26 @@ Return to your Docker container. When CLUMPAK finishes processing your data, dow
 
 ```
 cd /app/data
-wget http://clumpak.tau.ac.il/results.html?jobId=1659307908
+wget http://clumpak.tau.ac.il/CLUMPAK_results/1659307908/1659307908.zip
 ```
 
+Once your file is downloaded, unzip the zip file.
+```
+unzip 1659307908.zip
+```
+
+Next, run distructRerun.py to process the output. You must run distructRerun.py before executing any of the following commands. As of v3.0, AdmixPipe uses the distructRerun.py module to record paths to CLUMPAK outputs and admixture results in various json files. These paths are used by the cvSum.py and runEvalAdmix.py modules. Likewise, if you move your results folder or CLUMPAK output folder after running distructRerun.py, then you will have to run this step again before proceeding. 
+```
+distructRerun.py -d 1659307908/ -a exampleDir/ -k 1 -K 8
+```
+
+You can now get the cv value and log likelihood summary stats and plots for your major and minor clusters by running cvSum.py
+```
+cvSum.py
+```
+
+Finally, you can run EvalAdmix on your run. Change back to the /app/data/exampleDir directory and run it with the following command:
+```
+cd exampleDir/
+runEvalAdmix.py -p example -k 1 -K 8 -m example_map.txt -n 8
+```

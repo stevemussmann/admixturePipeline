@@ -35,8 +35,30 @@ This should produce a new file named **example.vcf** with a size of approximatel
 
 ## Running the pipeline with the example files:
 
-You can run the program to validate that it works by running the following command. This will run the pipeline for 8 iterations each on K=1 through K=8. The command will also subsample one SNP per locus (-t 120). This value was selected because the data were assembled via de novo assembly, and each locus has a maximum length of around 120bp. 
+You can run the program to validate that it works by running the following command. This will run the pipeline for 8 iterations each on K=1 through K=8. The command will also subsample one SNP per locus (-t 120). This value was selected because the data were assembled via de novo assembly, and each locus has a maximum length of around 120bp. Eight processor cores (-n 8) were also used. 
 
 ```
-admixturePipeline.py -m example_map.txt -v example.vcf -k 1 -K 8 -R 8 -t 120
+admixturePipeline.py -m example_map.txt -v example.vcf -k 1 -K 8 -R 8 -t 120 -n 8
 ```
+
+When this command finishes running, submit your results.zip and example_pops.txt files to the CLUMPAK server: http://clumpak.tau.ac.il/. This can be done manually using the following instructions:
+1) Click the first 'Browse...' button and navigate to your results.zip file.
+2) Select the 'ADMIXTURE' radio button.
+3) Click the second 'Browse...' button and navigate to the example_pops.txt file.
+4) Click the 'Advanced Options' button.
+5) Under the 'MCL' threshold, select 'User Defined' and enter 0.9
+6) Enter your email address.
+7) Click the 'Submit Form' button.
+
+Alternatively, **if you have configured the optional submitClumpak.py module outside of the Docker container**, you can submit the proper files by navigating to the data/exampleDir directory and entering the following command:
+```
+submitClumpak.py -p example -e smussmann@gmail.com -m 0.9
+```
+
+Return to your Docker container. When CLUMPAK finishes processing your data, download the resulting zip file. The proper file will be a 10-digit number zip file (such as 1659307908.zip). You can either download manually and move the file to the /app/data folder of your Docker container, or wget this file directly to the /app/data folder of your Docker container. **The following command is an example. The URL to your data file will be different than the one shown here.**
+
+```
+cd /app/data
+wget http://clumpak.tau.ac.il/results.html?jobId=1659307908
+```
+

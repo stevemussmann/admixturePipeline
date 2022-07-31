@@ -5,7 +5,7 @@ A pipeline that accepts a VCF file to run through Admixture
 1) **example.vcf.tar.gz**: compressed vcf file for input to admixturePipeline.py
 2) **example_map.txt**: example population map that corresponds to samples in example.vcf. Used as input to admixturePipeline.py
 3) **exampleDir.tar.gz**: This compressed folder holds the expected contents of the exampleDir directory described in the tutorial below **prior to running distructRerun.py**. You can use this in the tutorial below if you want to jump into the tutorial at the 'distructRerun.py' step.
-4) 1659307908.zip: This zipped folder is the output of the CLUMPAK pipeline for the steps described below. You can use this in the tutorial below if you want to jump into the tutorial at the 'distructRerun.py' step, or if the CLUMPAK website is down.
+4) **1659307908.zip**: This zipped folder is the output of the CLUMPAK pipeline for the steps described below. You can use this in the tutorial below if you want to jump into the tutorial at the 'distructRerun.py' step, or if the CLUMPAK website is down.
 
 ## Tutorial Using Example Files
 

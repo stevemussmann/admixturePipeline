@@ -39,6 +39,13 @@ Launch the container by placing the "runDocker.sh" script in the folder from whi
 ```
 This script creates a folder named "data" in the directory on your machine from which you launched the Docker container. You can put any input files for AdmixPipe v3.0 into this folder and they will be accessible inside the container (in /app/data/). Any outputs written to this folder and any of its subdirectories will still be accessible after you exit the container. If you write any output to other locations inside the container, they will be lost upon exit. All required AdmixPipe modules (i.e., all except submitClumpak.py) have been setup within the container and will function with the commands provided throughout the remainder of this documentation. 
 
+If running the runDocker.sh script on your machine requires sudo permission, you can create a docker users group and add your username to that group. This can be accomplished with the following, if you are running the command from your own user account. If you are running the command for another user, replace ${USER} with their username:
+
+```
+sudo groupadd docker
+sudo usermod -aG docker ${USER}
+```
+
 ### Manual Setup
 Due to the many (sometimes complex) dependencies required by this pipeline, manual installation is not advised. However, if you insist upon installing the pipeline manually, you should get started by cloning this repository. Then install the program dependencies listed below. 
 

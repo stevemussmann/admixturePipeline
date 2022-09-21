@@ -30,6 +30,8 @@ echo "be lost upon exiting."
 echo ""
 echo ""
 
+chmod a+w ${dir}/data
+
 docker container run -v ${dir}/data/:/app/data --rm -it mussmann/admixpipe:3.0 /bin/bash
 
 exit

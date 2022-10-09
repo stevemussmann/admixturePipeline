@@ -21,6 +21,25 @@ class Popmap():
 			print(infile, "may have spaces in either sample or population names.")
 			print("Verify your popmap file is in the correct format and try rerunning.")
 			raise SystemExit
+	
+	def get_plinkList(self, ped):
+		plinkList = list()
+		with open(ped, 'r') as f:
+			for line in f:
+				tempLine = line.split()
+				plinkList.append(tempLine[0])
+		return plinkList
+	
+	def print_populations(self, filePrefix):
+		ped = filePrefix + ".ped"
+		plinkList = self.get_plinkList(ped)
+		self.sort(plinkList)
+		popfile = filePrefix + "_pops.txt"
+		f = open(popfile, 'w')
+		for ind in plinkList:
+			f.write(self.get_pop(ind))
+			f.write("\n")
+		f.close()
 
 	def get_pop(self,ind):
 		return self.popmap.get(ind)

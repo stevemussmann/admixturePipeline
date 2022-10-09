@@ -23,7 +23,6 @@ class ComLine():
 		)
 		required.add_argument("-v", "--vcf",
 							dest='vcf',
-							required=True,
 							help="Specify a vcf file for input."
 		)
 		opt_admix.add_argument("-k", "--minK",
@@ -37,6 +36,10 @@ class ComLine():
 							type=int,
 							default=20,
 							help="maximum K value."
+		)
+		opt_admix.add_argument("-p", "--plink",
+							dest='plink',
+							help="Specify the prefix for a plink-formatted file. File should have been encoded in plink using the --recode12 option. This option disables ALL filtering. This is under active development. Use at your own risk."
 		)
 		opt_vcf.add_argument("-M", "--mac",
 					dest='mac',
@@ -99,11 +102,41 @@ class ComLine():
 
 		self.args = parser.parse_args()
 
+		#check that combinations of command line options are valid
+		if all([self.args.vcf, self.args.plink]):
+			print("ERROR: Cannot specify both a vcf file and a plink file as input. Use one or the other.")
+			print("Exiting program...")
+			print("")
+			raise SystemExit
+		
+		if any([self.args.vcf, self.args.plink]):
+			if self.args.vcf:
+				print("VCF input option used.")
+			if self.args.plink:
+				print("Direct PLINK input option used.")
+				print("Continuing with all filtering options disabled.")
+		else:
+			print("ERROR: Must specify either a vcf file or a plink file as input.")
+			print("Exiting program...")
+			print("")
+			raise SystemExit
+		
 		#check if files exist
+		print("Checking if popmap file exists.")
 		self.exists( self.args.popmap )
-		self.exists( self.args.vcf )
+		if self.args.vcf:
+			print("Checking if .vcf file exists.")
+			self.exists( self.args.vcf )
 		if self.args.remove:
+			print("Checking if sample removal list exists.")
 			self.exists( self.args.remove )
+		if self.args.plink:
+			print("Checking if plink .ped file exists.")
+			plinkPed = self.args.plink + ".ped"
+			self.exists( plinkPed )
+			print("Checking if plink .map file exists.")
+			plinkMap = self.args.plink + ".map"
+			self.exists( plinkMap )
 
 
 
@@ -113,3 +146,6 @@ class ComLine():
 			print("Exiting program...")
 			print("")
 			raise SystemExit
+		else:
+			print("Found.")
+			print("")

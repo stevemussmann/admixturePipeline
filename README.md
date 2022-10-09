@@ -101,7 +101,11 @@ You can run the program to print help options with the following command:
 
 List of current required options:
 * **-m / --popmap:** Specify a tab-delimited population map (sample --> population).  This will be converted to a population list that can be input into a pipeline such as CLUMPAK (http://clumpak.tau.ac.il/) for visualization of data
+
+One of the following two options is also required, but they cannot be used together in the same run:
+* **-p / --plink:** Specify a plink file for input. File should have been produced using the --recode12 option in plink. This option disables all filtering options in the program. This is under development and not robustly tested; use at your own risk. 
 * **-v / --vcf:** Specify a VCF file for input.
+
 
 Optional arguments:
 * **-n / --np:** Specify the number of processors.  Currently the only multithreaded program is Admixture.
@@ -123,10 +127,15 @@ VCFtools optional arguments:
 
 ## Example:
 
-The following command will run the program from K values 1 through 10, conducting 10 repetitions at each K value.  Admixture will use all 16 processors available on the hypothetical machine, VCFtools will filter SNPs at an interval of 100bp, and the minor allele frequency filter in VCFtools will drop any loci with a minor allele frequency less than 0.05. Any individuals not present in popmap.txt will also be filtered out before Admixture is executed:
+The preferred usage of the program is to provide a .vcf file as input. The following command will run the program from K values 1 through 10, conducting 10 repetitions at each K value.  Admixture will use all 16 processors available on the hypothetical machine, VCFtools will filter SNPs at an interval of 100bp, and the minor allele frequency filter in VCFtools will drop any loci with a minor allele frequency less than 0.05. Any individuals not present in popmap.txt will also be filtered out before Admixture is executed:
 
 ```
 admixturePipeline.py -m popmap.txt -v input.vcf -k 1 -K 10 -n 16 -t 100 -a 0.05
+```
+
+Alternatively, you can now directly provide a pre-filtered plink file as input. The files (.ped and .map) should be equivalent to those output using the --recode12 option in plink. Specify the plink file prefix to use this option, as shown in the example below. NOTE: directly inputting a plink-formatted file disables ALL filtering options in the program.
+```
+admixturePipeline.py -m popmap.txt -p input -k 1 -K 10 -n 16
 ```
 
 ## Outputs:
@@ -180,7 +189,7 @@ submitClumpak.py -p prefix -e email@domain.com
 
 List of current options:
 * **-r / --results:** Provide the results.zip file from your admixpipe run. Specifying the name is only necessary if you have changed it from the default of 'results.zip'.
-* **-p / --prefix:** Specify the prefix from your admixpipe run. This will be the same name as your VCF file without the .vcf file extension.
+* **-p / --prefix:** Specify the prefix from your admixpipe run. This will either be the prefix of your plink file (i.e., without .bed or .map extension), or same name as your VCF file without the .vcf file extension.
 * **-e / --email:** Specify your email address for submission to the CLUMPAK web server.
 * **-m / --MCL:** \[optional\] Provide user-defined MCL threshold for similarity scores. Must be >=0 and <=0.99.
 * **-d / --DISTRUCT:** \[optional\] Provide user-defined DISTRUCT threshold for minimal distruct cluster threshold. Must be >=0 and <=0.95.
@@ -302,7 +311,7 @@ runEvalAdmix.py -p prefix -k 1 -K 12 -m popmap.txt -n 8
 The above command will first execute PLINK to convert your .ped file to a .bed file. Then it will run evalAdmix on all original .Q files produced by admixturePipeline.py before finally running evalAdmix on the .Q outputs for major and minor clusters identified by CLUMPAK. The plots for the major and minor clusters are produced by averaging across the .corres files produced for each run corresponding to a particular major or minor cluster, then input into evalAdmix using the .Q scores file for that cluster which was output by CLUMPP when the CLUMPAK pipeline was run.
 
 List of current options:
-* **-p / --prefix:** Specify your .ped file prefix from your initial admixturePipeline.py run. This should be the same as the name of your original input VCF file, except without the .vcf extension (required).
+* **-p / --prefix:** Specify your .ped file prefix from your initial admixturePipeline.py run. If you input a VCF file, this will be the name of that VCF file, except without the .vcf extension (required).
 * **-k / --minK:** Specify the minimum K value (required).
 * **-K / --maxK:** Specify the maximum K value (required).
 * **-m / --popmap:** Specify a tab-delimited population map (sample --> population) (required).  

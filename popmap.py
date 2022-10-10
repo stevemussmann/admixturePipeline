@@ -42,8 +42,17 @@ class Popmap():
 		popfile = filePrefix + "_pops.txt"
 		f = open(popfile, 'w')
 		for ind in plinkList:
-			f.write(self.get_pop(ind))
-			f.write("\n")
+			try:
+				f.write(self.get_pop(ind))
+				f.write("\n")
+			except TypeError as e:
+				print("ERROR in popmap.py: " + str(e))
+				print("Attempted to look up " + ind + " in the popmap file, but no record was found.")
+				print("Check that all samples in your plink file appear in your popmap.")
+				print("If inputting a .bed file, check that the individual sample identifier is in column 1 of your associated .fam file.")
+				print("If inputting a .ped file, check that the individual sample identifier is in column 1 of your .ped file.")
+				print("")
+				raise SystemExit
 		f.close()
 
 	def get_pop(self,ind):

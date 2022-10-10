@@ -22,17 +22,22 @@ class Popmap():
 			print("Verify your popmap file is in the correct format and try rerunning.")
 			raise SystemExit
 	
-	def get_plinkList(self, ped):
+	def get_plinkList(self, pfile):
 		plinkList = list()
-		with open(ped, 'r') as f:
+		with open(pfile, 'r') as f:
 			for line in f:
 				tempLine = line.split()
 				plinkList.append(tempLine[0])
 		return plinkList
 	
-	def print_populations(self, filePrefix):
-		ped = filePrefix + ".ped"
-		plinkList = self.get_plinkList(ped)
+	# bed is a boolean describing whether a bed file was input (True) or a ped file (False)
+	def print_populations(self, filePrefix, bed):
+		pfile=""
+		if bed == True:
+			pfile = filePrefix + ".fam"
+		else:
+			pfile = filePrefix + ".ped"
+		plinkList = self.get_plinkList(pfile)
 		self.sort(plinkList)
 		popfile = filePrefix + "_pops.txt"
 		f = open(popfile, 'w')

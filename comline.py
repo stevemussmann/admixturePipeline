@@ -37,9 +37,13 @@ class ComLine():
 							default=20,
 							help="maximum K value."
 		)
-		opt_admix.add_argument("-p", "--plink",
-							dest='plink',
-							help="Specify the prefix for a plink-formatted file. File should have been encoded in plink using the --recode12 option. This option disables ALL filtering. This is under active development. Use at your own risk."
+		opt_admix.add_argument("-p", "--ped",
+							dest='ped',
+							help="Specify the prefix for a text plink file. File should have been encoded in plink using the --recode12 option. This option disables ALL filtering. This is under active development. Use at your own risk."
+		)
+		opt_admix.add_argument("-b", "--bed",
+							dest='bed',
+							help="Specify the prefix for a binary plink file. File should have been encoded in plink using the --recode12 option. This option disables ALL filtering. This is under active development. Use at your own risk."
 		)
 		opt_vcf.add_argument("-M", "--mac",
 					dest='mac',
@@ -94,7 +98,7 @@ class ComLine():
 							default=20,
 							help="Number of replicates per K."
 		)
-		opt_vcf.add_argument("-b", "--bi",
+		opt_vcf.add_argument("-B", "--bi",
 							dest='bi',
 							action='store_true',
 							help="Turn off filter for biallelic SNPs."
@@ -103,42 +107,53 @@ class ComLine():
 		self.args = parser.parse_args()
 
 		#check that combinations of command line options are valid
-		if all([self.args.vcf, self.args.plink]):
-			print("ERROR: Cannot specify both a vcf file and a plink file as input. Use one or the other.")
+		booleans=[self.args.vcf, self.args.ped, self.args.bed]
+		if self.xOrMoreAreTrue(booleans) > 1:
+			print("ERROR: Only one of a bed, ped, or vcf file can be used as input.")
 			print("Exiting program...")
 			print("")
 			raise SystemExit
-		
-		if any([self.args.vcf, self.args.plink]):
+		elif any([self.args.vcf, self.args.ped, self.args.bed]):
 			if self.args.vcf:
 				print("VCF input option used.")
-			if self.args.plink:
-				print("Direct PLINK input option used.")
+			if self.args.ped:
+				print("PLINK ped input option used.")
+				print("Continuing with all filtering options disabled.")
+			if self.args.bed:
+				print("PLINK bed input option used.")
 				print("Continuing with all filtering options disabled.")
 		else:
-			print("ERROR: Must specify either a vcf file or a plink file as input.")
+			print("ERROR: Must specify either a VCF file or a PLINK file (bed or ped) as input.")
 			print("Exiting program...")
 			print("")
 			raise SystemExit
 		
 		#check if files exist
-		print("Checking if popmap file exists.")
+		print("Checking if popmap file exists...")
 		self.exists( self.args.popmap )
 		if self.args.vcf:
-			print("Checking if .vcf file exists.")
+			print("Checking if VCF file exists...")
 			self.exists( self.args.vcf )
 		if self.args.remove:
-			print("Checking if sample removal list exists.")
+			print("Checking if sample removal list exists...")
 			self.exists( self.args.remove )
-		if self.args.plink:
-			print("Checking if plink .ped file exists.")
-			plinkPed = self.args.plink + ".ped"
+		if self.args.ped:
+			print("Checking if plink .ped file exists...")
+			plinkPed = self.args.ped + ".ped"
 			self.exists( plinkPed )
-			print("Checking if plink .map file exists.")
-			plinkMap = self.args.plink + ".map"
+			print("Checking if plink .map file exists...")
+			plinkMap = self.args.ped + ".map"
 			self.exists( plinkMap )
-
-
+		if self.args.bed:
+			print("Checking if plink .bed file exists...")
+			plinkBed = self.args.bed + ".bed"
+			self.exists( plinkBed )
+			print("Checking if plink .bim file exists...")
+			plinkBim = self.args.bed + ".bim"
+			self.exists( plinkBim )
+			print("Checking if plink .fam file exists...")
+			plinkFam = self.args.bed + ".fam"
+			self.exists( plinkFam )
 
 	def exists(self, filename):
 		if( os.path.isfile(filename) != True ):
@@ -149,3 +164,10 @@ class ComLine():
 		else:
 			print("Found.")
 			print("")
+	
+	def xOrMoreAreTrue(self, booleans):
+		count = 0
+		for boolean in booleans:
+			if(boolean):
+				count += 1
+		return count

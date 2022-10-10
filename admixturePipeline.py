@@ -22,13 +22,20 @@ def main():
 		vcf_file.print_populations(populations)
 		vcf_file.print_individuals(populations)
 
-		admix_run = Admixture(vcf_file.prefix, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv)
+		admix_run = Admixture(vcf_file.prefix, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, False)
 
-	#else if using plink input, go directly to running admixture
-	else:
+	#if using plink ped, go directly to running admixture
+	elif input.args.ped:
 		#print_populations function in popmap class mimics output of print_populations function in vcf class
-		populations.print_populations(input.args.plink)
-		admix_run = Admixture(input.args.plink, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv)
+		populations.print_populations(input.args.ped, False)
+		admix_run = Admixture(input.args.ped, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, False)
+	#if using plink bed format, go directly to running admixture
+	elif input.args.bed:
+		#print_populations function in popmap class mimics output of print_populations function in vcf class
+		populations.print_populations(input.args.bed, True)
+		admix_run = Admixture(input.args.bed, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, True)
+		
+
 	admix_run.admix()
 	admix_run.create_zip()
 

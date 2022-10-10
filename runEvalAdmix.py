@@ -11,7 +11,8 @@ def main():
 
 	# make plink .bed file and fix .fam file
 	pl = Plink(input.args.prefix)
-	pl.makeBED()
+	if input.args.bed:
+		pl.makeBED()
 	pl.fixFam(input.args.popmap)
 
 	ea = EvalAdmix(input.args.prefix, input.args.mc,input.args.evalAdmixRcode)

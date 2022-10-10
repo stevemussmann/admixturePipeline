@@ -17,7 +17,7 @@ class Admixture():
 	'Class for executing Admixture commands'
 
 
-	def __init__(self, prefix, NP, minK, maxK, rep, cv):
+	def __init__(self, prefix, NP, minK, maxK, rep, cv, bed):
 		self.prefix = prefix
 		self.NP = NP
 		self.minK = minK
@@ -25,6 +25,9 @@ class Admixture():
 		self.rep = rep
 		self.cv = cv
 		self.qfiles = DefaultListOrderedDict()
+		self.ext = ".ped"
+		if bed == True:
+			self.ext = ".bed"
 
 	def admix(self):
 		ks = range(self.minK, self.maxK+1)
@@ -32,7 +35,7 @@ class Admixture():
 		#for each k value
 		for i in ks:
 			for j in range(self.rep):
-				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " --cv=" + str(self.cv) + " " + self.prefix + ".ped " + str(i)
+				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " --cv=" + str(self.cv) + " " + self.prefix + self.ext + " " + str(i)
 				
 				#call Admixture
 				admixtureCall = SysCall(command_string)

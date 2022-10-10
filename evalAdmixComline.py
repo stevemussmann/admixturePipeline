@@ -10,6 +10,11 @@ class ComLine():
 
 	def __init__(self, args):
 		parser = argparse.ArgumentParser()
+		parser.add_argument("-b", "--bed",
+							dest='bed',
+							action='store_false',
+							help="Boolean switch to convert .ped to .bed format (default = true). Use this option if you used the -b/--bed option when running admixturePipeline.py"
+		)
 		parser.add_argument("-p", "--prefix",
 							dest='prefix',
 							required=True,
@@ -53,6 +58,27 @@ class ComLine():
 		#check if files exist
 		if(self.args.mc != "none"):
 			self.exists(self.args.mc)
+		if(self.args.bed):
+			print("Checking for plink text format files. If these checks fail, you may need to use the -b/--bed option.")
+			print("Checking if plink .ped file exists...")
+			plinkPed = self.args.prefix + ".ped"
+			self.exists( plinkPed )
+			print("Checking if plink .map file exists...")
+			plinkMap = self.args.prefix + ".map"
+			self.exists( plinkMap )
+		else:
+			print("Checking for plink binary format files. If these checks fail, you may need to drop the -b/--bed option.")
+			print("Checking if plink .bed file exists...")
+			plinkBed = self.args.prefix + ".bed"
+			self.exists( plinkBed )
+			print("Checking if plink .bim file exists...")
+			plinkBim = self.args.prefix + ".bim"
+			self.exists( plinkBim )
+			print("Checking if plink .fam file exists...")
+			plinkFam = self.args.prefix + ".fam"
+			self.exists( plinkFam )
+
+
 
 	def exists(self, filename):
 		if( os.path.isfile(filename) != True ):
@@ -61,6 +87,9 @@ class ComLine():
 			print( "Exiting program..." )
 			print( "" )
 			raise SystemExit
+		else:
+			print("Found.")
+			print("")
 
 	def dirExists(self,directory):
 		if(os.path.isdir(directory) != True):

@@ -48,6 +48,3 @@ class LogLikelihood():
 
 	def printText(self):
 		print(self.d)
-			
-
-	

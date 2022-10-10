@@ -1,20 +1,20 @@
 [![DOI](https://zenodo.org/badge/96546673.svg)](https://zenodo.org/badge/latestdoi/96546673)
 
 # AdmixPipe v3: A Method for Parsing and Filtering VCF Files for Admixture Analysis
-A pipeline that accepts a VCF file to run through Admixture
+A pipeline that accepts VCF and PLINK files to run through Admixture
 
 ## Citing AdmixPipe
 AdmixPipe v2.0 is published in BMC Bioinformatics. A manuscript is currently in preparation for v3.0. For now, you should cite the publication below if you use any part of this pipeline:
 
 S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: population analyses in ADMIXTURE for non-model organisms. BMC Bioinformatics 21:337. DOI: 10.1186/s12859-020-03701-4
 
-## IMPORTANT NOTE ON v3.0 (30-January-2022)
+## IMPORTANT NOTE ON v3.0 (updated 10-October-2022)
 
 The remainder of this README.md file details documentation for AdmixPipe v3.0, which has several "behind the scenes" changes, bug fixes, and enhancements to existing modules. Two new modules have also been developed for the following purposes: 
 1) automatic submission of admixturePipeline.py output to the CLUMPAK website.
 2) assessment of the best K using the evalAdmix package (http://www.popgen.dk/software/index.php/EvalAdmix). 
 
-Some of the outputs from AdmixPipe v2.0 are not compatible with the v3.0 scripts because I use json files to track data and file names from early parts of the pipeline that are needed in some of the later modules. If you need to use the v2.0 scripts for any reason, they are still available from the prior releases on this page (v2.0.2 was the final release of AdmixPipe v2.0).  
+Some of the outputs from AdmixPipe v2.0 are not compatible with the v3.0 scripts because I use json files to track data and file names from early parts of the pipeline that are needed in some of the later modules. If you need to use the v2.0 scripts for any reason, they are still available from the prior releases on this page (v2.0.2 was the final release of AdmixPipe v2.0).
 
 Other important notes for v3.0: 
 1) whereas AdmixPipe v2.0 was backward compatible with Python 2.7.x, v3.0+ requires Python 3.
@@ -23,11 +23,12 @@ Other important notes for v3.0:
 4) The submitClumpak.py module is **completely optional**. You can accomplish the same results by manually submitting your admixturePipeline.py module outputs to the CLUMPAK website. 
 5) The submitClumpak.py module will not function in the Docker container. If you wish to use it, this module must be set up on your own computer. It requires selenium and currently is only compatible if you have Firefox installed. 
 6) The data processing and plotting functions of the cvSum.py module underwent a complete rewrite for v3.0.
+7) PLINK .bed and .ped files are now accepted as direct input, although it is assumed these files will be pre-filtered. Directly inputting a PLINK file disables all filtering options.
 
 ## Installation & Setup for AdmixPipe v3:
 
 ### Docker Setup
-Note: As of Oct. 9, 2022 the Docker container is a commit or two behind the github repository. However, these were mostly minor changes and the only feature not currently implemented in Docker is the option to directly input a plink file rather than a VCF. An updated container will be coming soon, but it may be a few weeks. 
+Note: As of Oct. 10, 2022 the Docker container is a commit or two behind the github repository. However, these were mostly minor changes and the only feature not currently implemented in Docker is the option to directly input PLINK files rather than VCF. An updated container will be coming soon, but it may be a few weeks. 
 
 This pipeline was written for Unix based operating systems, such as the various Linux distributions and Mac OS X. As of v3.0, we have achieved platform independence and greater ease of installation through development of a Docker container. This is now the recommended method for running the program. To get started, install [Docker](https://www.docker.com/) on your machine and pull the Docker image using the following command:
 
@@ -105,7 +106,8 @@ List of current required options:
 * **-m / --popmap:** Specify a tab-delimited population map (sample --> population).  This will be converted to a population list that can be input into a pipeline such as CLUMPAK (http://clumpak.tau.ac.il/) for visualization of data
 
 One of the following two options is also required, but they cannot be used together in the same run:
-* **-p / --plink:** Specify a plink file for input. File should have been produced using the --recode12 option in plink. This option disables all filtering options in the program. This is under development and not robustly tested; use at your own risk. 
+* **-b / --bed:** Specify a binary plink file (.bed) for input. This option disables all filtering options in the program. This is currently under development and not robustly tested; use at your own risk.
+* **-p / --ped:** Specify a text-based plink file (.ped) for input. File should have been produced using the --recode12 option in plink. This option disables all filtering options in the program. This is under development and not robustly tested; use at your own risk. 
 * **-v / --vcf:** Specify a VCF file for input.
 
 
@@ -121,7 +123,7 @@ Admixture optional arguments:
 VCFtools optional arguments:
 * **-M / --mac:** Enter the minimum count for the minor allele filter. (default = off, specify a positive integer to turn it on).
 * **-a / --maf:** Enter a minimum frequency for the minor allele frequency filter. (default = off, specify a value between 0.0 and 1.0 to turn it on).
-* **-b / --bi:** Turns biallelic filter off. (default = on, **we do not recommend turning this setting off because ADMIXTURE only processes biallelic SNPs**)  
+* **-B / --bi:** Turns biallelic filter off. (default = on, **we do not recommend turning this setting off because ADMIXTURE only processes biallelic SNPs**)  
 * **-r / --remove:** Provide a blacklist of individuals that will be filtered out by VCFtools. This is a textfile with each name on its own line. Names of individuals must match those in the .vcf file exactly. 
 * **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
 * **-C / --indcov:** Filter samples based on maximum allowable missing data. Feature added by tkchafin. (default = 0.9, input = float). 
@@ -135,15 +137,20 @@ The preferred usage of the program is to provide a .vcf file as input. The follo
 admixturePipeline.py -m popmap.txt -v input.vcf -k 1 -K 10 -n 16 -t 100 -a 0.05
 ```
 
-Alternatively, you can now directly provide a pre-filtered plink file as input. The files (.ped and .map) should be equivalent to those output using the --recode12 option in plink. Specify the plink file prefix to use this option, as shown in the example below. NOTE: directly inputting a plink-formatted file disables ALL filtering options in the program.
+Alternatively, you can now directly provide pre-filtered plink files as input. Text-based plink files (.ped and .map) should be equivalent to those output using the --recode12 option in plink. Specify the plink file prefix to use this option, as shown in the example below. NOTE: directly inputting a plink-formatted file disables ALL filtering options in the program.
 ```
 admixturePipeline.py -m popmap.txt -p input -k 1 -K 10 -n 16
+```
+
+A similar command is used to provide a pre-filtered binary plink file (.bed, .fam, and .bim). 
+```
+admixturePipeline.py -m popmap.txt -b input -k 1 -K 10 -n 16
 ```
 
 ## Outputs:
 
 For the example line of code above, the following outputs will be produced:
-* **input.ped**, **input.map**: output of plink
+* **input.ped**, **input.map**: output of plink (produced only if you input a VCF file)
 * **results.zip**: a compressed file that can be input into a pipeline such as CLUMPAK
 * **input.{k}\_{r}.P** and **input.{k}\_{r}.Q**: Admixture output files for each iteration {r} of each K value {k}
 * **input\_pops.txt**: a list of population data that can be input into a pipeline such as CLUMPAK
@@ -312,8 +319,14 @@ runEvalAdmix.py -p prefix -k 1 -K 12 -m popmap.txt -n 8
 ```
 The above command will first execute PLINK to convert your .ped file to a .bed file. Then it will run evalAdmix on all original .Q files produced by admixturePipeline.py before finally running evalAdmix on the .Q outputs for major and minor clusters identified by CLUMPAK. The plots for the major and minor clusters are produced by averaging across the .corres files produced for each run corresponding to a particular major or minor cluster, then input into evalAdmix using the .Q scores file for that cluster which was output by CLUMPP when the CLUMPAK pipeline was run.
 
+If you ran admixturePipeline.py by directly inputting a pre-filtered .bed file, then you must indicate this with the -b/--bed option as shown below. This allows evalAdmix to use your original .bed file rather than perform unnecessary file conversions:
+```
+runEvalAdmix.py -p prefix -k 1 -K 12 -m popmap.txt -n 8 -b
+```
+
 List of current options:
-* **-p / --prefix:** Specify your .ped file prefix from your initial admixturePipeline.py run. If you input a VCF file, this will be the name of that VCF file, except without the .vcf extension (required).
+* **-b / --bed:** Boolean switch to indicate that you originally ran admixturePipeline.py by directly inputting a pre-filtered .bed file (default = off/False).
+* **-p / --prefix:** Specify your .ped or .bed file prefix from your initial admixturePipeline.py run. If you input a VCF file, this will be the name of that VCF file, except without the .vcf extension (required).
 * **-k / --minK:** Specify the minimum K value (required).
 * **-K / --maxK:** Specify the maximum K value (required).
 * **-m / --popmap:** Specify a tab-delimited population map (sample --> population) (required).  

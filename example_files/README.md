@@ -6,6 +6,8 @@ A pipeline that accepts a VCF file to run through Admixture
 2) **example_map.txt**: example population map that corresponds to samples in example.vcf. Used as input to admixturePipeline.py
 3) **exampleDir.tar.gz**: This compressed folder holds the expected contents of the exampleDir directory described in the tutorial below **prior to running distructRerun.py**. You can use this in the tutorial below if you want to jump into the tutorial at the 'distructRerun.py' step.
 4) **1659307908.zip**: This zipped folder is the output of the CLUMPAK pipeline for the steps described below. You can use this in the tutorial below if you want to jump into the tutorial at the 'distructRerun.py' step, or if the CLUMPAK website is down.
+5) **bed_example.tar.gz**: Example .bed formatted files (and associated popmap.txt) that can be used to run admixturePipeline.py from the -b/--bed option.
+6) **ped_example.tar.gz**: Example .ped formatted files (and associated popmap.txt) that can be used to run admixturePipeline.py from the -p/--ped option.
 
 ## Tutorial Using Example Files
 
@@ -87,4 +89,23 @@ Finally, you can run EvalAdmix on your admixture analysis. Change back to the /a
 ```
 cd exampleDir/
 runEvalAdmix.py -p example -k 1 -K 8 -m example_map.txt -n 8
+```
+
+## Running the pipeline directly from PLINK example Files
+As of October 10, 2022 you can run admixturePipeline.py directly from pre-filtered PLINK files (both .bed and .ped formats). Example files are provided here as reference in case you have trouble running the pipeline on your own .bed or .ped files. You can test the pipeline on these files using the following commands.
+
+For running on the .ped example files:
+```
+admixturePipeline.py -m popmap.txt -p dx2003.filt2 -k 2 -K 4 -R 3 -n 8
+```
+
+The command for the .bed example is very similar:
+```
+admixturePipeline.py -m popmap.txt -b dx2003.filt2 -k 2 -K 4 -R 3 -n 8
+```
+
+Commands for most of the rest of the pipeline are unaffected by the file type input to admixturePipeline.py. The one exception is the runEvalAdmix.py module. The program evalAdmix requires .bed as input. If you run admixturePipeline.py from a .ped file, no changes are necessary to how the pipeline is run because it will automatically convert your .ped to .bed. However, if you ran admixturePipeline.py from a .bed file you will have to let runEvalAdmix.py know that a .bed already exists. This is accomplished with the -b/--bed switch in runEvalAdmix.py. For example:
+
+```
+runEvalAdmix.py -m popmap.txt -p dx2003.filt2 -k 2 -K 4 -n 8 -b
 ```

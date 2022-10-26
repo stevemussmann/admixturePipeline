@@ -4,6 +4,7 @@ from comline import ComLine
 from vcf import VCF
 from admixture import Admixture
 from popmap import Popmap
+from plink import Plink
 
 import sys
 
@@ -26,11 +27,15 @@ def main():
 
 	#if using plink ped, go directly to running admixture
 	elif input.args.ped:
+		plink_file = Plink(input.args.ped)
+		plink_file.filterPlinkPed(input.args.popmap)
 		#print_populations function in popmap class mimics output of print_populations function in vcf class
 		populations.print_populations(input.args.ped, False)
 		admix_run = Admixture(input.args.ped, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, False)
 	#if using plink bed format, go directly to running admixture
 	elif input.args.bed:
+		plink_file = Plink(input.args.bed)
+		plink_file.filterPlinkBed(input.args.popmap)
 		#print_populations function in popmap class mimics output of print_populations function in vcf class
 		populations.print_populations(input.args.bed, True)
 		admix_run = Admixture(input.args.bed, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, True)

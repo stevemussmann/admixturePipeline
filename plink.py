@@ -29,6 +29,16 @@ class Plink():
 		call = SysCall(plink_command)
 		call.run_program()
 
+	def filterPlinkBed(self, keepfile):
+		plink_command = "plink --bfile " + self.prefix + " --make-bed --geno 0.99 --keep-fam " + keepfile + " --out " + self.prefix
+		call = SysCall(plink_command)
+		call.run_program()
+	
+	def filterPlinkPed(self, keepfile):
+		plink_command = "plink --file " + self.prefix + " --recode12 --geno 0.99 --keep-fam " + keepfile + " --out " + self.prefix
+		call = SysCall(plink_command)
+		call.run_program()
+
 	#adds populations to .fam file
 	def fixFam(self,popmap):
 		#get name for .fam file
@@ -54,8 +64,6 @@ class Plink():
 				temp[1] = d[temp[0]]
 				newline=' '.join(temp)
 				fam.append(newline)
-
-		#print(fam)
 
 		with open(famf, 'w') as fh:
 			for line in fam:

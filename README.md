@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/96546673.svg)](https://zenodo.org/badge/latestdoi/96546673)
 
-# AdmixPipe v3: A Method for Parsing and Filtering VCF Files for Admixture Analysis
+# AdmixPipe v3: A Method for Parsing and Filtering VCF and PLINK Files for Admixture Analysis
 A pipeline that accepts VCF and PLINK files to run through Admixture
 
 ## Citing AdmixPipe
@@ -23,14 +23,15 @@ Other important notes for v3.0:
 4) The submitClumpak.py module is **completely optional**. You can accomplish the same results by manually submitting your admixturePipeline.py module outputs to the CLUMPAK website. 
 5) The submitClumpak.py module will not function in the Docker container. If you wish to use it, this module must be set up on your own computer. It requires selenium and currently is only compatible if you have Firefox installed. 
 6) The data processing and plotting functions of the cvSum.py module underwent a complete rewrite for v3.0.
-7) PLINK .bed and .ped files are now accepted as direct input, although it is assumed these files will be pre-filtered. Directly inputting a PLINK file disables all filtering options.
+7) PLINK .bed and .ped files are now accepted as direct input. Minor allele frequency and missing data filtering options are now enabled for loci. Individual-based missing data filtering has not yet been enabled for PLINK files.
+8) The '-r / --remove' option has been removed from admixturePipeline.py. This option became redundant unnecessary because individuals not listed in your popmap are now automatically removed by both VCFtools and PLINK. 
 
 ## Installation & Setup for AdmixPipe v3:
 
 ### Docker Setup
-Note: As of Oct. 10, 2022 the Docker container is a commit or two behind the github repository. However, these were mostly minor changes and the only feature not currently implemented in Docker is the option to directly input PLINK files rather than VCF. An updated container will be coming soon, but it may be a few weeks. 
+Note: As of Oct. 10, 2022 the Docker container is several commits behind the github repository. Primarily, the only features not currently implemented in Docker relate to direct input of PLINK files. An updated container will be coming soon, but it may be a few weeks. 
 
-This pipeline was written for Unix based operating systems, such as the various Linux distributions and Mac OS X. As of v3.0, we have achieved platform independence and greater ease of installation through development of a Docker container. This is now the recommended method for running the program. To get started, install [Docker](https://www.docker.com/) on your machine and pull the Docker image using the following command:
+This pipeline was written for Unix based operating systems, such as the various Linux distributions and Mac OS X. As of v3.0, we have achieved greater platform independence and ease of installation through development of a Docker container. This is now the recommended method for running the program. To get started, install [Docker](https://www.docker.com/) on your machine and pull the Docker image using the following command:
 
 ```
 docker pull mussmann/admixpipe:3.0
@@ -115,19 +116,20 @@ Optional arguments:
 * **-n / --np:** Specify the number of processors.  Currently the only multithreaded program is Admixture.
 
 Admixture optional arguments:
+* **-c / --cv:** Specify the cross-validation number for the admixture program.  See the admixture program manual for more information (default = 20)
 * **-k / --minK:** Specify the minimum K value to be tested (default = 1).
 * **-K / --maxK:** Specify the maximum K value to be tested (default = 20).
-* **-c / --cv:** Specify the cross-validation number for the admixture program.  See the admixture program manual for more information (default = 20)
 * **-R / --rep:** Specify the number of replicates for each K value (default = 20)
 
-VCFtools optional arguments:
-* **-M / --mac:** Enter the minimum count for the minor allele filter. (default = off, specify a positive integer to turn it on).
+General filtering options (enabled for both VCFtools and PLINK):
 * **-a / --maf:** Enter a minimum frequency for the minor allele frequency filter. (default = off, specify a value between 0.0 and 1.0 to turn it on).
-* **-B / --bi:** Turns biallelic filter off. (default = on, **we do not recommend turning this setting off because ADMIXTURE only processes biallelic SNPs**)  
-* **-r / --remove:** Provide a blacklist of individuals that will be filtered out by VCFtools. This is a textfile with each name on its own line. Names of individuals must match those in the .vcf file exactly. 
-* **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
-* **-C / --indcov:** Filter samples based on maximum allowable missing data. Feature added by tkchafin. (default = 0.9, input = float). 
+* **-M / --mac:** Enter the minimum count for the minor allele filter. (default = off, specify a positive integer to turn it on).
 * **-S / --snpcov:** Filter SNPs based on proportion of allowable missing data. Feature added by tkchafin. (default = 0.1; defined to be between 0 and 1, where 0 allows sites that are completely missing and 1 indicates no missing data allowed; input = float).
+
+VCFtools filtering options:
+* **-B / --bi:** Turns biallelic filter off. (default = on, **we do not recommend turning this setting off because ADMIXTURE only processes biallelic SNPs**)
+* **-C / --indcov:** Filter samples based on maximum allowable missing data. Feature added by tkchafin. (default = 0.9, input = float).
+* **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
 
 ## Example:
 
@@ -137,7 +139,7 @@ The preferred usage of the program is to provide a .vcf file as input. The follo
 admixturePipeline.py -m popmap.txt -v input.vcf -k 1 -K 10 -n 16 -t 100 -a 0.05
 ```
 
-Alternatively, you can now directly provide pre-filtered plink files as input. Text-based plink files (.ped and .map) should be equivalent to those output using the --recode12 option in plink. Specify the plink file prefix to use this option, as shown in the example below. NOTE: directly inputting a plink-formatted file disables ALL filtering options in the program.
+Alternatively, you can now directly provide pre-filtered plink files as input. Text-based plink files (.ped and .map) should be equivalent to those output using the --recode12 option in plink. Specify the plink file prefix to use this option, as shown in the example below. NOTE: not all filtering options are available for PLINK inputs.
 ```
 admixturePipeline.py -m popmap.txt -p input -k 1 -K 10 -n 16
 ```

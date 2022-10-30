@@ -106,7 +106,7 @@ You can run the program to print help options with the following command:
 List of current required options:
 * **-m / --popmap:** Specify a tab-delimited population map (sample --> population).  This will be converted to a population list that can be input into a pipeline such as CLUMPAK (http://clumpak.tau.ac.il/) for visualization of data
 
-One of the following two options is also required, but they cannot be used together in the same run:
+One of the following three options is also required:
 * **-b / --bed:** Specify a binary plink file (.bed) for input. This option disables all filtering options in the program. This is currently under development and not robustly tested; use at your own risk.
 * **-p / --ped:** Specify a text-based plink file (.ped) for input. File should have been produced using the --recode12 option in plink. This option disables all filtering options in the program. This is under development and not robustly tested; use at your own risk. 
 * **-v / --vcf:** Specify a VCF file for input.

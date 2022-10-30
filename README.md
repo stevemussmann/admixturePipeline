@@ -24,7 +24,7 @@ Other important notes for v3.0:
 5) The submitClumpak.py module will not function in the Docker container. If you wish to use it, this module must be set up on your own computer. It requires selenium and currently is only compatible if you have Firefox installed. 
 6) The data processing and plotting functions of the cvSum.py module underwent a complete rewrite for v3.0.
 7) PLINK .bed and .ped files are now accepted as direct input. Minor allele frequency and missing data filtering options are now enabled for loci. Individual-based missing data filtering has not yet been enabled for PLINK files.
-8) The '-r / --remove' option has been removed from admixturePipeline.py. This option became redundant unnecessary because individuals not listed in your popmap are now automatically removed by both VCFtools and PLINK. 
+8) The '-r / --remove' option has been removed from admixturePipeline.py. This option's behavior became unnecessary because individuals not listed in your popmap are now automatically removed by both VCFtools and PLINK. 
 
 ## Installation & Setup for AdmixPipe v3:
 

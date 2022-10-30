@@ -12,7 +12,7 @@ import sys
 class VCF():
 	'Class for operating on VCF file using VCFtools and Plink'
 
-	def __init__(self, infile, thin, maf, mac, ind, snp, bi, r):
+	def __init__(self, infile, thin, maf, mac, ind, snp, bi):
 		self.vcf_file = infile
 		self.thin = thin
 		self.maf = maf
@@ -20,13 +20,9 @@ class VCF():
 		self.ind = ind #maximum allowable missing data per snp
 		self.snp = snp #maximum allowable missing data per individual
 		self.bi = bi #controls biallelic filter
-		self.removeFile = r #file containing individuals to be removed
-		self.removeInds = False
 		self.blacklist = dict() #make dictionary of blacklisted individuals
 		self.discard = list() #list of individuals present in vcf but not in popmap
 		self.vcflist = list() #list of all individuals that exist in the VCF file created from vcv-query command
-		if self.removeFile:
-			self.removeInds = True
 
 		temp = os.path.splitext(os.path.basename(infile))
 		self.prefix = temp[0]
@@ -47,7 +43,6 @@ class VCF():
 		remove = []
 		if(self.ind < 1.0 and self.ind > 0.0):
 			remove = self.get_ind_coverage()
-			#print(remove)
 
 		vcf_command = "vcftools --vcf " + self.vcf_file + " --plink --out " + self.prefix
 		if(self.thin > 0):
@@ -62,8 +57,6 @@ class VCF():
 			vcf_command = vcf_command + " --mac " + str(self.mac)
 		if(self.bi == True):
 			vcf_command = vcf_command + " --min-alleles 2 --max-alleles 2"
-		if(self.removeInds == True ):
-			vcf_command = vcf_command + " --remove " + str(self.removeFile)
 		if(len(self.discard) > 0):
 			for ind in self.discard:
 				vcf_command = vcf_command + " --remove-indv " + str(ind)
@@ -75,8 +68,6 @@ class VCF():
 
 	def get_ind_coverage(self):
 		vcf_command = "vcftools --vcf " + self.vcf_file + " --missing-indv --out " + self.prefix
-		if( self.removeInds == True ):
-			vcf_command = vcf_command + " --remove " + str(self.removeFile)
 
 		call = SysCall(vcf_command)
 		call.run_program()
@@ -95,7 +86,6 @@ class VCF():
 						continue
 					else:
 						stuff = line.split()
-						#print(stuff)
 						if float(stuff[4]) > self.ind:
 							print("Removing individual %s: %s missing data"%(stuff[0],stuff[4]))
 							self.blacklist[stuff[0]]=1
@@ -130,13 +120,6 @@ class VCF():
 		# sort the popmap according to the order samples appear in VCF file.
 		popmap.sort(self.vcflist)
 
-		# remove individuals
-		if(self.removeInds == True):
-			rmf = self.readfile(self.removeFile)
-			for key in rmf:
-				key.rstrip()
-				self.blacklist[key]=1 
-
 		#print populations file, excluding blacklisted individuals
 		data = self.readfile(self.vcf_file)
 		popfile = self.prefix + "_pops.txt"
@@ -148,12 +131,6 @@ class VCF():
 		f.close()
 
 	def print_individuals(self,popmap):
-		if(self.removeInds == True):
-			rmf = self.readfile(self.removeFile)
-			for key in rmf:
-				key.rstrip()
-				self.blacklist[key]=1 
-
 		#print populations file, excluding blacklisted individuals
 		data = self.readfile(self.vcf_file)
 		popfile = self.prefix + "_inds.txt"
@@ -164,7 +141,6 @@ class VCF():
 				f.write("\n")
 		f.close()
 
-
 	def readfile(self,infile):
 		f=open(infile)
 		data = f.read().splitlines()
@@ -174,7 +150,6 @@ class VCF():
 	def compIndLists(self,popmap):
 		self.vcflist = self.readfile("vcf_indlist.txt")
 		popmaplist = popmap.get_list()
-		#print(popmaplist)
 		self.discard = list(set(self.vcflist) - set(popmaplist))
 		for key in self.discard:
 			key.rstrip()

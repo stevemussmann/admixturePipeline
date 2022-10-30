@@ -11,11 +11,11 @@ class ComLine():
 	def __init__(self, args):
 		parser = argparse.ArgumentParser()
 		parser._action_groups.pop()
-		required = parser.add_argument_group('required arguments')
-		optional = parser.add_argument_group('optional arguments')
+		required = parser.add_argument_group('Required arguments (only one of -v, -b, or -p is required)')
+		optional = parser.add_argument_group('Optional arguments')
 		opt_admix = parser.add_argument_group('Admixture optional arguments')
-		opt_plink = parser.add_argument_group('plink optional arguments')
-		opt_vcf = parser.add_argument_group('VCFtools optional arguments')
+		opt_filt = parser.add_argument_group('Filtering arguments (compatible with VCFtools and PLINK)')
+		opt_vcf = parser.add_argument_group('VCFtools filtering arguments')
 		required.add_argument("-m", "--popmap",
 							dest='popmap',
 							required=True,
@@ -37,22 +37,21 @@ class ComLine():
 							default=20,
 							help="maximum K value."
 		)
-		opt_admix.add_argument("-p", "--ped",
+		required.add_argument("-p", "--ped",
 							dest='ped',
-							help="Specify the prefix for a text plink file. File should have been encoded in plink using the --recode12 option. This option disables ALL filtering. This is under active development. Use at your own risk."
+							help="Specify the prefix for a text plink file. File should have been encoded in plink using the --recode12 option. This is under active development. Use at your own risk."
 		)
-		opt_admix.add_argument("-b", "--bed",
+		required.add_argument("-b", "--bed",
 							dest='bed',
-							help="Specify the prefix for a binary plink file. File should have been encoded in plink using the --recode12 option. This option disables ALL filtering. This is under active development. Use at your own risk."
+							help="Specify the prefix for a binary plink file. This is under active development. Use at your own risk."
 		)
-		opt_vcf.add_argument("-M", "--mac",
-					dest='mac',
-					type=int,
-					default=0,
-					help="Enter the minimum count for the minor allele filter."
+		opt_filt.add_argument("-M", "--mac",
+							dest='mac',
+							type=int,
+							default=0,
+							help="Enter the minimum count for the minor allele filter."
 		)
-
-		opt_vcf.add_argument("-a", "--maf",
+		opt_filt.add_argument("-a", "--maf",
 							dest='maf',
 							type=float,
 							default=0.0,
@@ -70,17 +69,13 @@ class ComLine():
 							default=0,
 							help="Use VCFtools to thin out loci falling within the specified proximity to one another."
 		)
-		opt_vcf.add_argument("-r", "--remove",
-							dest='remove',
-							help="Specify a file of blacklisted individuals to have VCFtools remove from the analysis."
-		)
 		opt_vcf.add_argument("-C", "--indcov",
 							dest='indcov',
 							type=float,
 							default=0.9,
 							help="Specify the maximum allowable missing data per individual"
 		)
-		opt_vcf.add_argument("-S", "--snpcov",
+		opt_filt.add_argument("-S", "--snpcov",
 							dest='snpcov',
 							type=float,
 							default=0.1,
@@ -134,9 +129,6 @@ class ComLine():
 		if self.args.vcf:
 			print("Checking if VCF file exists...")
 			self.exists( self.args.vcf )
-		if self.args.remove:
-			print("Checking if sample removal list exists...")
-			self.exists( self.args.remove )
 		if self.args.ped:
 			print("Checking if plink .ped file exists...")
 			plinkPed = self.args.ped + ".ped"

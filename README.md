@@ -29,8 +29,6 @@ Other important notes for v3.0:
 ## Installation & Setup for AdmixPipe v3:
 
 ### Docker Setup
-Note: As of Oct. 10, 2022 the Docker container is several commits behind the github repository. Primarily, the only features not currently implemented in Docker relate to direct input of PLINK files. An updated container will be coming soon, but it may be a few weeks. 
-
 This pipeline was written for Unix based operating systems, such as the various Linux distributions and Mac OS X. As of v3.0, we have achieved greater platform independence and ease of installation through development of a Docker container. This is now the recommended method for running the program. To get started, install [Docker](https://www.docker.com/) on your machine and pull the Docker image using the following command:
 
 ```

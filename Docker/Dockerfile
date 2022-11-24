@@ -6,13 +6,13 @@ ARG USERNAME=admixuser
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG IMAGE_NAME=admixpipe
-ARG IMAGE_TAG=1.1
+ARG IMAGE_TAG=3.0
 ENV USER $USERNAME
 ENV HOME /home/$USERNAME
 ENV IMAGE_NAME $IMAGE_NAME
 ENV IMAGE_TAG $IMAGE_TAG
 
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential r-base r-base-dev python3.6 python3-pip python3-setuptools python3-dev git autoconf automake vim wget less
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential r-base r-base-dev python3.8 python3-pip python3-setuptools python3-dev git autoconf automake vim wget less libgdal-dev perl libgetopt-long-descriptive-perl libfile-slurp-perl libfile-path-tiny-perl liblist-moreutils-perl libpdf-api2-perl libpdf-table-perl libgd-graph-perl libscalar-list-utils-perl libscalar-util-numeric-perl libstatistics-distributions-perl libarchive-extract-perl libarray-utils-perl libarchive-zip-perl dos2unix ghostscript
 
 WORKDIR /app
 
@@ -20,11 +20,21 @@ COPY requirements.txt /app/requirements.txt
 
 RUN pip3 install -r requirements.txt
 
+## Install Perl requirements
+RUN mkdir -p /app/src/perl
+WORKDIR /app/src/perl
+COPY List-Permutor-0.022.tar.gz /app/src/perl
+RUN tar -zxvf List-Permutor-0.022.tar.gz
+WORKDIR /app/src/perl/List-Permutor-0.022
+RUN perl Makefile.PL
+RUN make
+RUN make install
+
 ## Install PLINK
 RUN mkdir -p /app/src/plink
 WORKDIR /app/src/plink
-COPY plink_linux_x86_64_20210606.zip /app/src/plink
-RUN unzip /app/src/plink/plink_linux_x86_64_20210606.zip
+COPY plink_linux_x86_64_20220402.zip /app/src/plink
+RUN unzip /app/src/plink/plink_linux_x86_64_20220402.zip
 
 ## Install VCFtools
 RUN mkdir -p /app/src/vcftools
@@ -57,6 +67,29 @@ RUN unzip /app/src/evaladmix/evalAdmix-master.zip
 WORKDIR /app/src/evaladmix/evalAdmix-master
 RUN make
 
+## Install CLUMPAK
+RUN mkdir -p /app/src/clumpak
+WORKDIR /app/src/clumpak
+COPY CLUMPAK.zip /app/src/clumpak/.
+RUN unzip CLUMPAK.zip 
+WORKDIR /app/src/clumpak/CLUMPAK
+RUN unzip 26_03_2015_CLUMPAK.zip
+WORKDIR /app/src/clumpak/CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK
+RUN chmod a+x *.pl
+RUN dos2unix *.pl
+RUN sed -i '1s/^/\#!\/usr\/bin\/perl\n/' BestKByEvanno.pl
+RUN cp *.pm /etc/perl/.
+WORKDIR /app/src/clumpak/CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK/CLUMPP
+RUN chmod a+x CLUMPP
+WORKDIR /app/src/clumpak/CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK/distruct
+RUN chmod a+x distruct1.1
+WORKDIR /app/src/clumpak/CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK/mcl/bin
+RUN chmod a+x *
+WORKDIR /etc/perl
+RUN sed -i 's/CLUMPP\//\/app\/src\/clumpak\/CLUMPAK\/26_03_2015_CLUMPAK\/CLUMPAK\/CLUMPP\//g' ClumppAccessor.pm
+RUN sed -i 's/mcl\/bin\//\/app\/src\/clumpak\/CLUMPAK\/26_03_2015_CLUMPAK\/CLUMPAK\/mcl\/bin\//g' MCLAccessor.pm 
+RUN sed -i 's/distruct\//\/app\/src\/clumpak\/CLUMPAK\/26_03_2015_CLUMPAK\/CLUMPAK\/distruct\//g' ClusterAccessor.pm
+
 ## link binaries and scripts
 # make bin directory
 RUN mkdir -p /app/bin
@@ -67,6 +100,8 @@ RUN ln -s /app/src/plink/plink
 RUN ln -s /app/src/admixture/dist/admixture_linux-1.3.0/admixture
 RUN ln -s /app/src/distruct/distruct1.1/distructLinux1.1 distruct
 RUN ln -s /app/src/evaladmix/evalAdmix-master/evalAdmix
+RUN ln -s /app/src/clumpak/CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK/CLUMPAK.pl
+RUN ln -s /app/src/clumpak/CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK/BestKByEvanno.pl
 
 ## Install AdmixPipe
 RUN mkdir -p /app/scripts/python 
@@ -76,11 +111,12 @@ WORKDIR /app/scripts/python/admixturePipeline
 RUN sed -i 's/\/home\/mussmann\/local\/src\/distruct1.1\/ColorBrewer\//\/app\/ColorBrewer\//g' distructComline.py
 RUN sed -i 's/\/home\/mussmann\/local\/src\/evalAdmix\/visFuns.R/\/app\/src\/evaladmix\/evalAdmix-master\/visFuns.R/g' evalAdmixComline.py
 
-
 ## Move stuff around
 RUN mv /app/src/distruct/distruct1.1/ColorBrewer /app/.
 RUN mkdir -p /app/data
+COPY vimrc /home/admixuser/.vimrc
 
+## comment out the following 6 lines for debugging of container as root
 RUN groupadd --gid $USER_GID $USERNAME \
 	&& adduser --uid $USER_UID --gid $USER_GID --disabled-password $USERNAME \
 	--gecos "First LAST,RoomNumber,WorkPhone,HomePhone" \
@@ -91,7 +127,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
 #echo /app/bin to path
 RUN echo "export PATH=/app/bin:/app/scripts/python/admixturePipeline:${PATH}" >> /home/admixuser/.bashrc
 
+## comment out the following 1 line for debugging as root
 USER $USER
 
 WORKDIR /app/data
-

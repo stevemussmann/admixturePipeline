@@ -43,7 +43,7 @@ class ComLine():
 		)
 		parser.add_argument("-R", "--evalAdmixRcode",
 							dest='evalAdmixRcode',
-							default="/home/mussmann/local/src/evalAdmix/visFuns.R",
+							default="/app/src/evaladmix/evalAdmix-master/visFuns.R",
 							help="Provide the path to where visualization functions for evalAdmix are stored on your machine."
 		)
 		parser.add_argument("-n", "--np",

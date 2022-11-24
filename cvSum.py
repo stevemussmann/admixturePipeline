@@ -20,6 +20,7 @@ def main():
 	logLike = LogLikelihood(input.args.ll)
 	logLike.readText() #reads major clusters
 	logLike.readMinor()
+	logLike.printLoglike()
 	#logLike.printText()
 
 	so = CVStats(cvFile.d,input.args.out)

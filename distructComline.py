@@ -58,7 +58,7 @@ class ComLine():
 		)
 		parser.add_argument("-p", "--pathtocolorbrew",
 							dest='pathtocolorbrew',
-							default="/home/mussmann/local/src/distruct1.1/ColorBrewer/",
+							default="/app/ColorBrewer/",
 							help="Provide the path to where colorbrewer palettes are stored on your machine."
 		)
 

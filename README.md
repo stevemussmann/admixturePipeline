@@ -52,18 +52,20 @@ sudo usermod -aG docker ${USER}
 Due to the many (sometimes complex) dependencies required by this pipeline, manual installation is not advised. However, if you insist upon installing the pipeline manually, you should get started by cloning this repository. Then install the program dependencies listed below. 
 
 #### Program Dependencies
-The complete pipeline has five external program dependencies that must be installed. The modules from which they are called are listed below each program name:
+The complete pipeline has six external program dependencies that must be installed. The modules from which they are called are listed below each program name:
+* **Admixture** (https://dalexander.github.io/admixture/download.html)
+  * admixturePipeline.py
+* **CLUMPAK** (http://clumpak.tau.ac.il/download/CLUMPAK.zip)
+  * submitClumpak.py
+* **distruct** (https://rosenberglab.stanford.edu/distructDownload.html)
+  * distructRerun.py
+* **evalAdmix** (https://github.com/GenisGE/evalAdmix)
+  * runEvalAdmix.py
 * **PLINK 1.9 beta 4.5 or newer** (https://www.cog-genomics.org/plink2)
   * admixturePipeline.py
   * runEvalAdmix.py
 * **VCFtools** (https://vcftools.github.io/index.html)
   * admixturePipeline.py
-* **Admixture** (https://dalexander.github.io/admixture/download.html)
-  * admixturePipeline.py
-* **distruct** (https://rosenberglab.stanford.edu/distructDownload.html)
-  * distructRerun.py
-* **evalAdmix** (https://github.com/GenisGE/evalAdmix)
-  * runEvalAdmix.py
 
 It is advised that you install the latest version of each program manually. For example, admixturePipeline.py utilizes options in PLINK and VCFtools that are not present in the versions curated within the standard Ubuntu repositories. Each program should be added to your $PATH as the lowercase version of its name (i.e., 'plink', 'vcftools', 'admixture', 'distruct') with the exception of evalAdmix (which should be in your path as 'evalAdmix'). Additionally, you must make sure the vcf-query script from the vcftools package is present in your $PATH because it is now required by the admixturePipeline.py script. If you installed vcftools through the "sudo make install" method, then this should have already happened. 
 
@@ -86,14 +88,29 @@ AdmixPipe v3 is composed of five different modules. Follow the links below in th
 
 ### Table of Contents:
 1. [admixturePipeline.py](#admixturepipeline)
+    A. [Installation](#admixinstall)
+    B. [Usage](#admixusage)
 2. [submitClumpak.py](#submitclumpak)
+    A. [Installation](#clumpakinstall)
+    B. [Usage](#clumpakusage)
 3. [distructRerun.py](#distructrerun)
+    A. [Installation](#distructinstall)
+    B. [Usage](#distructusage)
 4. [cvSum.py](#cvsum)
+    A. [Installation](#cvinstall)
+    B. [Usage](#cvusage)
 5. [runEvalAdmix.py](#runevaladmix)
+    A. [Installation](#evalinstall)
+    B. [Usage](#evalusage)
 
 # 1. admixturePipeline.py: <a name="admixturepipeline"></a>
-
 **New feature in AdmixPipe v3.0:** This module will now filter out individuals not present in your popmap file. For example, if you want to exclude an individual sample from your analysis, just leave it out of your popmap file and it will be removed from your vcf file before admixture is executed. 
+
+## Installation and Setup for admixturePipeline.py:<a name="admixinstall"></a>
+
+Install the latest versions of Admixture, PLINK, and VCFtools manually. Each program should be added to your $PATH as the lowercase version of its name (i.e., 'plink', 'vcftools', 'admixture'). Uou must also put the vcf-query script from the vcftools package in your $PATH. If you installed vcftools through the "sudo make install" method, then this should have already happened. 
+
+## Usage: <a name="admixusage"></a>
 
 You can run the program to print help options with the following command:
 
@@ -165,7 +182,7 @@ This module was developed to automate the process of submitting admixturePipelin
 
 ## Installation & Setup for submitClumpak.py:
 
-This module has three requirements:
+This module has three requirements for usage with the CLUMPAK webserver:
 1. selenium (python library)
 2. Firefox web browser
 3. Firefox gecko driver (firefox-geckodriver)
@@ -187,6 +204,58 @@ Once all dependencies are installed, you can run the program to print help optio
 ```
 submitClumpak.py -h
 ```
+
+As of AdmixPipe v3.1, CLUMPAK itself is now included in the Docker image, and submitClumpak.py is compatible with a local installation of CLUMPAK. I highly recommend using the Docker container or manually submitting your admixturePipeline.py results to the CLUMPAK webserver if you do not want to set up submitClumpak.py because manual installation of CLUMPAK requires several dependencies and modifications of the CLUMPAK code. But if you insist on conducting a full manual installation of AdmixPipe, here is how I got it running in the Docker container. 
+
+Most can be installed through Ubuntu's repositories:
+```
+sudo apt-get install libgetopt-long-descriptive-perl \
+ libfile-slurp-perl \
+ libfile-path-tiny-perl \
+ liblist-moreutils-perl \
+ libpdf-api2-perl \
+ libpdf-table-perl \
+ libgd-graph-perl \
+ libscalar-list-utils-perl \
+ libscalar-util-numeric-perl \
+ libstatistics-distributions-perl \
+ libarchive-extract-perl \
+ libarray-utils-perl \
+ libarchive-zip-perl \
+ ghostscript
+```
+The perl List::Permutor package also must also be installed (https://metacpan.org/pod/List::Permutor). I am not aware of an Ubuntu repository containing this package. Here's how to do a manual install:
+```
+tar -zxvf List-Permutor-0.022.tar.gz
+cd List-Permutor-0.022
+perl Makefile.PL
+make
+sudo make install
+```
+The CLUMPAK source code is available from http://clumpak.tau.ac.il/download/CLUMPAK.zip. Download it and unzip the file. 
+Some of the perl scripts have issues that prevent them from working on your system 'out of the box.' 
+1. Some have Windows line breaks. The dos2unix program in Ubuntu can fix these for you. Go into the CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK folder and run it on all .pl files to be make sure these are fixed. 
+2. The 'BestKByEvanno.pl' script is missing the #!/bin/bash at the beginning. 
+3. Make sure all scripts are executable. 
+4. Copy all .pm files to a location monitored by perl's @INC variable. In the Docker container, I copied them to /etc/perl. You may need sudo permissions to access /etc/perl on your computer. Alternatively, here's a way to install perl modules in your home directory: https://kb.iu.edu/d/baiu
+```
+unzip CLUMPAK.zip
+cd CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK
+dos2unix *.pl
+sed -i '1s/^/\#!\/usr\/bin\/perl\n/' BestKByEvanno.pl
+chmod u+x *.pl
+cp *.pm /etc/perl/.
+```
+Next, make sure you have CLUMPP, distruct1.1, and mcl installed and you have permissions to execute all (all of these are included in the CLUMPAK.zip file you downloaded).
+
+You also need to modify a few of the .pm files with the path to CLUMPP, distruct, and mcl on your system. For example, here's how I accomplished this with sed commands in the Docker container setup. Just replace `\/app\/src\/clumpak` with the location where you unzipped the CLUMPAK.zip file on your computer.
+
+```
+sed -i 's/CLUMPP\//\/app\/src\/clumpak\/CLUMPAK\/26_03_2015_CLUMPAK\/CLUMPAK\/CLUMPP\//g' ClumppAccessor.pm
+sed -i 's/mcl\/bin\//\/app\/src\/clumpak\/CLUMPAK\/26_03_2015_CLUMPAK\/CLUMPAK\/mcl\/bin\//g' MCLAccessor.pm 
+sed -i 's/distruct\//\/app\/src\/clumpak\/CLUMPAK\/26_03_2015_CLUMPAK\/CLUMPAK\/distruct\//g' ClusterAccessor.pm
+```
+Finally, make sure CLUMPAK.pl and BestKByEvanno.pl are someplace monitored by your $PATH. 
 
 ## Usage:
 

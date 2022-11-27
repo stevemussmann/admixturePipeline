@@ -88,20 +88,20 @@ AdmixPipe v3 is composed of five different modules. Follow the links below in th
 
 ### Table of Contents:
 1. [admixturePipeline.py](#admixturepipeline)
-    A. [Installation](#admixinstall)
-    B. [Usage](#admixusage)
+    * [Installation](#admixinstall)
+    * [Usage](#admixusage)
 2. [submitClumpak.py](#submitclumpak)
-    A. [Installation](#clumpakinstall)
-    B. [Usage](#clumpakusage)
+    * [Installation](#clumpakinstall)
+    * [Usage](#clumpakusage)
 3. [distructRerun.py](#distructrerun)
-    A. [Installation](#distructinstall)
-    B. [Usage](#distructusage)
+    * [Installation](#distructinstall)
+    * [Usage](#distructusage)
 4. [cvSum.py](#cvsum)
-    A. [Installation](#cvinstall)
-    B. [Usage](#cvusage)
+    * [Installation](#cvinstall)
+    * [Usage](#cvusage)
 5. [runEvalAdmix.py](#runevaladmix)
-    A. [Installation](#evalinstall)
-    B. [Usage](#evalusage)
+    * [Installation](#evalinstall)
+    * [Usage](#evalusage)
 
 # 1. admixturePipeline.py: <a name="admixturepipeline"></a>
 **New feature in AdmixPipe v3.0:** This module will now filter out individuals not present in your popmap file. For example, if you want to exclude an individual sample from your analysis, just leave it out of your popmap file and it will be removed from your vcf file before admixture is executed. 

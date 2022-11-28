@@ -41,7 +41,7 @@ Launch the container by placing the "runDocker.sh" script in the folder from whi
 ```
 This script creates a folder named "data" in the directory on your machine from which you launched the Docker container. You can put any input files for AdmixPipe v3.1 into this folder and they will be accessible inside the container (in /app/data/). Any outputs written to this folder and any of its subdirectories will still be accessible after you exit the container. If you write any output to other locations inside the container, they will be lost upon exit. All required AdmixPipe modules (i.e., all except submitClumpak.py) have been setup within the container and will function with the commands provided throughout the remainder of this documentation. 
 
-If running the runDocker.sh script on your machine requires sudo permission, you can create a docker users group and add your username to that group. This can be accomplished with the following, if you are running the command from your own user account. If you are running the command for another user, replace ${USER} with their username:
+If running the runDocker.sh script on your machine requires sudo permission, you can create a docker users group and add your username to that group. This can be accomplished with the following, if you are running the command from your own user account. If you are running the command for another user, replace `${USER}` with their username:
 
 ```
 sudo groupadd docker
@@ -235,7 +235,7 @@ sudo apt-get install libgetopt-long-descriptive-perl \
  libarchive-zip-perl \
  ghostscript
 ```
-The perl List::Permutor package also must also be installed (https://metacpan.org/pod/List::Permutor). I am not aware of an Ubuntu repository containing this package. Here's how to do a manual install:
+The perl [List::Permutor](https://metacpan.org/pod/List::Permutor) package also must also be installed. I am not aware of an Ubuntu repository containing this package. Here's how to do a manual install:
 ```
 tar -zxvf List-Permutor-0.022.tar.gz
 cd List-Permutor-0.022
@@ -243,12 +243,12 @@ perl Makefile.PL
 make
 sudo make install
 ```
-The CLUMPAK source code is available from http://clumpak.tau.ac.il/download/CLUMPAK.zip. Download it and unzip the file. 
+The CLUMPAK source code is available [here](http://clumpak.tau.ac.il/download/CLUMPAK.zip). Download it and unzip the file. 
 Some of the perl scripts have issues that prevent them from working on your system 'out of the box.' 
-1. Some have Windows line breaks. The dos2unix program in Ubuntu can fix these for you (`sudo apt-get install dos2unix`). Go into the CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK folder and run it on all .pl files to be make sure these are fixed. 
-2. The 'BestKByEvanno.pl' script is missing the #!/bin/bash at the beginning. 
+1. Some have Windows line breaks. The dos2unix program in Ubuntu can fix these for you (`sudo apt-get install dos2unix`). Go into the `CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK/` folder and run it on all .pl files to be make sure these are fixed. 
+2. The 'BestKByEvanno.pl' script is missing the `#!/usr/bin/perl` at the beginning. 
 3. Make sure all scripts are executable. 
-4. Copy all .pm files to a location monitored by perl's @INC variable. In the Docker container, I copied them to /etc/perl. You may need sudo permissions to access /etc/perl on your computer. Alternatively, here's a way to install perl modules in your home directory: https://kb.iu.edu/d/baiu
+4. Copy all .pm files to a location monitored by perl's @INC variable. In the Docker container, I copied them to /etc/perl. You may need sudo permissions to access /etc/perl on your computer. Alternatively, [here's a way to install perl modules in your home directory](https://kb.iu.edu/d/baiu).
 
 ```
 unzip CLUMPAK.zip

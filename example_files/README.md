@@ -1,5 +1,6 @@
-# Admixture Pipeline: A Method for Parsing and Filtering VCF Files for Admixture Analysis
-A pipeline that accepts a VCF file to run through Admixture
+# AdmixPipe v3.1 Tutorial: 
+
+A pipeline for parsing and filtering VCF and PLINK files to conduct Admixture analysis
 
 ## Example Files in this Directory
 The tutorial primarily relies upon the following two files:

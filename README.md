@@ -80,6 +80,8 @@ AdmixPipe v3 is composed of five different modules. Follow the links below in th
     * [Options](#evaloptions)
     * [Outputs](#evaloutputs)
 
+For a full tutorial see the [example_files directory](https://github.com/stevemussmann/admixturePipeline/tree/master/example_files) in this repository. The remainder of this README file describes basic functions of AdmixPipe.
+
 # 1. admixturePipeline.py: <a name="admixturepipeline"></a>
 This module takes standard genotype data files (VCF or BED/PED) as input, conducts filtering according to user-specified parameters, performs all necessary file conversions, and finally executes Admixture on the filtered dataset according to user-specified parameters. 
 

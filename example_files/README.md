@@ -1,4 +1,4 @@
-# AdmixPipe v3.1 Tutorial: 
+# AdmixPipe v3.2 Tutorial: 
 
 A pipeline for parsing and filtering VCF and PLINK files to conduct Admixture analysis
 
@@ -21,7 +21,7 @@ This tutorial will demonstrate how to run the program using the Docker container
 
 Once that is completed, pull the Docker container to your system using the following command:
 ```
-docker pull mussmann/admixpipe:3.1
+docker pull mussmann/admixpipe:3.2
 ```
 
 If you are using a Mac, launch the 'Docker Desktop' application.
@@ -31,7 +31,7 @@ Launch the container by placing the [runDocker.sh](https://github.com/stevemussm
 wget https://raw.githubusercontent.com/stevemussmann/admixturePipeline/master/Docker/runDocker.sh
 ./runDocker.sh
 ```
-The `runDocker.sh` script creates a folder named `data/` in the directory on your machine from which you launched the Docker container. This folder is shared from your machine to the Docker container, meaning you can put any input files for AdmixPipe v3.1 into this folder and they will be accessible inside the container (in `/app/data/`). Any outputs written to this folder and any of its subdirectories will remain accessible after you exit the container. Anything written to other locations inside the container will be lost upon exit. All AdmixPipe modules have been setup within the container and will function with the commands provided throughout the remainder of this tutorial.
+The `runDocker.sh` script creates a folder named `data/` in the directory on your machine from which you launched the Docker container. This folder is shared from your machine to the Docker container, meaning you can put any input files for AdmixPipe v3.2 into this folder and they will be accessible inside the container (in `/app/data/`). Any outputs written to this folder and any of its subdirectories will remain accessible after you exit the container. Anything written to other locations inside the container will be lost upon exit. All AdmixPipe modules have been setup within the container and will function with the commands provided throughout the remainder of this tutorial.
 
 When the container launches, you will be placed in the `/app/data` directory by default. Create a folder in which you will place the example files and change directories into it. Then pull in the example files using the wget command.
 ```
@@ -87,7 +87,7 @@ Once you are happy with the results (you can view the preliminary outputs in the
 
 ### distructRerun.py
 
-Next, run distructRerun.py to process the CLUMPAK output. As of v3.1, AdmixPipe uses the distructRerun.py module to record paths to CLUMPAK outputs and admixture results in various `.json` files. These paths are used downstream by the cvSum.py and runEvalAdmix.py modules. This means that if you move your results folder and/or CLUMPAK output folder after running distructRerun.py, then you will have to execute distructRerun.py again before proceeding with other modules. 
+Next, run distructRerun.py to process the CLUMPAK output. As of v3.2, AdmixPipe uses the distructRerun.py module to record paths to CLUMPAK outputs and admixture results in various `.json` files. These paths are used downstream by the cvSum.py and runEvalAdmix.py modules. This means that if you move your results folder and/or CLUMPAK output folder after running distructRerun.py, then you will have to execute distructRerun.py again before proceeding with other modules. 
 
 The following command prepares your CLUMPAK outputs so that you can modify properties of your admixture plots for publication. The basic command is the following, where `-d` and `-a` specify the locations of your CLUMPAK and admixturePipeline.py outputs, respectively. These required parameters can handle relative paths, but will determine and write the full path of the outputs to `.json` files. The parameters `-k 1 -K 8` provide the range of K values that you tested. From the `/app/data/exampleDir/` directory, run the following:
 

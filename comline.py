@@ -63,11 +63,11 @@ class ComLine():
 							default=1,
 							help="Number of processors."
 		)
-		opt_vcf.add_argument("-t", "--thin",
+		opt_filt.add_argument("-t", "--thin",
 							dest='thin',
 							type=int,
 							default=0,
-							help="Use VCFtools to thin out loci falling within the specified proximity to one another."
+							help="Use VCFtools or PLINK to thin out loci falling within the specified proximity to one another."
 		)
 		opt_vcf.add_argument("-C", "--indcov",
 							dest='indcov',

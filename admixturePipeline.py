@@ -30,7 +30,7 @@ def main():
 		plink_file = Plink(input.args.ped)
 		plink_file.checkFam(input.args.popmap, False)
 		plink_file.makeBak(False)
-		plink_file.filterPlink(input.args.popmap, input.args.snpcov, input.args.maf, input.args.mac, False)
+		plink_file.filterPlink(input.args.popmap, input.args.snpcov, input.args.maf, input.args.mac, False, input.args.thin)
 		#print_populations function in popmap class mimics output of print_populations function in vcf class
 		populations.print_populations(input.args.ped, False)
 		admix_run = Admixture(input.args.ped, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, False)
@@ -39,7 +39,7 @@ def main():
 		plink_file = Plink(input.args.bed)
 		plink_file.checkFam(input.args.popmap, True)
 		plink_file.makeBak(True)
-		plink_file.filterPlink(input.args.popmap, input.args.snpcov, input.args.maf, input.args.mac, True)
+		plink_file.filterPlink(input.args.popmap, input.args.snpcov, input.args.maf, input.args.mac, True, input.args.thin)
 		#print_populations function in popmap class mimics output of print_populations function in vcf class
 		populations.print_populations(input.args.bed, True)
 		admix_run = Admixture(input.args.bed, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, True)

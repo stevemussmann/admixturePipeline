@@ -30,12 +30,12 @@ class Plink():
 		call = SysCall(plink_command)
 		call.run_program()
 
-	def filterPlink(self, keepfile, snp, maf, mac, bed):
-		plink_command = self.buildCommand(keepfile, snp, maf, mac, bed)
+	def filterPlink(self, keepfile, snp, maf, mac, bed, thin):
+		plink_command = self.buildCommand(keepfile, snp, maf, mac, bed, thin)
 		call = SysCall(plink_command)
 		call.run_program()
 	
-	def buildCommand(self, keepfile, snp, maf, mac, bed):
+	def buildCommand(self, keepfile, snp, maf, mac, bed, thin):
 		command = "plink "
 
 		# build different start to command conditional upon bed or ped input
@@ -43,6 +43,10 @@ class Plink():
 			command = command + "--bfile " + self.prefix + " --make-bed "
 		else:
 			command = command + "--file " + self.prefix + " --recode12 "
+
+		# filter to thin by distance between snps
+		if(thin > 0):
+			command = command + " --bp-space " + str(thin)
 
 		# include filter for allowable missing data per locus
 		if(snp < 1.0 and snp > 0.0):

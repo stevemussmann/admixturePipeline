@@ -46,7 +46,7 @@ class Plink():
 
 		# filter to thin by distance between snps
 		if(thin > 0):
-			command = command + " --bp-space " + str(thin)
+			command = command + " --bp-space " + str(thin) + " "
 
 		# include filter for allowable missing data per locus
 		if(snp < 1.0 and snp > 0.0):

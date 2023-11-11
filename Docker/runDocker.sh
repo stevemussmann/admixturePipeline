@@ -32,6 +32,6 @@ echo ""
 
 chmod a+w ${dir}/data
 
-docker container run -v ${dir}/data/:/app/data --rm -it mussmann/admixpipe:3.1 /bin/bash
+docker container run -v ${dir}/data/:/app/data --rm -it mussmann/admixpipe:3.2 /bin/bash
 
 exit

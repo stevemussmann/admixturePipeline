@@ -4,7 +4,11 @@
 A pipeline that accepts VCF and PLINK files to run through Admixture
 
 ## Citing AdmixPipe
-AdmixPipe v2.0 is published in BMC Bioinformatics. A manuscript is currently in preparation for v3.2. For now, please cite the 2020 publication if you use any part of this pipeline:
+If using version 3.0+ of this pipeline, please cite the following recently accepted manuscript:
+
+S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2023. ADMIXPIPE v3: Facilitating Population Structure Delimitation from SNP Data. Bioinformatics Advances *In Press*
+
+If using v2.x or earlier, please cite the following paper:
 
 S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2020. AdmixPipe: population analyses in ADMIXTURE for non-model organisms. BMC Bioinformatics 21:337. DOI: 10.1186/s12859-020-03701-4
 

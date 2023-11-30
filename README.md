@@ -4,9 +4,9 @@
 A pipeline that accepts VCF and PLINK files to run through Admixture
 
 ## Citing AdmixPipe
-If using version 3.0+ of this pipeline, please cite the following recently accepted manuscript:
+If using version 3.0+ of this pipeline, please cite the following paper:
 
-S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2023. ADMIXPIPE v3: Facilitating Population Structure Delimitation from SNP Data. Bioinformatics Advances *In Press*
+S.M. Mussmann, M.R. Douglas, T.K. Chafin, M.E. Douglas 2023. ADMIXPIPE v3: Facilitating Population Structure Delimitation from SNP Data. Bioinformatics Advances 3(1):vbad168. DOI: 10.1093/bioadv/vbad168
 
 If using v2.x or earlier, please cite the following paper:
 

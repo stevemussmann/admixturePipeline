@@ -13,43 +13,43 @@ class ComLine():
 		parser.add_argument("-a", "--ad",
 							dest='ad',
 							required=True,
-							help="Provide a path to admixture output"
+							help="Provide a path to admixture output."
 		)
 		parser.add_argument("-d", "--directory",
 							dest='directory',
 							required=True,
-							help="Provide a path to clumpak output"
+							help="Provide a path to clumpak output."
 		)
 		parser.add_argument("-K", "--maxK",
 							dest='maxk',
 							required=True,
-							help="Provide the highest clustering value tested for clumpak run"
+							help="Provide the highest clustering value tested for clumpak run."
 		)
 		parser.add_argument("-k", "--minK",
 							dest='mink',
 							required=True,
-							help="Provide the lowest clustering value tested for clumpak run"
+							help="Provide the lowest clustering value tested for clumpak run."
 		)
 		parser.add_argument("-w", "--width",
 							dest='width',
 							default="2",
-							help="Provide the width of each individual bar in the distruct output"
+							help="Provide the width of each individual bar in the distruct output."
 		)
 		parser.add_argument("-m", "--majc",
 							dest='majc',
 							default="MajorClusterRuns.txt",
-							help="Provide file that will hold names of runs corresponding to the major clusters"
+							help="Provide file that will hold names of runs corresponding to the major clusters."
 							
 		)
 		parser.add_argument("-l", "--otl",
 							dest='otl',
 							default="AdmixturePopIdToPopName",
-							help="Provide file that will hold names of labels in the distruct plots. Default value works for ADMIXTURE output analyzed in CLUMPAK. Change value to your custom DISTRUCT labels file that you uploaded to CLUMPAK if you want to manipulate STRUCTURE output that has been analyzed in CLUMPAK (note: this option is currently experimental and may result in unexpected behavior)"
+							help="Provide file that will hold names of labels in the distruct plots. Default value works for ADMIXTURE output analyzed in CLUMPAK. Change value to your custom DISTRUCT labels file that you uploaded to CLUMPAK if you want to manipulate STRUCTURE output that has been analyzed in CLUMPAK (note: this option is currently experimental and may result in unexpected behavior)."
 		)
 		parser.add_argument("-r", "--run",
 							dest='run',
 							action='store_true',
-							help="Run Distruct on all drawparams files"
+							help="Run Distruct on all drawparams files."
 		)
 		parser.add_argument("-c", "--colorbrew",
 							dest='colorbrew',
@@ -60,6 +60,11 @@ class ComLine():
 							dest='pathtocolorbrew',
 							default="/home/mussmann/local/src/distruct1.1/ColorBrewer/",
 							help="Provide the path to where colorbrewer palettes are stored on your machine."
+		)
+		parser.add_argument("-s", "--sort",
+							dest='sort',
+							action='store_true',
+							help="Sort barplots by q value."
 		)
 
 		self.args = parser.parse_args()

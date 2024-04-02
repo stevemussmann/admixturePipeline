@@ -8,6 +8,7 @@ from pathlib import Path
 
 import json
 import os
+import pandas
 import sys
 
 def mergeDicts(dict1, dict2):
@@ -25,6 +26,46 @@ def jsonDump(admixDir, outfile, outputDict):
 	outPath = os.path.join(admixDir, outfile)
 	with open(outPath, 'w') as jf:
 		json.dump(outputDict, jf, indent=4)
+
+def createList(r1, r2):
+	if( r1 == r2 ):
+		return r1
+	else:
+		res = []
+		while(r1 < r2+1 ):
+			res.append(r1)
+			r1 += 1
+		return res
+
+def qfileSort(qfilesDict):
+	for k in qfilesDict.keys():
+		# create initial list of columns that need to be sorted
+		ncols = 4+int(k)
+		colList = createList(5, ncols)
+		#print(colList)
+		
+		# read qfile into dataframe
+		df = pandas.read_csv(qfilesDict[k], delim_whitespace=True, header=None)
+
+		# create list of values telling whether or not to sort ascending
+		ascList = list() # hold value indicating whether sort will be ascending for each column
+		colDict = dict() # hold dict of key=column, val=sum(column)
+		for item in colList:
+			colDict[item] = df[item].sum()
+			#print(colDict[item])
+			ascList.append(True)
+
+		# get groups (k values) in order of least ancestry to greatest
+		colSorted = dict(sorted(colDict.items(), key=lambda x:x[1], reverse=True))
+		newlist = list()
+		for key, value in colSorted.items():
+			newlist.append(key)
+
+		# conduct sorting by qvalue columns
+		df.sort_values(by = newlist, ascending=ascList, ignore_index=True, inplace=True)
+
+		# write to file - this overwrites input files in best_
+		df.to_csv(qfilesDict[k], sep=' ', header=False, index=False)
 
 def main():
 	input = ComLine(sys.argv[1:])
@@ -89,10 +130,18 @@ def main():
 	jsonDump(input.args.ad, "cvRuns.json", runsDict)
 	jsonDump(input.args.ad, "qfilePaths.json", qfilesDict)
 
+	# add file sorting here
+
+	# run distruct if option is used
 	if input.args.run==True:
 		d.runDistruct()
-	
 
+	# sort indivq files by q values if -s/--sort option is used
+	if input.args.sort==True:
+		qfileSort(qfilesDict)
+		
+
+# run main function
 main()
 
 raise SystemExit

@@ -23,7 +23,7 @@ Some outputs from AdmixPipe v2.0 are not compatible with v3.2 because json files
 Other important notes for v3.2: 
 1) AdmixPipe v3.2 requires Python 3.
 2) Some command line options have changed slightly (especially long form commands - you can retrieve the current list of commands from any module by executing it with the --help option).
-3) A Docker container is now the preferred method for installation.
+3) A Docker container is now the preferred method for installation. The code in this github repository may sometimes contain new features that have not yet been committed to the Docker container.
 4) CLUMPAK is now installed in the Docker container.
 5) The submitClumpak.py module will submit admixturePipeline.py outputs to the Docker container installation of CLUMPAK ('Main pipeline' and 'BestK' pipeline).
 7) The data processing and plotting functions of the cvSum.py module underwent a complete rewrite for v3.2.
@@ -240,6 +240,7 @@ List of current options:<a name="distructoptions"></a>
 * **-m / --majc:** Provide the name of the output file that will hold the names of runs corresponding to the major clusters (optional; default = MajorClusterRuns.txt)
 * **-p / --pathtocolorbrew:** Specify the full path to the location of distruct1.1's colorbrewer files on your computer (not necessary if you are using the Docker container). 
 * **-r / --run:** Boolean switch. Using this option will run distruct for each drawparams file. (optional, default = off)
+* **-s / --sort:** Boolean switch. Use this option to sort barplots by individual q values. Sorting might not be perfect. Not yet implemented in Docker container. (optional, default = off)
 * **-w / --width:** Provide the width of each individual bar in the distruct output (optional; default = 2).
 
 Experimental options:

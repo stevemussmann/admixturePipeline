@@ -461,11 +461,15 @@ Finally, make sure the `CLUMPAK.pl` and `BestKByEvanno.pl` scripts are located i
 
 ### Installation & Setup for distructRerun.py:<a name="distructinstall"></a>
 
-There are no additional dependencies required for distructRerun.py (assuming you have already installed distruct itself). However, it is advised if you want to use the colorbrewer options in distruct that you modify the default location of the ColorBrewer palettes in the distructComline.py file (line 61) so that you do not need to specify this path each time you run this module. I also recommend you place the ColorBrewer folder in your home directory (e.g., `/home/username/ColorBrewer`). Burying it several directories deep on your system will prevent it from being read properly due to a bug in distruct. 
+One additional python3 library is required for this module: **pandas**. It can be installed via `pip3`. Command may need to be run as 'sudo' depending upon your system configuration.
+```
+pip3 install pandas
+```
+There are no other dependencies required for distructRerun.py (assuming you have already installed distruct itself). I also advise that if you want to use the colorbrewer options in distruct, then you should modify the default location of the ColorBrewer palettes in the distructComline.py file (line 61) so that you do not need to specify this path each time you run this module. I also recommend you place the ColorBrewer folder in your home directory (e.g., `/home/username/ColorBrewer`). Burying it several directories deep on your system will prevent it from being read properly due to a bug in distruct. 
 
 ### Installation & Setup for cvSum.py:<a name="cvinstall"></a>
 
-Two additional python3 libraries required for this module: **matplotlib** and **pandas**. Each can be installed via `pip3`. Commands may need to be run as 'sudo' depending upon your system configuration:
+Two additional python3 libraries required for this module: **matplotlib** and **pandas** (if not already installed for distructRerun.py). Each can be installed via `pip3`. Commands may need to be run as 'sudo' depending upon your system configuration:
 
 ```
 pip3 install pandas

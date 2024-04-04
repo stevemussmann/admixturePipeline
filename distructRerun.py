@@ -40,7 +40,12 @@ def createList(r1, r2):
 def qfileSort(qfilesDict):
 	for k in qfilesDict.keys():
 		# create initial list of columns that need to be sorted
-		ncols = 4+int(k)
+		ncols=0
+		if "MinClust" in str(k):
+			x = str(k).split(".")
+			ncols = 4+int(x[0])
+		else:
+			ncols = 4+int(k)
 		colList = createList(5, ncols)
 		#print(colList)
 		

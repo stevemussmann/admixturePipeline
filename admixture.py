@@ -19,7 +19,7 @@ class Admixture():
 	'Class for executing Admixture commands'
 
 
-	def __init__(self, prefix, NP, minK, maxK, rep, cv, bed):
+	def __init__(self, prefix, NP, minK, maxK, rep, cv, bed, hap):
 		self.prefix = prefix
 		self.NP = NP
 		self.minK = minK
@@ -30,6 +30,7 @@ class Admixture():
 		self.ext = ".ped"
 		if bed == True:
 			self.ext = ".bed"
+		self.hap = hap
 		self.infile = self.prefix + self.ext #build input file name based on ped/bed prefix and proper extension
 		self.startdir = os.getcwd() #directory from which admixturePipeline.py was launched
 		self.abspath = os.path.abspath(self.infile) #absolute path to infile
@@ -43,6 +44,11 @@ class Admixture():
 			for j in range(self.rep):
 				command_string = "admixture -j" + str(self.NP) + " -s " + str(np.random.randint(1000000)) + " --cv=" + str(self.cv) + " " + str(self.abspath) + " " + str(i)
 				
+				# add haploid option if invoked
+				if self.hap:
+					command_string = command_string + " --haploid=\"" + self.hap + "\""
+					print(command_string)
+				
 				#make a temporary directory with name based on current time in milliseconds
 				curtime = str(round(time.time() * 1000)) #get current time for naming directory
 				newdir = os.path.join(self.outdir, curtime) #construct path to temporary directory
@@ -54,6 +60,7 @@ class Admixture():
 
 				#call Admixture
 				admixtureCall = SysCall(command_string) #prepare system call
+
 				pathlist = os.path.split(self.prefix)
 				strippedPrefix = pathlist[1] #get input file prefix - this code should still work if a relative path was used, or if the input file is in the same directory from which admixturePipeline.py was launched
 				newprefix = os.path.join(self.outdir, strippedPrefix) #this 'prefix' includes the absolute path to the output directory

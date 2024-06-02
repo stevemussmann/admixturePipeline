@@ -37,6 +37,11 @@ class ComLine():
 							default=20,
 							help="maximum K value."
 		)
+		opt_admix.add_argument("-H", "--haploid",
+							dest='haploid',
+							type=str,
+							help="Provide text exactly as you want it to be supplied to the --haploid option in Admixture (e.g., \"*\")."
+		)
 		required.add_argument("-p", "--ped",
 							dest='ped',
 							help="Specify the prefix for a text plink file. File should have been encoded in plink using the --recode12 option. This is under active development. Use at your own risk."

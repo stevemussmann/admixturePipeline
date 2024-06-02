@@ -14,7 +14,7 @@ def main():
 		vcf_file = VCF(input.args.vcf, input.args.thin, input.args.maf, input.args.mac, input.args.indcov, input.args.snpcov, input.args.bi)
 
 	populations = Popmap(input.args.popmap)
-	
+
 	#convert to Plink if using .vcf input, then run admixture
 	if input.args.vcf:
 		vcf_file.compIndLists(populations)
@@ -23,7 +23,7 @@ def main():
 		vcf_file.print_populations(populations)
 		vcf_file.print_individuals(populations)
 
-		admix_run = Admixture(vcf_file.prefix, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, False)
+		admix_run = Admixture(vcf_file.prefix, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, False, input.args.haploid)
 
 	#if using plink ped, go directly to running admixture
 	elif input.args.ped:
@@ -33,7 +33,7 @@ def main():
 		plink_file.filterPlink(input.args.popmap, input.args.snpcov, input.args.maf, input.args.mac, False, input.args.thin)
 		#print_populations function in popmap class mimics output of print_populations function in vcf class
 		populations.print_populations(input.args.ped, False)
-		admix_run = Admixture(input.args.ped, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, False)
+		admix_run = Admixture(input.args.ped, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, False, input.args.haploid)
 	#if using plink bed format, go directly to running admixture
 	elif input.args.bed:
 		plink_file = Plink(input.args.bed)
@@ -42,7 +42,7 @@ def main():
 		plink_file.filterPlink(input.args.popmap, input.args.snpcov, input.args.maf, input.args.mac, True, input.args.thin)
 		#print_populations function in popmap class mimics output of print_populations function in vcf class
 		populations.print_populations(input.args.bed, True)
-		admix_run = Admixture(input.args.bed, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, True)
+		admix_run = Admixture(input.args.bed, input.args.np, input.args.minK, input.args.maxK, input.args.rep, input.args.cv, True, input.args.haploid)
 		
 
 	admix_run.admix()

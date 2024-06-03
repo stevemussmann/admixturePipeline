@@ -111,7 +111,8 @@ Optional arguments:
 * **-n / --np:** Specify the number of processors.  Currently the only multithreaded program is Admixture.
 
 Admixture optional arguments:
-* **-c / --cv:** Specify the cross-validation number for the admixture program.  See the admixture program manual for more information (default = 20)
+* **-c / --cv:** Specify the cross-validation number for the Admixture program.  See the admixture program manual for more information (default = 20)
+* **-H / --haploid:** If you want to perform haploid data analysis in Admixture, you can use this option to provide information in the same manner it would be provided to Admixture (e.g., `-H "*"`, see [page 10 of the Admixture user manual](https://dalexander.github.io/admixture/admixture-manual.pdf)).
 * **-k / --minK:** Specify the minimum K value to be tested (default = 1).
 * **-K / --maxK:** Specify the maximum K value to be tested (default = 20).
 * **-R / --rep:** Specify the number of replicates for each K value (default = 20)
@@ -240,7 +241,7 @@ List of current options:<a name="distructoptions"></a>
 * **-m / --majc:** Provide the name of the output file that will hold the names of runs corresponding to the major clusters (optional; default = MajorClusterRuns.txt)
 * **-p / --pathtocolorbrew:** Specify the full path to the location of distruct1.1's colorbrewer files on your computer (not necessary if you are using the Docker container). 
 * **-r / --run:** Boolean switch. Using this option will run distruct for each drawparams file. (optional, default = off)
-* **-s / --sort:** Boolean switch. Use this option to sort barplots by individual q values. Sorting might not be perfect. Not yet implemented in Docker container. (optional, default = off)
+* **-s / --sort:** Boolean switch. Use this option to sort barplots by individual q values. Sorting might not be perfect. (optional, default = off)
 * **-w / --width:** Provide the width of each individual bar in the distruct output (optional; default = 2).
 
 Experimental options:

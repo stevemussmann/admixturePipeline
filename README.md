@@ -121,7 +121,7 @@ General filtering options (enabled for both VCFtools and PLINK):
 * **-a / --maf:** Enter a minimum frequency for the minor allele frequency filter. (default = off, specify a value between 0.0 and 1.0 to turn it on).
 * **-M / --mac:** Enter the minimum count for the minor allele filter. (default = off, specify a positive integer to turn it on).
 * **-S / --snpcov:** Filter SNPs based on proportion of allowable missing data. Feature added by tkchafin. (default = 0.1; defined to be between 0 and 1, where 0 allows sites that are completely missing and 1 indicates no missing data allowed; input = float).
-* * **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
+* **-t / --thin:** Filter loci by thinning out any loci falling within the specified proximity to one another, measured in basepairs.  (default = off, specify an integer greater than 0 to turn it on).
 
 VCFtools filtering options:
 * **-B / --bi:** Turns biallelic filter off. (default = on, **we do not recommend turning this setting off because ADMIXTURE only processes biallelic SNPs**)

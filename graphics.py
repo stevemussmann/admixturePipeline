@@ -28,6 +28,6 @@ class Graphics():
 		fig = matplotlib.pyplot.figure(figsize=(12.8,9.6),dpi=300,frameon=True)
 		df.boxplot()
 		matplotlib.pyplot.xticks(rotation=90)
-		matplotlib.pyplot.grid(b=None,axis='both',which='major')
+		matplotlib.pyplot.grid(visible=None,axis='both',which='major')
 		fig.savefig(self.output, bbox_inches='tight')
 

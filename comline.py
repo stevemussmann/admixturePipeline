@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import argparse
+import json
 import os.path
 import distutils.util
 
@@ -105,6 +106,11 @@ class ComLine():
 		)
 
 		self.args = parser.parse_args()
+
+		# store admixturePipeline args as json file
+		argsdict = vars(self.args)
+		with open('admixturePipeline.json', 'w') as f:
+			json.dump(argsdict, f)
 
 		#check that combinations of command line options are valid
 		booleans=[self.args.vcf, self.args.ped, self.args.bed]

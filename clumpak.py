@@ -64,6 +64,9 @@ class Clumpak():
 		directory = "clumpakBestK"
 		self.deleteDir(directory, overwrite)
 
+		# check file ll to see if k=1 exists; remove if all likelihood values for k=1 are equal.
+		ll = checkStdev(ll)
+
 		commStr = "BestKByEvanno.pl --id " + ms + " --d " + directory + " --f " + ll + " --inputtype lnprobbyk"
 
 		call = SysCall(commStr)
@@ -97,6 +100,21 @@ class Clumpak():
 		calcVal = 1/reps
 		s = s + " --mclminclusterfraction " + str(calcVal)
 		return s
+
+	def checkStdev(self,ll):
+		# read ll file into dict of arrays
+		result = dict()
+		with open(ll, 'r') as f:
+			for line in f:
+				parts = line.strip().split()
+				result.setdefault(parts[0], []).append(parts[1])
+		print(result)
+
+		#basename = os.path.splitext(ll)[0]
+		#newll = str(basenanme) + ".corrected.txt"
+
+		#return newll
+		return ll
 
 	def deleteDir(self,directory, overwrite):
 		if os.path.exists(directory):

@@ -44,7 +44,7 @@ class Clumpak():
 		if self.distructOpt == True:
 			commStr = self.distructOption(distruct,commStr)
 		else:
-			commStr = self.distructDefault(distruct,commStr)
+			commStr = self.distructDefault(commStr,reps)
 
 		call = SysCall(commStr)
 		call.run_program()

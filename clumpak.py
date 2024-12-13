@@ -65,7 +65,7 @@ class Clumpak():
 		self.deleteDir(directory, overwrite)
 
 		# check file ll to see if k=1 exists; remove if all likelihood values for k=1 are equal.
-		ll = checkStdev(ll)
+		ll = self.checkStdev(ll)
 
 		commStr = "BestKByEvanno.pl --id " + ms + " --d " + directory + " --f " + ll + " --inputtype lnprobbyk"
 

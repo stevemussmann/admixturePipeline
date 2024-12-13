@@ -103,18 +103,43 @@ class Clumpak():
 
 	def checkStdev(self,ll):
 		# read ll file into dict of arrays
-		result = dict()
+		d = dict()
 		with open(ll, 'r') as f:
 			for line in f:
 				parts = line.strip().split()
-				result.setdefault(parts[0], []).append(parts[1])
-		print(result)
+				d.setdefault(parts[0], []).append(parts[1])
+		#print(result)
 
-		#basename = os.path.splitext(ll)[0]
-		#newll = str(basenanme) + ".corrected.txt"
+		# check if k=1 exists
+		if '1' in d:
+			count = len(set(d['1']))
+			if count == 1:
+				print("WARNING: The bestK pipeline cannot test K=1 for your dataset because the standard deviation of its loglikelihood values = 0.")
+				print("K=1 is being removed from your loglikelihood file and all other K values will be tested.")
+				print("The rest of your analysis should not be impacted by this issue.")
+				print("")
 
-		#return newll
-		return ll
+				# remove K=1
+				del d['1']
+				# get new name for file to be written
+				basename = os.path.splitext(ll)[0]
+				newll = str(basenanme) + ".corrected.txt"
+
+				# write new ll file without K=1
+				fh = open(newll, 'w')
+				for k,v in d.items():
+					for i in v:
+						fh.write(str(k))
+						fh.write("\t")
+						fh.write(str(i))
+						fh.write("\n")
+				fh.close()
+
+				return newll
+			else:
+				return ll
+		else:		
+			return ll
 
 	def deleteDir(self,directory, overwrite):
 		if os.path.exists(directory):

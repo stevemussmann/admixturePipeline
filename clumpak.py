@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 import json
 
@@ -36,7 +37,11 @@ class Clumpak():
 		# get name of populations file
 		p = prefix + "_pops.txt"
 
-		commStr = "CLUMPAK.pl --id " + ms + " --dir clumpakOutput --file " + results + " --inputtype admixture --indtopop " + p
+		# check if output directory already exists and delete if it does
+		directory = "clumpakOutput"
+		self.deleteDir(directory)
+
+		commStr = "CLUMPAK.pl --id " + ms + " --dir " + directory + " --file " + results + " --inputtype admixture --indtopop " + p
 
 		if self.mclOpt == True:
 			commStr = self.mclOption(mcl,commStr)
@@ -54,8 +59,12 @@ class Clumpak():
 		# get time in milliseconds to name the run
 		date = datetime.utcnow() - datetime(1970, 1, 1)
 		ms = str(round(date.total_seconds()*1000))
+		
+		# check if output directory already exists and delete if it does
+		directory = "clumpakBestK"
+		self.deleteDir(directory)
 
-		commStr = "BestKByEvanno.pl --id " + ms + " --d clumpakBestK --f " + ll + " --inputtype lnprobbyk"
+		commStr = "BestKByEvanno.pl --id " + ms + " --d " + directory + " --f " + ll + " --inputtype lnprobbyk"
 
 		call = SysCall(commStr)
 		call.run_program()
@@ -89,3 +98,6 @@ class Clumpak():
 		s = s + " --mclminclusterfraction " + str(calcVal)
 		return s
 
+	def deleteDir(self,directory):
+		if os.path.exists(directory):
+			shutil.rmtree(directory)

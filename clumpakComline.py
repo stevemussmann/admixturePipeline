@@ -41,6 +41,11 @@ class ComLine():
 							action='store_true',
 							help="Submit to CLUMPAK server instead of running locally."
 		)
+		parser.add_argument("-x", "--overwrite",
+							dest='overwrite',
+							action='store_true',
+							help="Overwrite existing CLUMPAK output directory."
+		)
 		parser.add_argument("-M", "--mainpipeline",
 							dest='mainpipeline',
 							action='store_true',

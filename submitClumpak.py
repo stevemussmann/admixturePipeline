@@ -12,10 +12,10 @@ def main():
 		clmpkw = ClumpakWeb(input.args.results, input.args.prefix, input.args.email, input.args.MCL, input.args.DISTRUCT)
 	elif input.args.mainpipeline:
 		clmpk = Clumpak()
-		clmpk.mainP(input.args.results, input.args.prefix, input.args.MCL, input.args.DISTRUCT)
+		clmpk.mainP(input.args.results, input.args.prefix, input.args.MCL, input.args.DISTRUCT, input.args.overwrite)
 	elif input.args.bestk:
 		clmpk = Clumpak()
-		clmpk.bestK(input.args.ll)
+		clmpk.bestK(input.args.ll, input.args.overwrite)
 
 main()
 

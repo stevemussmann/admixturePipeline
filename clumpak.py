@@ -20,7 +20,7 @@ class Clumpak():
 		with open('admixturePipeline.json') as f:
 			self.apArgs = json.load(f)
 
-	def mainP(self,results,prefix,mcl,distruct):
+	def mainP(self,results,prefix,mcl,distruct,overwrite):
 		if bool(mcl) == True:
 			self.mclOpt = True
 		
@@ -39,7 +39,7 @@ class Clumpak():
 
 		# check if output directory already exists and delete if it does
 		directory = "clumpakOutput"
-		self.deleteDir(directory)
+		self.deleteDir(directory, overwrite)
 
 		commStr = "CLUMPAK.pl --id " + ms + " --dir " + directory + " --file " + results + " --inputtype admixture --indtopop " + p
 
@@ -54,7 +54,7 @@ class Clumpak():
 		call = SysCall(commStr)
 		call.run_program()
 
-	def bestK(self,ll):
+	def bestK(self,ll,overwrite):
 		
 		# get time in milliseconds to name the run
 		date = datetime.utcnow() - datetime(1970, 1, 1)
@@ -62,7 +62,7 @@ class Clumpak():
 		
 		# check if output directory already exists and delete if it does
 		directory = "clumpakBestK"
-		self.deleteDir(directory)
+		self.deleteDir(directory, overwrite)
 
 		commStr = "BestKByEvanno.pl --id " + ms + " --d " + directory + " --f " + ll + " --inputtype lnprobbyk"
 
@@ -98,6 +98,12 @@ class Clumpak():
 		s = s + " --mclminclusterfraction " + str(calcVal)
 		return s
 
-	def deleteDir(self,directory):
+	def deleteDir(self,directory, overwrite):
 		if os.path.exists(directory):
-			shutil.rmtree(directory)
+			if overwrite == True:
+				shutil.rmtree(directory)
+			else:
+				print("Directory " + str(directory) + " already exists.")
+				print("If you would like to overwrite this directory, rerun submitClumpak.py with the '-x / --overwrite' option.")
+				print("")
+				raise SystemExit

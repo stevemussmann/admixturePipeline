@@ -73,7 +73,7 @@ class Clumpak():
 
 		return s
 
-	def distructOption(self,distruct,s,reps):
+	def distructOption(self,distruct,s):
 		if(bool(distruct) == True) and (distruct <=0.95) and (distruct >= 0):
 			s = s + " --mclminclusterfraction " + str(distruct)
 		elif(bool(distruct) == True) and ((distruct > 0.95) or (distruct < 0)):

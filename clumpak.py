@@ -123,7 +123,7 @@ class Clumpak():
 				del d['1']
 				# get new name for file to be written
 				basename = os.path.splitext(ll)[0]
-				newll = str(basenanme) + ".corrected.txt"
+				newll = str(basename) + ".corrected.txt"
 
 				# write new ll file without K=1
 				fh = open(newll, 'w')

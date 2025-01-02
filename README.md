@@ -439,10 +439,13 @@ Some of the CLUMPAK perl scripts have issues that must be corrected before they 
 3. Make sure all scripts are executable. 
 4. Copy all .pm files to a location monitored by perl's @INC variable. In the Docker container, I copied them to /etc/perl. You may need sudo permissions to access /etc/perl on your computer. Alternatively, [here's a way to install perl modules in your home directory](https://kb.iu.edu/d/baiu) if you do not have admin privileges.
 
-Once you have downloaded the CLUMPAK.zip file, the following commands will perform the above 4 corrections. The last `cp` command may require admin privileges. 
+The following commands will download the CLUMPAK.zip file and perform the above 4 corrections. The last `cp` command may require admin privileges. 
 ```
+wget http://clumpak.tau.ac.il/download/CLUMPAK.zip
 unzip CLUMPAK.zip
-cd CLUMPAK/26_03_2015_CLUMPAK/CLUMPAK
+cd CLUMPAK
+unzip 26_03_2015_CLUMPAK.zip
+cd 26_03_2015_CLUMPAK/CLUMPAK
 dos2unix *.pl
 sed -i '1s/^/\#!\/usr\/bin\/perl\n/' BestKByEvanno.pl
 chmod u+x *.pl

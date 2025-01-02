@@ -424,6 +424,7 @@ apt-get install libgetopt-long-descriptive-perl \
 The perl [List::Permutor](https://metacpan.org/pod/List::Permutor) package also must also be installed. I am not aware of an Ubuntu repository containing this package. Here's how to do a manual install once you have downloaded the List::Permutor package code:
 
 ```
+wget https://cpan.metacpan.org/authors/id/P/PH/PHOENIX/List-Permutor-0.022.tar.gz
 tar -zxvf List-Permutor-0.022.tar.gz
 cd List-Permutor-0.022
 perl Makefile.PL

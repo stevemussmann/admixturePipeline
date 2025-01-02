@@ -12,8 +12,8 @@ class ComLine():
 		parser = argparse.ArgumentParser()
 		parser.add_argument("-b", "--bed",
 							dest='bed',
-							action='store_false',
-							help="Boolean switch to convert .ped to .bed format (default = true). Use this option if you used the -b/--bed option when running admixturePipeline.py"
+							action='store_true',
+							help="Boolean switch to convert .ped to .bed format (default = false). Use this option if you used the -b/--bed option when running admixturePipeline.py"
 		)
 		parser.add_argument("-p", "--prefix",
 							dest='prefix',

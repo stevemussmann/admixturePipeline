@@ -9,9 +9,9 @@ import sys
 def main():
 	input = ComLine(sys.argv[1:])
 
-	# make plink .bed file and fix .fam file
+	## make plink .bed file and fix .fam file
 	pl = Plink(input.args.prefix)
-	if input.args.bed:
+	if not input.args.bed:
 		pl.makeBED()
 	pl.fixFam(input.args.popmap)
 

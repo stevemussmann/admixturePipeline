@@ -441,7 +441,7 @@ Some of the CLUMPAK perl scripts have issues that must be corrected before they 
 
 The following commands will download the CLUMPAK.zip file and perform the above 4 corrections. The last `cp` command may require admin privileges. 
 ```
-wget http://clumpak.tau.ac.il/download/CLUMPAK.zip
+wget --no-check-certificate http://clumpak.tau.ac.il/download/CLUMPAK.zip
 unzip CLUMPAK.zip
 cd CLUMPAK
 unzip 26_03_2015_CLUMPAK.zip

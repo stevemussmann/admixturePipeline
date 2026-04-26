@@ -1,7 +1,0 @@
-fiona==1.10b2
-geopandas==1.1.2
-pandas==1.1.5
-rpy2==3.4.3
-matplotlib==3.3.4
-numpy==1.22.2
-selenium==4.6.0

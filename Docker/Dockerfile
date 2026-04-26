@@ -6,7 +6,7 @@ ARG USERNAME=admixuser
 ARG USER_UID=1001
 ARG USER_GID=$USER_UID
 ARG IMAGE_NAME=admixpipe
-ARG IMAGE_TAG=3.2
+ARG IMAGE_TAG=3.2.2
 ENV USER=$USERNAME
 ENV HOME=/home/$USERNAME
 ENV IMAGE_NAME=$IMAGE_NAME
@@ -15,10 +15,6 @@ ENV IMAGE_TAG=$IMAGE_TAG
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential r-base r-base-dev python3 python3-setuptools python3-dev git autoconf automake vim wget less libgdal-dev perl libgetopt-long-descriptive-perl libfile-slurp-perl libfile-path-tiny-perl liblist-moreutils-perl libpdf-api2-perl libpdf-table-perl libgd-graph-perl libscalar-list-utils-perl libscalar-util-numeric-perl libstatistics-distributions-perl libarchive-extract-perl libarray-utils-perl libarchive-zip-perl dos2unix ghostscript python3-fiona python3-geopandas python3-pandas python3-rpy2 python3-matplotlib python3-numpy adduser vcftools python3-selenium
 
 WORKDIR /app
-
-#COPY requirements.txt /app/requirements.txt
-
-#RUN pip3 install -r requirements.txt
 
 ## Install Perl requirements
 RUN mkdir -p /app/src/perl
@@ -35,17 +31,6 @@ RUN mkdir -p /app/src/plink
 WORKDIR /app/src/plink
 COPY plink_linux_x86_64_20220402.zip /app/src/plink
 RUN unzip /app/src/plink/plink_linux_x86_64_20220402.zip
-
-## Install VCFtools
-#RUN mkdir -p /app/src/vcftools
-#WORKDIR /app/src/vcftools
-#COPY vcftools-vcftools-v0.1.16-20-gd511f46.zip /app/src/vcftools
-#RUN unzip /app/src/vcftools/vcftools-vcftools-v0.1.16-20-gd511f46.zip
-#WORKDIR /app/src/vcftools/vcftools-vcftools-d511f46/
-#RUN ./autogen.sh
-#RUN ./configure
-#RUN make
-#RUN make install
 
 ## Install Admixture
 RUN mkdir -p /app/src/admixture

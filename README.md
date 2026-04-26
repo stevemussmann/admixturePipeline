@@ -185,14 +185,15 @@ submitClumpak.py -p prefix -e email@domain.com -w
 ```
 
 List of current options:<a name="clumpakoptions"></a>
-* **-b / --bestk:** Run the CLUMPAK BestK pipeline locally in the Docker container (or on your computer if you performed a manual install of CLUMPAK). 
-* **-d / --DISTRUCT:** \[optional\] Provide user-defined DISTRUCT threshold for minimal distruct cluster threshold. Must be >=0 and <=0.95.
+* **-b / --bestk:** Run the CLUMPAK BestK pipeline locally in the Docker container (or on your computer if you performed a manual install of CLUMPAK). IMPORTANT: The BestK pipeline cannot evaluate K=1, and attempting to do so will cause it to crash. Consequently, submitClumpak.py will now mask any K=1 replicates from the BestK pipeline when it is run (implemented in v3.2.2)
+* **-d / --DISTRUCT:** \[optional\] This option controls a threshold that determines which minor clusters are included in the CLUMPAK output. If the proportion of replicates represented by a minor cluster is below this value (e.g., -d = 0.1 but a minor cluster is represented by only 1/20 replicates (=0.05), it will not be included in the final output. Default behaviour by submitClumpak.py is to calculate a value that will include these clusters among clumpak outputs (implemented in version 3.2.2). Alternatively, provide a user-defined DISTRUCT threshold to avoid reporting clusters that are proportionally below your threshold. User-defined values must be >=0 and <=0.95.
 * **-e / --email:** Specify your email address for submission to the CLUMPAK web server.
 * **-m / --MCL:** \[optional\] Provide user-defined MCL threshold for similarity scores. Must be >=0 and <=0.99.
 * **-M / --mainpipeline:** Run the CLUMPAK main pipeline locally in the Docker container (or on your computer).
 * **-p / --prefix:** Specify the prefix from your admixpipe run. This will either be the prefix of your plink file (i.e., without .bed or .map extension), or same name as your VCF file without the .vcf file extension.
 * **-r / --results:** Provide the results.zip file from your admixpipe run. Specifying the name is only necessary if you have changed it from the default of 'results.zip'.
 * **-w / --web:** Submit your results to the main pipeline of the CLUMPAK web server (option not available in the Docker container).
+* **-x / --overwrite:** (implemented in v3.2.2) When running in the Docker container, use this option to automatically overwrite your existing `clumpakOutput/` directory. Boolean; default = false (off).
 
 ## Outputs:<a name="clumpakoutputs"></a>
 

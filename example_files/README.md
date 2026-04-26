@@ -21,7 +21,7 @@ This tutorial will demonstrate how to run the program using the Docker container
 
 Once that is completed, pull the Docker container to your system using the following command:
 ```
-docker pull mussmann/admixpipe:3.2
+docker pull mussmann/admixpipe:3.2.2
 ```
 
 If you are using a Mac, launch the 'Docker Desktop' application.

@@ -36,7 +36,7 @@ Other important notes for v3.2:
 This pipeline was written for Unix based operating systems, such as the various Linux distributions and Mac OS X. As of v3.2, we have achieved greater platform independence and ease of installation through development of a Docker container. This is the preferred method for running AdmixPipe. To get started, install [Docker](https://www.docker.com/) on your machine and pull the Docker image using the following command:
 
 ```
-docker pull mussmann/admixpipe:3.2
+docker pull mussmann/admixpipe:3.2.2
 ```
 
 Launch the container by first placing the [runDocker.sh script](https://github.com/stevemussmann/admixturePipeline/blob/master/Docker/runDocker.sh) in the folder from which you want to run the container. Then execute the script as shown below.
@@ -44,7 +44,7 @@ Launch the container by first placing the [runDocker.sh script](https://github.c
 ```
 ./runDocker.sh
 ```
-This script creates a folder named "data" in the directory on your machine from which you launched the Docker container. You can put any input files for AdmixPipe v3.2 into this folder and they will be accessible inside the container (in /app/data/). Any outputs written to this folder and any of its subdirectories will still be accessible after you exit the container. If you write any output to other locations inside the container, they will be lost upon exit. All required AdmixPipe modules and dependency programs have been configured within the container and, unless noted otherwise, will function with the commands provided throughout the remainder of this documentation. 
+This script creates a folder named "data" in the directory on your machine from which you launched the Docker container. You can put any input files for AdmixPipe v3.2 into this folder and they will be accessible inside the container (in /app/data/). Any outputs written to this folder and any of its subdirectories will still be accessible after you exit the container. If you write any output to other locations inside the container, they will be lost upon exit. All required AdmixPipe modules and dependency programs have been configured within the container and, unless noted otherwise, will function with the commands provided throughout the remainder of this documentation.
 
 If running the runDocker.sh script on your machine requires sudo permission, you can create a docker users group and add your username to that group. This can be accomplished with the following, if you are running the command from your own user account. If you are running the command for another user, replace `${USER}` with their username:
 

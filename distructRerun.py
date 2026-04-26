@@ -9,6 +9,7 @@ from pathlib import Path
 import json
 import os
 import pandas
+import shutil
 import sys
 
 def mergeDicts(dict1, dict2):
@@ -71,6 +72,53 @@ def qfileSort(qfilesDict):
 
 		# write to file - this overwrites input files in best_
 		df.to_csv(qfilesDict[k], sep=' ', header=False, index=False)
+
+def popSort(k, qfilesDict, wd, otl):
+	#print("Sort the populations by Q value at chosen K value")
+	#print(qfilesDict[str(k)])
+	df = pandas.read_csv(qfilesDict[str(k)], sep='\s+', engine='python', header=None) # read into pandas dataframe
+	df.drop(df.columns[[0,1,2,4]], axis=1, inplace=True) # drop unneeded columns - keep sample group number and Q columns
+	df.columns = range(df.shape[1]) # renumber columns so sample group = 0; Q columns = 1+
+	#print(df)
+
+	result = df.groupby(0).sum() # group by sample group and sum columns for each sample group
+
+	result['max'] = result.idxmax(axis=1) # get population with greatest Q sum for each sample group
+	result['popnum'] = result.index
+	#print(result)
+
+	# construct path to top labels file (default file name = AdmixturePopIdToPopName)
+	brd = os.path.join(wd, "best_results")
+	toplabels = os.path.join(brd,otl)
+
+	# construct path to top labels file backup
+	brd = os.path.join(wd, "best_results")
+	bak = otl + ".bak"
+	otlbak = os.path.join(brd,bak)
+
+	# make backup copy if it does not already exist
+	if os.path.isfile(otlbak) == False:
+		shutil.copy(toplabels, otlbak)
+		print("\nBackup of", toplabels, "written to", otlbak)
+	else:
+		print("\nBackup of labels file already exists")
+
+	#read toplabels into 'labels' df
+	labels = pandas.read_csv(toplabels, sep='\s+', engine='python', header=None)
+	labels.columns = ['popnum', 'pop']
+	#print(labels)
+
+	#merge 'result' and 'labels' dfs
+	merged = pandas.merge(result, labels, on='popnum', how='inner')
+	#print(merged)
+	
+	# sort first numerically on max column then alphabetically on pop column
+	mergeSort = merged.sort_values(by=['max', 'pop'])
+	#print(mergeSort)
+
+	# write sorted populations to toplabels file
+	mergeSort.to_csv(toplabels, sep='\t', columns=['popnum', 'pop'], index=False, header=False)
+
 
 def main():
 	input = ComLine(sys.argv[1:])
@@ -136,15 +184,17 @@ def main():
 	jsonDump(input.args.ad, "qfilePaths.json", qfilesDict)
 
 	# add file sorting here
-
-	# run distruct if option is used
-	if input.args.run==True:
-		d.runDistruct()
+	if input.args.popSort:
+		popSort(input.args.popSort, qfilesDict, input.args.directory, input.args.otl)
 
 	# sort indivq files by q values if -s/--sort option is used
 	if input.args.sort==True:
 		qfileSort(qfilesDict)
 		
+	# run distruct if option is used
+	if input.args.run==True:
+		d.runDistruct()
+
 
 # run main function
 main()

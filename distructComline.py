@@ -61,6 +61,12 @@ class ComLine():
 							default="/home/mussmann/local/src/distruct1.1/ColorBrewer/",
 							help="Provide the path to where colorbrewer palettes are stored on your machine."
 		)
+		parser.add_argument("-P", "--popSort",
+							dest='popSort',
+							type=int,
+							default=None,
+							help="Automatically sort your sample groups according to the Q values observed in a major cluster (e.g., enter '3' if you want to sort all sample groups by the population divisions for K=3)."
+		)
 		parser.add_argument("-s", "--sort",
 							dest='sort',
 							action='store_true',

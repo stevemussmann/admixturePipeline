@@ -58,7 +58,7 @@ class ComLine():
 		#check if files exist
 		if(self.args.mc != "none"):
 			self.exists(self.args.mc)
-		if(self.args.bed):
+		if not self.args.bed:
 			print("Checking for plink text format files. If these checks fail, you may need to use the -b/--bed option.")
 			print("Checking if plink .ped file exists...")
 			plinkPed = self.args.prefix + ".ped"

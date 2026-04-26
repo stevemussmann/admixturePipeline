@@ -11,7 +11,7 @@ def main():
 
 	## make plink .bed file and fix .fam file
 	pl = Plink(input.args.prefix)
-	if input.args.bed == False:
+	if not input.args.bed:
 		pl.makeBED()
 	pl.fixFam(input.args.popmap)
 

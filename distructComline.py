@@ -22,11 +22,13 @@ class ComLine():
 		)
 		parser.add_argument("-K", "--maxK",
 							dest='maxk',
+							type=int,
 							required=True,
 							help="Provide the highest clustering value tested for clumpak run."
 		)
 		parser.add_argument("-k", "--minK",
 							dest='mink',
+							type=int,
 							required=True,
 							help="Provide the lowest clustering value tested for clumpak run."
 		)
@@ -87,6 +89,14 @@ class ComLine():
 		# remove cv_file.txt if it exists
 		if(os.path.isfile("cv_file.MajClust.txt") == True):
 			os.remove("cv_file.MajClust.txt")
+
+		# test if --popSort value within --minK and --maxK range
+		if(self.args.popSort):
+			if not self.args.mink <= self.args.popSort <= self.args.maxk:
+				print("ERROR: -P/--popSort value must be >= -k/--minK and <= -K/--maxK.")
+				print("Exiting program...")
+				print("")
+				raise SystemExit
 
 
 	def exists(self, filename):

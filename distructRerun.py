@@ -29,14 +29,11 @@ def jsonDump(admixDir, outfile, outputDict):
 		json.dump(outputDict, jf, indent=4)
 
 def createList(r1, r2):
-	if( r1 == r2 ):
-		return r1
-	else:
-		res = []
-		while(r1 < r2+1 ):
-			res.append(r1)
-			r1 += 1
-		return res
+	res = []
+	while(r1 < r2+1 ):
+		res.append(r1)
+		r1 += 1
+	return res
 
 def qfileSort(qfilesDict):
 	for k in qfilesDict.keys():
